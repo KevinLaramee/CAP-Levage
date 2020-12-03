@@ -8,15 +8,36 @@
             <span id="qr_error" style="display: block;"></span>
             <input type="hidden" id="qrCodeOrigin" value=""/>
             <div id="loadingMessage" hidden="">⌛ Loading video...</div>
-            <!--<canvas id="canvas" height="480" width="640"></canvas>-->
-            <canvas id="canvas" style="width:100%;max-width: 500px;"></canvas>
+            <!--<canvas id="canvas" style="width:100%;max-width: 500px;"></canvas>-->
+            <video id="qr-video" style="width:100%;max-width: 500px;"></video>
         </center>
     </div>
     <div class="modal-footer">
         <!--<button id="qrCodeModalClose" class="btn" data-dismiss="modal">Fermer</button>-->
         <button id="qrCodeModalClose" class="btn">Fermer</button>
     </div>
-    <script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>
-    <script type="text/javascript" src="/certification/static/src/js/qr_code/QRSearch.js"></script>
+    <script type="text/javascript" src="/certification/static/src/js/qr_code/qr_code.js"></script>
 
 </div>
+<!--<div id="qrCodeModal" style="background-color: #fff;" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="qrCodeModalLabel" aria-hidden="true">-->
+    <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+        <!--<h3 id="qrCodeModalLabel">Scan QR</h3>-->
+    <!--</div>-->
+    <!--<div class="modal-body">-->
+        <!--<center>-->
+            <!--<span id="qr_error" style="display: block;"></span>-->
+            <!--<input type="hidden" id="qrCodeOrigin" value=""/>-->
+            <!--<div id="loadingMessage" hidden="">⌛ Loading video...</div>-->
+            <!--&lt;!&ndash;<canvas id="canvas" height="480" width="640"></canvas>&ndash;&gt;-->
+            <!--<canvas id="canvas" style="width:100%;max-width: 500px;"></canvas>-->
+        <!--</center>-->
+    <!--</div>-->
+    <!--<div class="modal-footer">-->
+        <!--&lt;!&ndash;<button id="qrCodeModalClose" class="btn" data-dismiss="modal">Fermer</button>&ndash;&gt;-->
+        <!--<button id="qrCodeModalClose" class="btn">Fermer</button>-->
+    <!--</div>-->
+    <!--<script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>-->
+    <!--<script type="text/javascript" src="/certification/static/src/js/qr_code/QRSearch.js"></script>-->
+
+<!--</div>-->
