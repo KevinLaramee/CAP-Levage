@@ -89,7 +89,7 @@
                                     <span id="qr_error_menu" style="display: block;"></span>
                                     <input type="hidden" id="qrCodeOriginMenu" value=""/>
                                     <div id="loadingMessageMenu" hidden="">⌛ Loading video...</div>
-                                    <!--<canvas id="canvasMenu" style="width:100%;max-width: 500px;"></canvas>-->
+                                    <canvas id="canvasMenu" style="width:100%;max-width: 500px;"></canvas>
                                     <div id="cam-has-camera"></div>
                                     <video id="qr-video" style="width:100%;max-width: 500px;"></video>
                                 </center>
