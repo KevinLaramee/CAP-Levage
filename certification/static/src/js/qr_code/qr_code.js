@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const scanner = new QrScanner(video, result => sendResult(result));
 
   const triggers = document.querySelectorAll('[aria-haspopup="dialog"]');
-  const doc = document.querySelector('.js-document');
+//  const doc = document.querySelector('.js-document');
 
   const open = function (dialog) {
     dialog.setAttribute('aria-hidden', false);
-    doc.setAttribute('aria-hidden', true);
+//    doc.setAttribute('aria-hidden', true);
 
     scanner.start().then(() => {
         scanner.hasFlash().then(hasFlash => {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const close = function (dialog) {
     dialog.setAttribute('aria-hidden', true);
-    doc.setAttribute('aria-hidden', false);
+//    doc.setAttribute('aria-hidden', false);
 
     scanner.stop();
   };

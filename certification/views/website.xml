@@ -69,7 +69,15 @@
                   </div>
                 </div>
 
-                <div id="qrCodeModalMenu" class="modal" tabindex="-1" role="dialog">
+                <div id="dialog"
+                     class="modal c-dialog"
+                     tabindex="-1"
+                     role="dialog"
+                     aria-labelledby="dialog-title"
+                     aria-describedby="dialog-desc"
+                     aria-modal="true"
+                     aria-hidden="true"
+                >
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -81,15 +89,17 @@
                                     <span id="qr_error_menu" style="display: block;"></span>
                                     <input type="hidden" id="qrCodeOriginMenu" value=""/>
                                     <div id="loadingMessageMenu" hidden="">⌛ Loading video...</div>
-                                    <!--<canvas id="canvas" height="480" width="640"></canvas>-->
-                                    <canvas id="canvasMenu" style="width:100%;max-width: 500px;"></canvas>
+                                    <!--<canvas id="canvasMenu" style="width:100%;max-width: 500px;"></canvas>-->
+                                    <div id="cam-has-camera"></div>
+                                    <video id="qr-video" style="width:100%;max-width: 500px;"></video>
                                 </center>
                             </div>
                             <div class="modal-footer">
-                                <button id="qrCodeModalCloseMenu" class="btn" data-dismiss="modal">Fermer</button>
+                                <button id="qrCodeModalCloseMenu" class="btn" data-dismiss="dialog">Fermer</button>
                                 <!--<button id="qrCodeModalClose" class="btn">Fermer</button>-->
                             </div>
-                            <script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>
+                            <!--<script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>-->
+                            <script type="module" src="/certification/static/src/js/qr_code/qr_code.js"></script>
 
                             <div id="scriptCamContentMenu"></div>
                             <!--<script type="text/javascript" src="/certification/static/src/js/qr_code/QRSearch.js"></script>-->
@@ -148,7 +158,7 @@
 						<li><a href="/my/equipments" role="menuitem">Mes matériels</a></li>
 						<li><a href="/my/equipment" role="menuitem" t-if="user_id.gest_materiel and
 																	  request.env.user.has_group('certification.website_lvl_3')">Créer un matériel</a></li>
-                        <li><a id="search_qr_code_menu" style="cursor:pointer;">Scan QR</a></li>
+                        <li><a id="search_qr_code_menu" aria-haspopup="dialog" aria-controls="dialog" style="cursor:pointer;">Scan QR</a></li>
 						<!--<li><a href="/my/planification" role="menuitem">Planification contrôles</a></li>-->
 					</t>
 					<li><a href="/website/calendar" role="menuitem">Programmer visite VGP</a></li>
