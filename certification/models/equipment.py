@@ -1271,18 +1271,16 @@ class IrAttachment(models.Model):
             return super(IrAttachment, self).create(vals)
 
     def write(self, vals):
-        if self.res_model == 'critt.equipment' and self.res_field == 'image_medium':
-            compressed_image = self.compressImage(vals.get('datas'))
-            old = self.env['ir.attachment'].search([('res_model', '=', 'critt.equipment'),
-                                                    ('res_field', '=', 'image_small'), ('res_id', '=', self.res_id)])
-            old.unlink()
-            # vals_img_small = {'name': 'image_small', 'res_model': 'critt.equipment', 'res_field': 'image_small',
-            #                  'res_id': self.res_id, 'type': 'binary', 'datas_fname': self.store_fname,
-            #                  'datas': compressed_image}
-            vals_img_small = {'name': 'image_small', 'res_model': 'critt.equipment', 'res_field': 'image_small',
-                              'res_id': self.res_id, 'type': 'binary',
-                              'datas': compressed_image}
-            self.create(vals_img_small)
+        for rec in self:
+            if rec.res_model == 'critt.equipment' and rec.res_field == 'image_medium':
+                compressed_image = self.compressImage(vals.get('datas'))
+                old = self.env['ir.attachment'].search([('res_model', '=', 'critt.equipment'),
+                                                        ('res_field', '=', 'image_small'), ('res_id', '=', rec.res_id)])
+                old.unlink()
+                vals_img_small = {'name': 'image_small', 'res_model': 'critt.equipment', 'res_field': 'image_small',
+                                  'res_id': rec.res_id, 'type': 'binary',
+                                  'datas': compressed_image}
+                self.create(vals_img_small)
         return super(IrAttachment, self).write(vals)
 
     def compressImage(self, image):
