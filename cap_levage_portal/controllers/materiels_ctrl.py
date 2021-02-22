@@ -32,7 +32,7 @@ class CapLevageWebsite(http.Controller):
         searchbar_sortings = {
             "date": {
                 "label": _("Date de prochain contrôle"),
-                "order": "date_dernier_audit desc, id asc",
+                "order": "audit_suivant desc, id asc",
             }
         }
         searchbar_inputs = {

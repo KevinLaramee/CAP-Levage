@@ -93,6 +93,9 @@
                             <a t-field="materiel.num_materiel"/>
                         </div>
                         <div>
+                            <a t-field="materiel.audit_suivant"/>
+                        </div>
+                        <div>
                             <a t-field="materiel.statut"
                                t-attf-style="background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
                         </div>
