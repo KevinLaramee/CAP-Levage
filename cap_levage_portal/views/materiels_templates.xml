@@ -1,0 +1,144 @@
+<odoo>
+    <data>
+        <!--        Affihe la page mes matériels dans le fil d'ariane-->
+        <template id="caplevage_my_materiels" name="caplevage_my_materiels" inherit_id="portal.portal_breadcrumbs" priority="30">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li class="breadcrumb-item">
+                    <a href="/cap_levage_portal/materiels" aria-label="Matériels" title="Matériels">
+                        <span>Mes matériels</span>
+                    </a>
+                </li>
+            </xpath>
+        </template>
+        <!--        Page principale listant les matériels -->
+        <template id="index">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <div class="container oe_website_sale">
+                    <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
+                        <!--                        Affiche la barre de recherche-->
+                        <t t-call="portal.portal_searchbar">
+                            <t t-set="title" t-value="' '"/>
+                            <t t-set="_classes">w-100 w-md-auto mt-2</t>
+                        </t>
+                    </div>
+                    <!--                    Affiche la liste des matériels-->
+                    <div class="row o_wsale_products_main_row">
+                        <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3"/>
+                        <div id="products_grid">
+                            <div t-if="bins" class="o_wsale_products_grid_table_wrapper">
+                                <table class="table table-borderless m-0" t-att-data-ppg="ppg" t-att-data-ppr="ppr">
+                                    <colgroup t-ignore="true">
+                                        <!-- Force the number of columns (useful when only one row of (x < ppr) products) -->
+                                        <col t-foreach="ppr" t-as="p"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr t-foreach="bins" t-as="tr_materiel">
+                                            <t t-foreach="tr_materiel" t-as="td_materiel">
+                                                <t t-if="td_materiel">
+                                                    <t t-set="materiel" t-value="td_materiel['item']"/>
+                                                    <td t-att-colspan="td_materiel['x'] != 1 and td_materiel['x']"
+                                                        t-att-rowspan="td_materiel['y'] != 1 and td_materiel['y']"
+                                                        t-attf-class="oe_product #{td_materiel['class']}">
+                                                        <div t-attf-class="o_wsale_product_grid_wrapper o_wsale_product_grid_wrapper_#{td_materiel['x']}_#{td_materiel['y']}">
+                                                            <t t-call="cap_levage_portal.materiel_infos"/>
+                                                        </div>
+                                                    </td>
+                                                </t>
+                                                <td t-else=""/>
+                                            </t>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <t t-else="">
+                                <div class="text-center text-muted">
+                                    <t t-if="not search">
+                                        <h3 class="mt8">Aucun matériel</h3>
+                                    </t>
+                                    <t t-else="">
+                                        <h3 class="mt8">Aucun résultat</h3>
+                                        <p>Aucun résultat pour le numéro de matériel"<strong t-esc='search'/>"
+                                        </p>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <!--                        Affiche la pagination-->
+                    <div class="products_pager form-inline justify-content-center mt-3">
+                        <t t-call="portal.pager"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!--        Affiche l'encart d'un matériel dans la liste -->
+        <template id="cap_levage_portal.materiel_infos">
+            <t t-set="product_href" t-value="'/cap_levage_portal/materiel/detail/' + str(materiel.id)"/>
+            <form action="/shop/cart/update" method="post" class="card oe_product_cart" itemscope="itemscope" itemtype="http://schema.org/Product">
+                <div class="card-body p-1 oe_product_image">
+                    <a t-att-href="product_href" class="d-block h-100" itemprop="url">
+                        <span t-field="materiel.image"
+                              t-options="{'widget': 'image', 'preview_image': 'image_small'}"
+                              class="d-flex h-100 justify-content-center align-items-center"/>
+                    </a>
+                </div>
+                <div class="card-body p-0 text-center o_wsale_product_information">
+                    <div class="p-2 o_wsale_product_information_text">
+                        <h6 class="o_wsale_products_item_title">
+                            <a itemprop="name" t-att-href="product_href" t-att-content="materiel.category_id" t-field="materiel.category_id"/>
+                        </h6>
+                        <div>
+                            <a t-field="materiel.num_materiel"/>
+                        </div>
+                        <div>
+                            <a t-field="materiel.statut"
+                               t-attf-style="background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </template>
+
+        <!--        Affiche le détail d'un matériel-->
+        <template id="cap_levage_portal.materiel_detail">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <span t-field="materiel.image_medium"
+                      t-options="{'widget': 'image', 'preview_image': 'image_small'}"
+                      class="d-flex h-100 justify-content-center align-items-center"/>
+                <a t-field="materiel.category_id"/>
+                <a t-field="materiel.statut"
+                   t-options='{"bg_color": "#15CA16:materiel.statut_index == 0;#FF8e60:materiel.statut_index == 1;#e6332a:materiel.statut_index == 2;#000000:materiel.statut_index == 3;"}'/>
+                <div class="prodcut-tab-wrap">
+                    <div class="container">
+                        <div class="row" id="product_more_info">
+                            <div class="col-md-12 pd_info">
+                                <div class="pd-more-info">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation">
+                                            <a class="active" href="#more_info" aria-controls="more_info" role="tab" data-toggle="tab">Description</a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#tab_2" aria-controls="tab_2" role="tab" data-toggle="tab">tab2</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="more_info">
+                                            <div itemprop="description" t-field="materiel.num_materiel" class="oe_structure mt16"
+                                                 id="product_full_description"/>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="tab_2">
+                                            <div t-field="materiel.category_id" class="oe_structure mt16" id="product_category"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
