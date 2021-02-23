@@ -5,4 +5,3 @@ from . import portal
 from . import equipes_ctrl
 from . import agences_ctrl
 from . import abstract_equipes_agences_ctrl
-

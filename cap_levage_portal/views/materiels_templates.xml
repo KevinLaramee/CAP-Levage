@@ -1,6 +1,6 @@
 <odoo>
     <data>
-        <!--        Affihe la page mes matériels dans le fil d'ariane-->
+        <!--        Affiche la page mes matériels dans le fil d'ariane-->
         <template id="caplevage_my_materiels" name="caplevage_my_materiels" inherit_id="portal.portal_breadcrumbs" priority="30">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
                 <li class="breadcrumb-item">
@@ -116,7 +116,7 @@
             <a t-field="materiel.category_id" class="font-weight-bold"/>
         </template>
 
-<!--        détail des différents onglets-->
+        <!--        détail des différents onglets-->
         <template id="cap_levage_portal.onglet_caracteristiques">
             <div class="col-12">
                 <div class="row">
@@ -188,8 +188,59 @@
                 </div>
             </div>
         </template>
+        <template id="cap_levage_portal.onglet_vgp">
+            <div class="o_portal_my_home">
+                <div class="oe_structure" id="oe_structure_portal_my_home_1"/>
+                <div class="o_portal_docs list-group">
+                    <t t-if="onglet_vgp.get('nb_certificats_fabrication')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Certificats de fabrication CE</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/certificats/fabrication/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_vgp.get('nb_certificats_fabrication')"/>
+                    </t>
+                    <t t-if="onglet_vgp.get('nb_vgp')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Rapport de VGP</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/vgp/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_vgp.get('nb_vgp')"/>
+                    </t>
+                    <t t-if="onglet_vgp.get('nb_certificats_destruction')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Certificats de destruction</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/certificats/destruction/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_vgp.get('nb_certificats_destruction')"/>
+                    </t>
+                    <t t-if="onglet_vgp.get('nb_certificats_controle')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Certificats de contrôle</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/certificats/controle/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_vgp.get('nb_certificats_controle')"/>
+                    </t>
+                </div>
+            </div>
+            <div class="oe_structure" id="oe_structure_portal_my_home_2"/>
+        </template>
+        <template id="cap_levage_portal.onglet_devis">
+            <div class="o_portal_my_home">
+                <div class="oe_structure" id="oe_structure_portal_my_home_1"/>
+                <div class="o_portal_docs list-group">
+                    <t t-if="onglet_devis.get('nb_devis')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Devis</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/devis/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_devis.get('nb_devis')"/>
+                    </t>
+                    <t t-if="onglet_devis.get('nb_bons_commande')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Bons de commande</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/boncommandes/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_devis.get('nb_bons_commande')"/>
+                    </t>
+                    <t t-if="onglet_devis.get('nb_factures')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Factures</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/factures/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_devis.get('nb_factures')"/>
+                    </t>
+                </div>
+            </div>
+            <div class="oe_structure" id="oe_structure_portal_my_home_2"/>
+        </template>
 
-<!--        Détail des caractéristiques principales-->
+        <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
             <div class="row">
                 <t t-call="cap_levage_portal.materiel_type"/>
@@ -275,9 +326,11 @@
                                                 <div role="suivi_tab" class="tab-pane" id="suivi_tab">
                                                     <t t-call="cap_levage_portal.onglet_suivi"/>
                                                 </div>
-                                                <div role="suivi_tab" class="tab-pane" id="vgp_tab">
+                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab">
+                                                    <t t-call="cap_levage_portal.onglet_vgp"/>
                                                 </div>
-                                                <div role="suivi_tab" class="tab-pane" id="devis_tab">
+                                                <div role="devis_tab" class="tab-pane" id="devis_tab">
+                                                    <t t-call="cap_levage_portal.onglet_devis"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,6 +340,44 @@
                         </div>
                     </div>
                 </div>
+            </t>
+        </template>
+
+        <!--    affiche la liste de certifcats/vgp du matériel -->
+        <template id="cap_levage_portal.certifs_list">
+            <t t-call="portal.portal_layout">
+                <t t-if="not documents">
+                    <p t-esc="emptymessage"/>
+                </t>
+                <t t-if="documents" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Référence</th>
+                            <th class="text-right">Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="documents" t-as="doc">
+                            <tr>
+                                <td>
+                                    <span t-field="doc.sequence"/>
+                                </td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-grow-1 mr-1 mb-1">
+                                        <a t-if="doc.pdf" class="btn btn-secondary btn-block o_download_btn"
+                                           t-att-href="doc.pdf" title="Download">
+                                            <i class="fa fa-download"/>
+                                        </a>
+                                        <a t-if="doc.dl_pdf" class="btn btn-secondary btn-block o_download_btn"
+                                           t-att-href="doc.dl_pdf" title="Download">
+                                            <i class="fa fa-download"/>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
             </t>
         </template>
     </data>
