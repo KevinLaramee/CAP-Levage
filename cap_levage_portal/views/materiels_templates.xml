@@ -358,6 +358,7 @@
                     <thead>
                         <tr class="active">
                             <th>Référence</th>
+                            <th>Date</th>
                             <th class="text-right">Document</th>
                         </tr>
                     </thead>
@@ -367,6 +368,9 @@
                                 <td>
                                     <span t-field="doc.sequence"/>
                                 </td>
+                                <td>
+                                    <span t-field="doc.date"/>
+                                </td>
                                 <td class="text-right">
                                     <div class="btn-group flex-grow-1 mr-1 mb-1">
                                         <a t-if="doc.pdf" class="btn btn-secondary btn-block o_download_btn"
@@ -375,6 +379,42 @@
                                         </a>
                                         <a t-if="doc.dl_pdf" class="btn btn-secondary btn-block o_download_btn"
                                            t-att-href="doc.dl_pdf" title="Download">
+                                            <i class="fa fa-download"/>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+        <template id="cap_levage_portal.vgp_list">
+            <t t-call="portal.portal_layout">
+                <t t-if="not documents">
+                    <p t-esc="emptymessage"/>
+                </t>
+                <t t-if="documents" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Référence</th>
+                            <th>Date</th>
+                            <th class="text-right">Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="documents" t-as="doc">
+                            <tr>
+                                <td>
+                                    <span t-field="doc.number"/>
+                                </td>
+                                <td>
+                                    <span t-field="doc.create_date"/>
+                                </td>
+                                <td class="text-right">
+                                    <div class="btn-group flex-grow-1 mr-1 mb-1">
+                                        <a class="btn btn-secondary btn-block o_download_btn"
+                                           t-att-href="doc.url" title="Download">
                                             <i class="fa fa-download"/>
                                         </a>
                                     </div>

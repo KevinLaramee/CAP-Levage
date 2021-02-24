@@ -223,6 +223,26 @@ class CertifcatsList(CustomerPortal):
             materiel_id, "destruction", "reforme", "destruction"
         )
 
+    @http.route(
+        "/cap_levage_portal/list/vgp/<int:materiel_id>",
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def list_certificat_creation_materiel(self, materiel_id, **kw):
+        materiel = http.request.env["critt.equipment"].browse(materiel_id)
+        vgps = materiel.rapport_controle
+
+        values = {
+            "documents": vgps,
+            "materiel": materiel,
+            "title": "VGP",
+            "emptymessage": f"Aucun VGP pour le matériel {materiel.num_materiel}",
+            "page_name": _("mes_materiels"),
+            "default_url": f"/cap_levage_portal/list/vgp/{materiel_id}",
+        }
+        return request.render("cap_levage_portal.vgp_list", values)
+
 
 class DevisFacturesList(CustomerPortal):
     def _generic_search(
