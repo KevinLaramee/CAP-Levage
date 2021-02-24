@@ -3,9 +3,14 @@
         <!--        Affiche la page mes matériels dans le fil d'ariane-->
         <template id="caplevage_my_materiels" name="caplevage_my_materiels" inherit_id="portal.portal_breadcrumbs" priority="30">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-                <li class="breadcrumb-item">
-                    <a href="/cap_levage_portal/materiels" aria-label="Matériels" title="Matériels">
+                <li t-if="page_name == 'mes_materiels'" class="breadcrumb-item" t-attf-class="breadcrumb-item active">
+                    <a href="/cap_levage_portal/materiels" aria-label="Mes matériels" title="Mes mtériels">
                         <span>Mes matériels</span>
+                    </a>
+                </li>
+                <li t-if="materiel" class="breadcrumb-item active">
+                    <a t-att-href="'/cap_levage_portal/materiel/detail/' + str(materiel.id)">
+                        <t t-esc="materiel.num_materiel"/>
                     </a>
                 </li>
             </xpath>

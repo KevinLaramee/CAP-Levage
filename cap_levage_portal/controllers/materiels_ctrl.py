@@ -15,7 +15,7 @@ class CapLevageWebsite(http.Controller):
             "/cap_levage_portal/materiels",
             "/cap_levage_portal/materiels/page/<int:page>",
         ],
-        auth="public",
+        auth="user",
         website=True,
     )
     def materiels_list(
@@ -79,7 +79,7 @@ class CapLevageWebsite(http.Controller):
                 "searchbar_sortings": searchbar_sortings,
                 "searchbar_inputs": searchbar_inputs,
                 "sortby": sortby,
-                "page_name": _("Mes matériels"),
+                "page_name": _("mes_materiels"),
                 "default_url": "/cap_levage_portal/materiels",
                 "ppr": PPR,
                 "ppg": PPG,
@@ -89,7 +89,7 @@ class CapLevageWebsite(http.Controller):
 
     @http.route(
         "/cap_levage_portal/materiel/detail/<int:materiel_id>",
-        auth="public",
+        auth="user",
         website=True,
     )
     def materiel_detail(self, materiel_id, **kw):
@@ -165,6 +165,7 @@ class CapLevageWebsite(http.Controller):
                 "materiel": materiel,
                 "onglet_vgp": onglet_vgp_data,
                 "onglet_devis": onglet_devis_data,
+                "page_name": _("mes_materiels"),
             },
         )
 
@@ -181,9 +182,10 @@ class CertifcatsList(CustomerPortal):
 
         values = {
             "documents": certificats,
+            "materiel": materiel,
             "title": f"Certificats {label_value}",
             "emptymessage": f"Aucun certificat de {label_value} pour le matériel {materiel.num_materiel}",
-            "page_name": f"Certifcats {label_value}",
+            "page_name": _("mes_materiels"),
             "default_url": f"/cap_levage_portal/list/{url_name}/{materiel_id}",
         }
         return request.render("cap_levage_portal.certifs_list", values)

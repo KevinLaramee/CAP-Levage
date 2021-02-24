@@ -3,20 +3,49 @@
         <!--        Affiche la page mes équipes dans le fil d'ariane-->
         <template id="caplevage_my_equipes" name="caplevage_my_equipes" inherit_id="portal.portal_breadcrumbs" priority="31">
             <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-                <li class="breadcrumb-item">
+                <li t-if="page_name == 'mes_equipes'" class="breadcrumb-item active">
                     <a href="/cap_levage_portal/equipes?sortby=name" aria-label="Equipes" title="Equipes">
                         <span>Mes équipes</span>
                     </a>
                 </li>
-                <li class="breadcrumb-item">
+                <li t-if="page_name == 'mes_agences'" class="breadcrumb-item active">
                     <a href="/cap_levage_portal/agences?sortby=name" aria-label="Agences" title="Agences">
                         <span>Mes agences</span>
+                    </a>
+                </li>
+                <li t-if="page_name == 'mes_equipes' and equipe" class="breadcrumb-item active">
+                    <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(equipe.id)">
+                        <t t-esc="equipe.name"/>
+                    </a>
+                </li>
+                <li t-if="page_name == 'mes_agences' and agence" class="breadcrumb-item active">
+                    <a t-att-href="'/cap_levage_portal/agence/detail/' + str(agence.id)">
+                        <t t-esc="agence.name"/>
                     </a>
                 </li>
             </xpath>
         </template>
 
-<!--        FIXME renomer les variables equipes pour etre générique-->
+        <template id="portal_my_home_menu_sale" name="Portal layout : sales menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+                <li t-if="page_name == 'quote' or sale_order and sale_order.state in ('sent', 'cancel')"
+                    t-attf-class="breadcrumb-item #{'active ' if not sale_order else ''}">
+                    <a t-if="sale_order" t-attf-href="/my/quotes?{{ keep_query() }}">Quotations</a>
+                    <t t-else="">Quotations</t>
+                </li>
+                <li t-if="page_name == 'order' or sale_order and sale_order.state not in ('sent', 'cancel')"
+                    t-attf-class="breadcrumb-item #{'active ' if not sale_order else ''}">
+                    <a t-if="sale_order" t-attf-href="/my/orders?{{ keep_query() }}">Sales Orders</a>
+                    <t t-else="">Sales Orders</t>
+                </li>
+                <li t-if="sale_order" class="breadcrumb-item active">
+                    <span t-field="sale_order.type_name"/>
+                    <t t-esc="sale_order.name"/>
+                </li>
+            </xpath>
+        </template>
+
+        <!--        FIXME renomer les variables equipes pour etre générique-->
         <!--        Page principale listant les équipes -->
         <template id="equipes_list">
             <t t-call="portal.portal_layout">
@@ -83,8 +112,8 @@
         <!--        Affiche l'encart d'un matériel dans la liste -->
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
-<!--            FIXME supprimer le form -->
-            <form action="/shop/cart/update" method="post" class="card oe_product_cart" itemscope="itemscope" itemtype="http://schema.org/Product">
+            <!--            FIXME supprimer le form -->
+            <div class="card oe_product_cart">
                 <div class="card-body p-1 oe_product_image">
                     <a t-att-href="product_href" class="d-block h-100" itemprop="url">
                         <span t-if="item.type == 'contact'" t-field="item.image_1920"
@@ -105,7 +134,194 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+        </template>
+        <template id="cap_levage_portal.agence_toolbar">
+            <div class="col-8"/>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Editer" title="Editer">
+                    <i class="fa fa-pencil"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Sauvegarder" title="Sauvegarder">
+                    <i class="fa fa-floppy-o"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Supprimer" title="Supprimer">
+                    <i class="fa fa-trash"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a t-att-href="'/cap_levage_portal/agence/detail/' + str(agence.id)" class="btn btn-secondary"
+                   aria-label="Annuler" title="Annuler">
+                    <i class="fa fa-ban"/>
+                </a>
+            </div>
+        </template>
+        <template id="cap_levage_portal.agence_champs_col_1">
+            <div class="col-12">
+                <div class="row">
+                    <label>Nom :</label>
+                    <a t-field="agence.name"/>
+                </div>
+                <div class="row">
+                    <label>Adresse :</label>
+                    <address t-esc="agence" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                </div>
+                <div class="row">
+                    <label>Notes :</label>
+                    <a t-field="agence.comment"/>
+                </div>
+            </div>
+        </template>
+        <template id="cap_levage_portal.agence_champs_col_2">
+            <div class="col-12">
+                <div class="row">
+                    <label>Email :</label>
+                    <a t-field="agence.email"/>
+                </div>
+                <div class="row">
+                    <label>Téléphone :</label>
+                    <a t-field="agence.phone"/>
+                </div>
+                <div class="row">
+                    <label>Mobile :</label>
+                    <a t-field="agence.mobile"/>
+                </div>
+            </div>
+        </template>
+
+        <!--        Affiche le détail d'une agence -->
+        <template id="cap_levage_portal.agence_detail">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <div class="panel">
+                    <div class="row">
+                        <t t-call="cap_levage_portal.agence_toolbar"/>
+                    </div>
+                    <h3>Adresse de livraison</h3>
+                    <div class="row">
+                        <div class="col-2">
+                            <span t-field="agence.parent_id.image_1920" t-options="{'widget': 'image'}"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.agence_champs_col_1"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.agence_champs_col_2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="/cap_levage_portal/materiels" class="btn btn-primary"
+                               aria-label="Mes matériels" title="Mes matériels">
+                                <i class="fa fa-wrench"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="cap_levage_portal.equipe_toolbar">
+            <div class="col-8"/>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Editer" title="Editer">
+                    <i class="fa fa-pencil"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Sauvegarder" title="Sauvegarder">
+                    <i class="fa fa-floppy-o"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                   aria-label="Supprimer" title="Supprimer">
+                    <i class="fa fa-trash"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(equipe.id)" class="btn btn-secondary"
+                   aria-label="Annuler" title="Annuler">
+                    <i class="fa fa-ban"/>
+                </a>
+            </div>
+        </template>
+        <template id="cap_levage_portal.equipe_champs_col_1">
+            <div class="col-12">
+                <div class="row">
+                    <label>Nom :</label>
+                    <a t-field="equipe.name"/>
+                </div>
+                <div class="row">
+                    <label>titre :</label>
+                    <a t-field="equipe.title"/>
+                </div>
+                <div class="row">
+                    <label>Poste occupé :</label>
+                    <a t-field="equipe.comment"/>
+                </div>
+                <div class="row">
+                    <label>Notes :</label>
+                    <a t-field="equipe.comment"/>
+                </div>
+            </div>
+        </template>
+        <template id="cap_levage_portal.equipe_champs_col_2">
+            <div class="col-12">
+                <div class="row">
+                    <label>Email :</label>
+                    <a t-field="equipe.email"/>
+                </div>
+                <div class="row">
+                    <label>Téléphone :</label>
+                    <a t-field="equipe.phone"/>
+                </div>
+                <div class="row">
+                    <label>Mobile :</label>
+                    <a t-field="equipe.mobile"/>
+                </div>
+            </div>
+        </template>
+        <!--        Affiche le détail d'une equipe -->
+        <template id="cap_levage_portal.equipe_detail">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <div class="panel">
+                    <div class="row">
+                        <t t-call="cap_levage_portal.equipe_toolbar"/>
+                    </div>
+                    <h3>Contact</h3>
+                    <div class="row">
+                        <div class="col-2">
+                            <span t-field="equipe.parent_id.image_1920" t-options="{'widget': 'image'}"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.equipe_champs_col_1"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.equipe_champs_col_2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="/cap_levage_portal/materiels" class="btn btn-primary"
+                               aria-label="Mes matériels" title="Mes matériels">
+                                <i class="fa fa-wrench"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </t>
         </template>
     </data>
 </odoo>

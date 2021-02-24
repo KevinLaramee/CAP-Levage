@@ -4,6 +4,7 @@ from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
 )
 from odoo import http
 
+from odoo.tools.translate import _
 
 class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     @http.route(
@@ -34,7 +35,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         }
         :return:
         """
-        return {"singulier": "agence", "pluriel": "agences"}
+        return {"singulier": "agence", "pluriel": "agences", "page_name": "agences"}
 
     def get_url_value(self):
         return "agences"
@@ -44,3 +45,19 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
 
     def get_detail_url(self):
         return "agence"
+
+    @http.route(
+        "/cap_levage_portal/agence/detail/<int:agence_id>",
+        auth="user",
+        website=True,
+    )
+    def agence_detail(self, agence_id):
+        agence = http.request.env["res.partner"].browse(agence_id)
+
+        return http.request.render(
+            "cap_levage_portal.agence_detail",
+            {
+                "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
+                "agence": agence,
+            },
+        )

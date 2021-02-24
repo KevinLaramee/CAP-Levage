@@ -4,6 +4,7 @@ from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
 )
 from odoo import http
 
+from odoo.tools.translate import _
 
 class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     @http.route(
@@ -11,7 +12,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
             "/cap_levage_portal/equipes",
             "/cap_levage_portal/equipes/page/<int:page>",
         ],
-        auth="public",
+        auth="user",
         website=True,
     )
     def equipes_list(self, page=1, sortby="name", search=None, search_in="allid", **kw):
@@ -34,7 +35,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         }
         :return:
         """
-        return {"singulier": "équipe", "pluriel": "équipes"}
+        return {"singulier": "équipe", "pluriel": "équipes", "page_name": "equipes"}
 
     def get_url_value(self):
         return "equipes"
@@ -44,3 +45,20 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
 
     def get_detail_url(self):
         return "equipe"
+
+
+    @http.route(
+        "/cap_levage_portal/equipe/detail/<int:equipe_id>",
+        auth="user",
+        website=True,
+    )
+    def equipe_detail(self, equipe_id):
+        equipe = http.request.env["res.partner"].browse(equipe_id)
+
+        return http.request.render(
+            "cap_levage_portal.equipe_detail",
+            {
+                "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
+                "equipe": equipe,
+            },
+        )

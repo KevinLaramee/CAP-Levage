@@ -37,7 +37,7 @@ class AbstractEquipesagencesCtrl:
 
     def list_elements(self, page, sortby, search, search_in, **kw):
         """
-        Page affichange une liste de matériels.
+        Page affichant une liste de matériels.
         TODO: filtrer par equipes + gérer les filtres par état & co
         :param search_in: ou rechercher
         :param page: page à afficher
@@ -116,7 +116,7 @@ class AbstractEquipesagencesCtrl:
                 "searchbar_sortings": searchbar_sortings,
                 "searchbar_inputs": searchbar_inputs,
                 "sortby": sortby,
-                "page_name": _(f"Mes {labels.get('pluriel')}"),
+                "page_name": _(f"mes_{labels.get('page_name')}"),
                 "default_url": f"/cap_levage_portal/{self.get_url_value()}",
                 "ppr": PPR,
                 "ppg": PPG,
