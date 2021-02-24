@@ -16,6 +16,7 @@
     "data": [
         "views/materiels_templates.xml",
         "views/agences_equipes_templates.xml",
+        "views/equipes_manipulation_templates.xml",
         "views/homepage_templates.xml",
     ],
 }

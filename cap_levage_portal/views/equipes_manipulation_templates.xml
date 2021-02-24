@@ -1,0 +1,170 @@
+<odoo>
+    <data>
+        <template id="cap_levage_portal.equipe_toolbar">
+            <div class="col-8"/>
+            <div class="col-1">
+                <a t-att-href="'/cap_levage_portal/equipe/edit/' + str(equipe.id)" class="btn btn-secondary"
+                   aria-label="Editer" title="Editer">
+                    <i class="fa fa-pencil"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <form id="equipe_edit_archive" method="POST" action="/cap_levage_portal/equipe/archive/">
+                    <input type="hidden" value="false" name="active"/>
+                    <button type="submit" t-att-id="equipe.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
+                        <i class="fa fa-trash"/>
+                    </button>
+                </form>
+            </div>
+        </template>
+        <template id="cap_levage_portal.equipe_champs_col_1">
+            <div class="col-12">
+                <div class="row">
+                    <label>Nom :</label>
+                    <a t-field="equipe.name"/>
+                </div>
+                <div class="row">
+                    <label>Titre :</label>
+                    <a t-field="equipe.title"/>
+                </div>
+                <div class="row">
+                    <label>Poste occupé :</label>
+                    <a t-field="equipe.function"/>
+                </div>
+                <div class="row">
+                    <label>Notes :</label>
+                    <a t-field="equipe.comment"/>
+                </div>
+            </div>
+        </template>
+        <template id="cap_levage_portal.equipe_champs_col_2">
+            <div class="col-12">
+                <div class="row">
+                    <label>Email :</label>
+                    <a t-field="equipe.email"/>
+                </div>
+                <div class="row">
+                    <label>Téléphone :</label>
+                    <a t-field="equipe.phone"/>
+                </div>
+                <div class="row">
+                    <label>Mobile :</label>
+                    <a t-field="equipe.mobile"/>
+                </div>
+            </div>
+        </template>
+        <!--        Affiche le détail d'une equipe -->
+        <template id="cap_levage_portal.equipe_detail">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <div class="panel">
+                    <div class="row">
+                        <t t-call="cap_levage_portal.equipe_toolbar"/>
+                    </div>
+                    <h3>Contact</h3>
+                    <div class="row">
+                        <div class="col-2">
+                            <span t-field="equipe.image_128" t-options="{'widget': 'image'}"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.equipe_champs_col_1"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.equipe_champs_col_2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="/cap_levage_portal/materiels" class="btn btn-primary"
+                               aria-label="Mes matériels" title="Mes matériels">
+                                <i class="fa fa-wrench"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+<!-- Edition d'une equipe -->
+        <template id="assets_frontend" inherit_id="website.assets_frontend">
+           <xpath expr="." position="inside">
+               <script type="text/javascript" src="/cap_levage_portal/static/src/js/avatarUpload.js"/>
+           </xpath>
+        </template>
+        <template id="cap_levage_portal.equipe_edit">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="panel">
+                        <h3>Contact</h3>
+                        <div class="row">
+                            <div class="col-2" id="cap_levage_portal_avatar">
+                                <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image'}"
+                                       class="d-none cap_levage_portal_avatar_upload"/>
+                                <img class="mb-3 cap_levage_portal_avatar_img" t-att-src="website.image_url(equipe, 'image_128') if mode == 'edit' else ''"/>
+                                <div class="text-left">
+                                    <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
+                                        <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
+                                    </a>
+                                    <a href="#" title="Clear" aria-label="Clear" class="btn border-primary cap_levage_portal_avatar_clear">
+                                        <i class="fa fa-trash-o float-sm-none float-md-right"/>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="name">Name</label>
+                                    <input type="text" name="name" t-attf-class="form-control" t-att-value="equipe.name if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="title_id">Titre</label>
+                                    <select name="title" t-attf-class="form-control">
+                                        <option value="">Titre...</option>
+                                        <t t-foreach="titles_list or []" t-as="title_value">
+                                            <option t-att-value="title_value.id"
+                                                    t-att-selected="title_value.id == equipe.title.id if mode == 'edit' else 0">
+                                                <t t-esc="title_value.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="function">Poste occupé</label>
+                                    <input name="function" t-attf-class="form-control" t-att-value="equipe.function if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="comment">Notes</label>
+                                    <input type="text" name="comment" t-attf-class="form-control" t-att-value="equipe.comment if mode == 'edit' else ''"/>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="email">Email</label>
+                                    <input type="email" name="email" t-attf-class="form-control" t-att-value="equipe.email if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="phone">Téléphone</label>
+                                    <input type="tel" name="phone" t-attf-class="form-control" t-att-value="equipe.phone if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="mobile">Mobile</label>
+                                    <input type="tel" name="mobile" t-attf-class="form-control" t-att-value="equipe.mobile if mode == 'edit' else ''"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <button type="submit" t-att-id="equipe.id if mode == 'edit' else ''" class="btn btn-primary">
+                                <i class="fa fa-save"/>
+                            </button>
+                            <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(equipe.id) if mode == 'edit' else '/cap_levage_portal/equipes'" class="btn btn-danger"
+                               aria-label="Annuler" title="Annuler">
+                                <span class="fa fa-ban"/>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -85,9 +85,11 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, CustomerPortal):
             {
                 "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
                 "equipe": equipe,
-                "titles": titles,
+                "titles_list": titles,
                 "edit": True,
                 "error": {},
+                "mode": "edit",
+                "post_url": f"/cap_levage_portal/equipe/edit/{equipe_id}",
             }
         )
 
@@ -118,3 +120,61 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, CustomerPortal):
 
         equipe.sudo().write(values)
         return werkzeug.utils.redirect(f"/cap_levage_portal/equipe/detail/{equipe_id}")
+
+    @http.route(
+        "/cap_levage_portal/equipe/archive/<int:equipe_id>",
+        methods=["POST"],
+        auth="user",
+        website=True,
+    )
+    def equipe_delete(self, equipe_id):
+        equipe = http.request.env["res.partner"].browse(equipe_id)
+        values = {"active": False}
+        equipe.sudo().write(values)
+        return werkzeug.utils.redirect("/cap_levage_portal/equipes")
+
+    @http.route(
+        "/cap_levage_portal/equipe/create",
+        methods=["GET"],
+        auth="user",
+        website=True,
+    )
+    def equipe_get_create_data(self):
+        titles = http.request.env["res.partner.title"].sudo().search([])
+        values = super()._prepare_home_portal_values()
+        values.update(
+            {
+                "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
+                "titles_list": titles,
+                "edit": True,
+                "error": {},
+                "mode": "create",
+                "post_url": "/cap_levage_portal/equipe/create",
+            }
+        )
+
+        return http.request.render("cap_levage_portal.equipe_edit", values)
+
+    @http.route(
+        "/cap_levage_portal/equipe/create",
+        methods=["POST"],
+        auth="user",
+        website=True,
+    )
+    def equipe_get_create(self, **post):
+        logged_user = http.request.env["res.users"].browse(http.request.session.uid)
+        values = {key: post[key] for key in MANDATORY_EQUIPE_FIELDS}
+        values.update({key: post[key] for key in OPTIONAL_EQUIPE_FIELDS if key in post})
+        values.update({"type": "contact", "parent_id": logged_user.partner_id.id})
+        new_equipe = http.request.env["res.partner"].create(values)
+
+        if "image_1920" in post:
+            image_1920 = post.get("image_1920")
+            if image_1920:
+                image_1920 = image_1920.read()
+                image_1920 = base64.b64encode(image_1920)
+                new_equipe.sudo().write({"image_1920": image_1920})
+
+        return werkzeug.utils.redirect(
+            f"/cap_levage_portal/equipe/detail/{new_equipe.id}"
+        )

@@ -35,7 +35,6 @@ odoo.define('cap_levage_portal_avatar.main', function (require) {
             reader.readAsDataURL(ev.currentTarget.files[0]);
             reader.onload = function (ev) {
                 $form.find('.cap_levage_portal_avatar_img').attr('src', ev.target.result);
-                $form.find('.cap_levage_portal_avatar_img').attr('style', 'border-radius: 50%; width: 128px; height: 128px;')
             };
             $form.find('#portal_clear_avatar').remove();
         },
@@ -43,7 +42,6 @@ odoo.define('cap_levage_portal_avatar.main', function (require) {
         _onClearAvatarClick: function (ev) {
             var $form = $(ev.currentTarget).closest('form');
             $form.find('.cap_levage_portal_avatar_img').attr('src', '/web/static/src/img/placeholder.png');
-            $form.find('.cap_levage_portal_avatar_img').attr('style', 'border-radius: 50%; width: 128px; height: 128px;')
             $form.append($('<input/>', {
                 name: 'clear_avatar',
                 id: 'portal_clear_avatar',

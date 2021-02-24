@@ -118,6 +118,7 @@ class AbstractEquipesagencesCtrl:
                 "sortby": sortby,
                 "page_name": _(f"mes_{labels.get('page_name')}"),
                 "default_url": f"/cap_levage_portal/{self.get_url_value()}",
+                "create_url": f"/cap_levage_portal/{self.get_detail_url()}/create",
                 "ppr": PPR,
                 "ppg": PPG,
                 "bins": TableComputeCapLevage().process(all_equipes, PPG, PPR),
