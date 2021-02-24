@@ -232,27 +232,15 @@
         <template id="cap_levage_portal.equipe_toolbar">
             <div class="col-8"/>
             <div class="col-1">
-                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
+                <a t-att-href="'/cap_levage_portal/equipe/edit/' + str(equipe.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
                 </a>
             </div>
             <div class="col-1">
                 <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
-                   aria-label="Sauvegarder" title="Sauvegarder">
-                    <i class="fa fa-floppy-o"/>
-                </a>
-            </div>
-            <div class="col-1">
-                <a href="/cap_levage_portal/materiels" class="btn btn-secondary"
-                   aria-label="Supprimer" title="Supprimer">
+                   aria-label="Archiver" title="Archiver">
                     <i class="fa fa-trash"/>
-                </a>
-            </div>
-            <div class="col-1">
-                <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(equipe.id)" class="btn btn-secondary"
-                   aria-label="Annuler" title="Annuler">
-                    <i class="fa fa-ban"/>
                 </a>
             </div>
         </template>
@@ -263,12 +251,12 @@
                     <a t-field="equipe.name"/>
                 </div>
                 <div class="row">
-                    <label>titre :</label>
+                    <label>Titre :</label>
                     <a t-field="equipe.title"/>
                 </div>
                 <div class="row">
                     <label>Poste occupé :</label>
-                    <a t-field="equipe.comment"/>
+                    <a t-field="equipe.function"/>
                 </div>
                 <div class="row">
                     <label>Notes :</label>
@@ -303,7 +291,7 @@
                     <h3>Contact</h3>
                     <div class="row">
                         <div class="col-2">
-                            <span t-field="equipe.parent_id.image_1920" t-options="{'widget': 'image'}"/>
+                            <span t-field="equipe.image_128" t-options="{'widget': 'image'}"/>
                         </div>
                         <div class="col-5">
                             <t t-call="cap_levage_portal.equipe_champs_col_1"/>
@@ -321,6 +309,92 @@
                         </div>
                     </div>
                 </div>
+            </t>
+        </template>
+
+
+        <template id="assets_frontend" inherit_id="website.assets_frontend">
+           <xpath expr="." position="inside">
+               <script type="text/javascript" src="/cap_levage_portal/static/src/js/avatarUpload.js"/>
+           </xpath>
+        </template>
+        <template id="cap_levage_portal.equipe_edit">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="/cap_levage_portal/equipe/edit/#{equipe.id}">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="panel">
+                        <div class="row">
+                            <t t-call="cap_levage_portal.equipe_toolbar"/>
+                        </div>
+                        <h3>Contact</h3>
+                        <div class="row">
+                            <div class="col-2" id="cap_levage_portal_avatar">
+                                <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image'}"
+                                       class="d-none cap_levage_portal_avatar_upload"/>
+                                <img class="mb-3 cap_levage_portal_avatar_img" t-att-src="website.image_url(equipe, 'image_128')"
+                                     style="object-fit: cover; border-radius: 50%; width: 128px; height: 128px;"/>
+                                <div class="text-left">
+                                    <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
+                                        <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
+                                    </a>
+                                    <a href="#" title="Clear" aria-label="Clear" class="btn border-primary cap_levage_portal_avatar_clear">
+                                        <i class="fa fa-trash-o float-sm-none float-md-right"/>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="name">Name</label>
+                                    <input type="text" name="name" t-attf-class="form-control" t-att-value="equipe.name"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="title_id">Titre</label>
+                                    <select name="title" t-attf-class="form-control">
+                                        <option value="">Titre...</option>
+                                        <t t-foreach="titles or []" t-as="title">
+                                            <option t-att-value="title.id"
+                                                    t-att-selected="title.id == equipe.title.id">
+                                                <t t-esc="title.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="function">Poste occupé</label>
+                                    <input name="function" t-attf-class="form-control" t-att-value="equipe.function"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="comment">Notes</label>
+                                    <input type="text" name="comment" t-attf-class="form-control" t-att-value="equipe.comment"/>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="email">Email</label>
+                                    <input type="email" name="email" t-attf-class="form-control" t-att-value="equipe.email"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="phone">Téléphone</label>
+                                    <input type="tel" name="phone" t-attf-class="form-control" t-att-value="equipe.phone"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="mobile">Mobile</label>
+                                    <input type="tel" name="mobile" t-attf-class="form-control" t-att-value="equipe.mobile"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <button type="submit" t-att-id="equipe.id" class="btn btn-primary">
+                                <i class="fa fa-save"/>
+                            </button>
+                            <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(equipe.id)" class="btn btn-danger"
+                               aria-label="Annuler" title="Annuler">
+                                <span class="fa fa-ban"/>
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </t>
         </template>
     </data>

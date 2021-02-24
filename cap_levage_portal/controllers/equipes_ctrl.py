@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
+import base64
+
+import werkzeug
+
 from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl,
 )
 from odoo import http
+from odoo.addons.portal.controllers.portal import CustomerPortal
 
 from odoo.tools.translate import _
 
-class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
+MANDATORY_EQUIPE_FIELDS = ["name", "title", "email"]
+OPTIONAL_EQUIPE_FIELDS = ["function", "email", "phone", "mobile", "comment"]
+
+
+class CapLevageEquipes(AbstractEquipesagencesCtrl, CustomerPortal):
     @http.route(
         [
             "/cap_levage_portal/equipes",
@@ -46,7 +55,6 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def get_detail_url(self):
         return "equipe"
 
-
     @http.route(
         "/cap_levage_portal/equipe/detail/<int:equipe_id>",
         auth="user",
@@ -62,3 +70,51 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
                 "equipe": equipe,
             },
         )
+
+    @http.route(
+        "/cap_levage_portal/equipe/edit/<int:equipe_id>",
+        methods=["GET"],
+        auth="user",
+        website=True,
+    )
+    def equipe_get_edit_data(self, equipe_id):
+        equipe = http.request.env["res.partner"].browse(equipe_id)
+        titles = http.request.env["res.partner.title"].sudo().search([])
+        values = super()._prepare_home_portal_values()
+        values.update(
+            {
+                "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
+                "equipe": equipe,
+                "titles": titles,
+                "edit": True,
+                "error": {},
+            }
+        )
+
+        return http.request.render("cap_levage_portal.equipe_edit", values)
+
+    @http.route(
+        "/cap_levage_portal/equipe/edit/<int:equipe_id>",
+        methods=["POST"],
+        auth="user",
+        website=True,
+    )
+    def equipe_edit(self, equipe_id, **post):
+        equipe = http.request.env["res.partner"].browse(equipe_id)
+        values = {key: post[key] for key in MANDATORY_EQUIPE_FIELDS}
+
+        if "image_1920" in post:
+            image_1920 = post.get("image_1920")
+            if image_1920:
+                image_1920 = image_1920.read()
+                image_1920 = base64.b64encode(image_1920)
+                equipe.sudo().write({"image_1920": image_1920})
+            post.pop("image_1920")
+        if "clear_avatar" in post:
+            equipe.sudo().write({"image_1920": False})
+            post.pop("clear_avatar")
+
+        values.update({key: post[key] for key in OPTIONAL_EQUIPE_FIELDS if key in post})
+
+        equipe.sudo().write(values)
+        return werkzeug.utils.redirect(f"/cap_levage_portal/equipe/detail/{equipe_id}")
