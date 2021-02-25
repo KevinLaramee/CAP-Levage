@@ -1,0 +1,157 @@
+<odoo>
+    <data>
+        <template id="cap_levage_portal.agence_toolbar">
+            <div class="col-8"/>
+            <div class="col-1">
+                <a t-att-href="'/cap_levage_portal/agence/edit/' + str(partner.id)" class="btn btn-secondary"
+                   aria-label="Editer" title="Editer">
+                    <i class="fa fa-pencil"/>
+                </a>
+            </div>
+            <div class="col-1">
+                <form id="agence_edit_archive" method="POST" action="/cap_levage_portal/agence/archive/">
+                    <input type="hidden" value="false" name="active"/>
+                    <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
+                        <i class="fa fa-trash"/>
+                    </button>
+                </form>
+            </div>
+        </template>
+        <template id="cap_levage_portal.agence_champs_col_1">
+            <div class="col-12">
+                <div class="row">
+                    <label>Nom :</label>
+                    <a t-field="partner.name"/>
+                </div>
+                <div class="row">
+                    <label>Adresse :</label>
+                    <address t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                </div>
+                <div class="row">
+                    <label>Notes :</label>
+                    <a t-field="partner.comment"/>
+                </div>
+            </div>
+        </template>
+        <template id="cap_levage_portal.agence_champs_col_2">
+            <div class="col-12">
+                <div class="row">
+                    <label>Email :</label>
+                    <a t-field="partner.email"/>
+                </div>
+                <div class="row">
+                    <label>Téléphone :</label>
+                    <a t-field="partner.phone"/>
+                </div>
+                <div class="row">
+                    <label>Mobile :</label>
+                    <a t-field="partner.mobile"/>
+                </div>
+            </div>
+        </template>
+
+        <!--        Affiche le détail d'une agence -->
+        <template id="cap_levage_portal.agence_detail">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <div class="panel">
+                    <div class="row">
+                        <t t-call="cap_levage_portal.agence_toolbar"/>
+                    </div>
+                    <h3>Adresse de livraison</h3>
+                    <div class="row">
+                        <div class="col-2">
+                            <span t-field="partner.parent_id.image_1920" t-options="{'widget': 'image'}"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.agence_champs_col_1"/>
+                        </div>
+                        <div class="col-5">
+                            <t t-call="cap_levage_portal.agence_champs_col_2"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <a href="/cap_levage_portal/materiels" class="btn btn-primary"
+                               aria-label="Mes matériels" title="Mes matériels">
+                                <i class="fa fa-wrench"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+<!-- Edition/création d'une agence -->
+        <template id="cap_levage_portal.agence_edit">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <form id="agence_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="panel">
+                        <h3>Contact</h3>
+                        <div class="row">
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="name">Name</label>
+                                    <input type="text" name="name" t-attf-class="form-control" t-att-value="partner.name if mode == 'edit' else ''"/>
+                                </div>
+
+                            <div t-attf-class="form-group col-xl-6">
+                                <label class="col-form-label" for="street">Street</label>
+                                <input type="text" name="street" t-attf-class="form-control" t-att-value="street if mode == 'edit' else ''"/>
+                            </div>
+                            <div t-attf-class="form-group col-xl-6">
+                                <label class="col-form-label" for="city">City</label>
+                                <input type="text" name="city" t-attf-class="form-control" t-att-value="city if mode == 'edit' else ''" />
+                            </div>
+                            <div t-attf-class="form-group col-xl-6">
+                                <label class="col-form-label label-optional" for="zip">Zip / Postal Code</label>
+                                <input type="text" name="zip" t-attf-class="form-control" t-att-value="zip if mode == 'edit' else ''" />
+                            </div>
+                            <div t-attf-class="form-group col-xl-6">
+                                <label class="col-form-label" for="country_id">Country</label>
+                                <select name="country_id" t-attf-class="form-control">
+                                    <option value="">Country...</option>
+                                    <t t-foreach="countries or []" t-as="country">
+                                        <option t-att-value="country.id" t-att-selected="country.id == int(country_id) if mode == 'edit' else 0">
+                                            <t t-esc="country.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="comment">Notes</label>
+                                    <input type="text" name="comment" t-attf-class="form-control" t-att-value="partner.comment if mode == 'edit' else ''"/>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="email">Email</label>
+                                    <input type="email" name="email" t-attf-class="form-control" t-att-value="partner.email if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="phone">Téléphone</label>
+                                    <input type="tel" name="phone" t-attf-class="form-control" t-att-value="partner.phone if mode == 'edit' else ''"/>
+                                </div>
+                                <div t-attf-class="form-group col-12">
+                                    <label class="col-form-label" for="mobile">Mobile</label>
+                                    <input type="tel" name="mobile" t-attf-class="form-control" t-att-value="partner.mobile if mode == 'edit' else ''"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <button type="submit" t-att-id="partner.id if mode == 'edit' else ''" class="btn btn-primary">
+                                <i class="fa fa-save"/>
+                            </button>
+                            <a t-att-href="'/cap_levage_portal/agence/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/agences'" class="btn btn-danger"
+                               aria-label="Annuler" title="Annuler">
+                                <span class="fa fa-ban"/>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </t>
+        </template>
+    </data>
+</odoo>
