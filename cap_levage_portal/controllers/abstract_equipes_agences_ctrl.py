@@ -2,10 +2,8 @@
 import base64
 from abc import abstractmethod
 
-import werkzeug
-
 from cap_levage_portal.controllers.grid_utils import TableComputeCapLevage
-from odoo import http
+from odoo import http, tools
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
 from odoo.tools.translate import _
@@ -27,7 +25,11 @@ class AbstractEquipesagencesCtrl:
         pass
 
     def _compute_generic_values(self):
-        return {"is_agence": self.is_agence(), "is_equipe": self.is_equipe()}
+        return {
+            "is_agence": self.is_agence(),
+            "is_equipe": self.is_equipe(),
+            "error": {},
+        }
 
     @abstractmethod
     def get_url_value(self):
@@ -47,6 +49,14 @@ class AbstractEquipesagencesCtrl:
 
     @abstractmethod
     def get_search_criteria(self):
+        pass
+
+    @abstractmethod
+    def get_optional_fields(self):
+        pass
+
+    @abstractmethod
+    def get_mandatory_fields(self):
         pass
 
     def list_elements(self, page, sortby, search, search_in, **kw):
@@ -144,37 +154,52 @@ class AbstractEquipesagencesCtrl:
             values,
         )
 
-    def update_res_partner(self, partner_id, post, mandatory_fields, optional_fields):
+    def update_res_partner(self, partner_id, post, error_page):
         partner = http.request.env["res.partner"].browse(partner_id)
-        values = {key: post[key] for key in mandatory_fields}
+        error, error_message = self.details_form_validate(post)
+        values = {}
+        if not error:
+            values.update({key: post[key] for key in self.get_mandatory_fields()})
 
-        if "image_1920" in post:
-            image_1920 = post.get("image_1920")
-            if image_1920:
-                image_1920 = image_1920.read()
-                image_1920 = base64.b64encode(image_1920)
-                partner.sudo().write({"image_1920": image_1920})
-            post.pop("image_1920")
-        if "clear_avatar" in post:
-            partner.sudo().write({"image_1920": False})
-            post.pop("clear_avatar")
+            if "image_1920" in post:
+                image_1920 = post.get("image_1920")
+                if image_1920:
+                    image_1920 = image_1920.read()
+                    image_1920 = base64.b64encode(image_1920)
+                    partner.sudo().write({"image_1920": image_1920})
+                post.pop("image_1920")
+            if "clear_avatar" in post:
+                partner.sudo().write({"image_1920": False})
+                post.pop("clear_avatar")
 
-        values.update({key: post[key] for key in optional_fields if key in post})
-        for field in set(['country_id', 'state_id']) & set(values.keys()):
-            try:
-                values[field] = int(values[field])
-            except:
-                values[field] = False
-        partner.sudo().write(values)
-        return werkzeug.utils.redirect(
-            f"/cap_levage_portal/{self.get_detail_url()}/detail/{partner_id}"
-        )
+            values.update(
+                {key: post[key] for key in self.get_optional_fields() if key in post}
+            )
+            for field in set(["country_id", "state_id"]) & set(values.keys()):
+                try:
+                    values[field] = int(values[field])
+                except:
+                    values[field] = False
+            partner.sudo().write(values)
+            return http.request.redirect(
+                f"/cap_levage_portal/{self.get_detail_url()}/detail/{partner_id}"
+            )
+        else:
+            values.update(self._compute_generic_values())
+            values.update(self.partner_get_edit_data(partner_id))
+            values.update(
+                {
+                    "error": error,
+                    "error_message": error_message,
+                }
+            )
+            return http.request.render(error_page, values)
 
     def archive_res_partner(self, partner_id):
         agence = http.request.env["res.partner"].browse(partner_id)
         values = {"active": False}
         agence.sudo().write(values)
-        return werkzeug.utils.redirect(f"/cap_levage_portal/{self.get_url_value()}")
+        return http.request.redirect(f"/cap_levage_portal/{self.get_url_value()}")
 
     def partner_get_create_data(self):
         titles = http.request.env["res.partner.title"].sudo().search([])
@@ -205,27 +230,77 @@ class AbstractEquipesagencesCtrl:
                 "titles_list": titles,
                 "countries": countries,
                 "edit": True,
-                "error": {},
                 "mode": "edit",
                 "post_url": f"/cap_levage_portal/{self.get_detail_url()}/edit/{partner_id}",
             }
         )
         return values
 
-    def partner_create(self, post, mandatory_fields, optional_fields):
+    def partner_create(self, post, error_page):
         logged_user = http.request.env["res.users"].browse(http.request.session.uid)
-        values = {key: post[key] for key in mandatory_fields}
-        values.update({key: post[key] for key in optional_fields if key in post})
-        values.update({"type": self.get_search_criteria(), "parent_id": logged_user.partner_id.id})
-        new_partner = http.request.env["res.partner"].create(values)
+        error, error_message = self.details_form_validate(post)
+        values = {}
+        if not error:
+            values.update({key: post[key] for key in self.get_mandatory_fields()})
+            values.update(
+                {key: post[key] for key in self.get_optional_fields() if key in post}
+            )
+            values.update(
+                {
+                    "type": self.get_search_criteria(),
+                    "parent_id": logged_user.partner_id.id,
+                }
+            )
+            new_partner = http.request.env["res.partner"].create(values)
 
-        if "image_1920" in post:
-            image_1920 = post.get("image_1920")
-            if image_1920:
-                image_1920 = image_1920.read()
-                image_1920 = base64.b64encode(image_1920)
-                new_partner.sudo().write({"image_1920": image_1920})
+            if "image_1920" in post:
+                image_1920 = post.get("image_1920")
+                if image_1920:
+                    image_1920 = image_1920.read()
+                    image_1920 = base64.b64encode(image_1920)
+                    new_partner.sudo().write({"image_1920": image_1920})
 
-        return werkzeug.utils.redirect(
-            f"/cap_levage_portal/{self.get_detail_url()}/detail/{new_partner.id}"
-        )
+            return http.request.redirect(
+                f"/cap_levage_portal/{self.get_detail_url()}/detail/{new_partner.id}"
+            )
+        else:
+            values.update(self._compute_generic_values())
+            values.update(self.partner_get_create_data())
+            values.update(
+                {
+                    "error": error,
+                    "error_message": error_message,
+                }
+            )
+            return http.request.render(error_page, values)
+
+    def details_form_validate(self, data):
+        error = dict()
+        error_message = []
+
+        # Validation
+        for field_name in self.get_mandatory_fields():
+            if not data.get(field_name):
+                error[field_name] = "missing"
+
+        # email validation
+        if data.get("email") and not tools.single_email_re.match(data.get("email")):
+            error["email"] = "error"
+            error_message.append(
+                _("Invalid Email! Please enter a valid email address.")
+            )
+
+        # error message for empty required fields
+        if [err for err in error.values() if err == "missing"]:
+            error_message.append(_("Some required fields are empty."))
+
+        unknown = [
+            k
+            for k in data
+            if k not in self.get_mandatory_fields() + self.get_optional_fields()
+        ]
+        if unknown:
+            error["common"] = "Unknown field"
+            error_message.append("Unknown field '%s'" % ",".join(unknown))
+
+        return error, error_message

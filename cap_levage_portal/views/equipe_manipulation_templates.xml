@@ -85,24 +85,33 @@
             </t>
         </template>
 
-<!-- Edition/création d'une equipe -->
+        <!-- Edition/création d'une equipe -->
         <template id="assets_frontend" inherit_id="website.assets_frontend">
-           <xpath expr="." position="inside">
-               <script type="text/javascript" src="/cap_levage_portal/static/src/js/avatarUpload.js"/>
-           </xpath>
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/avatarUpload.js"/>
+            </xpath>
         </template>
         <template id="cap_levage_portal.equipe_edit">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
                 <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="col-lg-12">
+                        <div t-if="error_message" class="alert alert-danger" role="alert">
+                            <t t-foreach="error_message" t-as="err">
+                                <t t-esc="err"/>
+                                <br/>
+                            </t>
+                        </div>
+                    </div>
                     <div class="panel">
                         <h3>Contact</h3>
                         <div class="row">
                             <div class="col-2" id="cap_levage_portal_avatar">
                                 <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
-                                <img class="mb-3 cap_levage_portal_avatar_img" t-att-src="website.image_url(partner, 'image_128') if mode == 'edit' else ''"/>
+                                <img class="mb-3 cap_levage_portal_avatar_img"
+                                     t-att-src="website.image_url(partner, 'image_128') if mode == 'edit' else ''"/>
                                 <div class="text-left">
                                     <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
                                         <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
@@ -113,13 +122,14 @@
                                 </div>
                             </div>
                             <div class="col-5">
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="name">Name</label>
-                                    <input type="text" name="name" t-attf-class="form-control" t-att-value="partner.name if mode == 'edit' else ''"/>
+                                    <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}"
+                                           t-att-value="partner.name if mode == 'edit' else ''"/>
                                 </div>
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('title') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="title_id">Titre</label>
-                                    <select name="title" t-attf-class="form-control">
+                                    <select name="title" t-attf-class="form-control #{error.get('title') and 'is-invalid' or ''}">
                                         <option value="">Titre...</option>
                                         <t t-foreach="titles_list or []" t-as="title_value">
                                             <option t-att-value="title_value.id"
@@ -129,27 +139,32 @@
                                         </t>
                                     </select>
                                 </div>
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('function') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="function">Poste occupé</label>
-                                    <input name="function" t-attf-class="form-control" t-att-value="partner.function if mode == 'edit' else ''"/>
+                                    <input name="function" t-attf-class="form-control #{error.get('function') and 'is-invalid' or ''}"
+                                           t-att-value="partner.function if mode == 'edit' else ''"/>
                                 </div>
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('comment') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="comment">Notes</label>
-                                    <input type="text" name="comment" t-attf-class="form-control" t-att-value="partner.comment if mode == 'edit' else ''"/>
+                                    <input type="text" name="comment" t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
+                                           t-att-value="partner.comment if mode == 'edit' else ''"/>
                                 </div>
                             </div>
                             <div class="col-5">
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="email">Email</label>
-                                    <input type="email" name="email" t-attf-class="form-control" t-att-value="partner.email if mode == 'edit' else ''"/>
+                                    <input type="email" name="email" t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}"
+                                           t-att-value="partner.email if mode == 'edit' else ''"/>
                                 </div>
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('phone') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="phone">Téléphone</label>
-                                    <input type="tel" name="phone" t-attf-class="form-control" t-att-value="partner.phone if mode == 'edit' else ''"/>
+                                    <input type="tel" name="phone" t-attf-class="form-control #{error.get('phone') and 'is-invalid' or ''}"
+                                           t-att-value="partner.phone if mode == 'edit' else ''"/>
                                 </div>
-                                <div t-attf-class="form-group col-12">
+                                <div t-attf-class="form-group #{error.get('mobile') and 'o_has_error' or ''} col-12">
                                     <label class="col-form-label" for="mobile">Mobile</label>
-                                    <input type="tel" name="mobile" t-attf-class="form-control" t-att-value="partner.mobile if mode == 'edit' else ''"/>
+                                    <input type="tel" name="mobile" t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''}"
+                                           t-att-value="partner.mobile if mode == 'edit' else ''"/>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +172,8 @@
                             <button type="submit" t-att-id="partner.id if mode == 'edit' else ''" class="btn btn-primary">
                                 <i class="fa fa-save"/>
                             </button>
-                            <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/equipes'" class="btn btn-danger"
+                            <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/equipes'"
+                               class="btn btn-danger"
                                aria-label="Annuler" title="Annuler">
                                 <span class="fa fa-ban"/>
                             </a>

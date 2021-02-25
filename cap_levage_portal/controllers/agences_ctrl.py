@@ -60,6 +60,12 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def is_equipe(self):
         return False
 
+    def get_optional_fields(self):
+        return OPTIONAL_AGENCE_FIELDS
+
+    def get_mandatory_fields(self):
+        return MANDATORY_AGENCE_FIELDS
+
     @http.route(
         "/cap_levage_portal/agence/detail/<int:agence_id>",
         auth="user",
@@ -95,7 +101,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         website=True,
     )
     def agence_edit(self, agence_id, **post):
-        return self.update_res_partner(agence_id, post, MANDATORY_AGENCE_FIELDS, OPTIONAL_AGENCE_FIELDS)
+        return self.update_res_partner(agence_id, post, "cap_levage_portal.agence_edit")
 
     @http.route(
         "/cap_levage_portal/agence/archive/<int:agence_id>",
@@ -123,5 +129,6 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         website=True,
     )
     def agence_get_create(self, **post):
-        return self.partner_create(post, MANDATORY_AGENCE_FIELDS, OPTIONAL_AGENCE_FIELDS)
+        return self.partner_create(post, "cap_levage_portal.agence_edit")
+
 

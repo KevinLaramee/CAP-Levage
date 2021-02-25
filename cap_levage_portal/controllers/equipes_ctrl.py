@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import werkzeug
 
 from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl
@@ -8,7 +9,7 @@ from odoo import http
 from odoo.tools.translate import _
 
 MANDATORY_EQUIPE_FIELDS = ["name", "title", "email"]
-OPTIONAL_EQUIPE_FIELDS = ["function", "phone", "mobile", "comment"]
+OPTIONAL_EQUIPE_FIELDS = ["function", "phone", "mobile", "comment", "image_1920"]
 
 
 class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
@@ -60,6 +61,12 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def is_equipe(self):
         return True
 
+    def get_optional_fields(self):
+        return OPTIONAL_EQUIPE_FIELDS
+
+    def get_mandatory_fields(self):
+        return MANDATORY_EQUIPE_FIELDS
+
     @http.route(
         "/cap_levage_portal/equipe/detail/<int:equipe_id>",
         auth="user",
@@ -95,7 +102,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         website=True,
     )
     def equipe_edit(self, equipe_id, **post):
-        return self.update_res_partner(equipe_id, post, MANDATORY_EQUIPE_FIELDS, OPTIONAL_EQUIPE_FIELDS)
+        return self.update_res_partner(equipe_id, post, "cap_levage_portal.equipe_edit")
 
     @http.route(
         "/cap_levage_portal/equipe/archive/<int:equipe_id>",
@@ -123,4 +130,4 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         website=True,
     )
     def equipe_get_create(self, **post):
-        return self.partner_create(post, MANDATORY_EQUIPE_FIELDS, OPTIONAL_EQUIPE_FIELDS)
+        return self.partner_create(post, "cap_levage_portal.equipe_edit")
