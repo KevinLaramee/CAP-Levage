@@ -42,7 +42,7 @@ class CapLevageWebsite(http.Controller):
             "agence": {
                 "label": _("Agence"),
                 "order": "agence_id asc, equipe_id asc, id asc",
-            }
+            },
         }
         searchbar_inputs = {
             "all": {
@@ -72,10 +72,18 @@ class CapLevageWebsite(http.Controller):
         logged_user = request.env["res.users"].browse(request.session.uid)
         search_domain = [("owner_user_id", "=", logged_user.id)]
         if search is not None and search_in is not None:
+            # FIXME - faire mieux ? champs store ?
+            partner_ids = (
+                http.request.env["res.partner"].search([("name", "ilike", search)]).ids
+            )
             search_domain += [
+                "|",
+                "|",
                 "|",
                 ("num_materiel", "ilike", search),
                 ("qr_code", "ilike", search),
+                ("equipe_id", "in", partner_ids),
+                ("agence_id", "in", partner_ids),
             ]
         total_items = materiels.search_count(search_domain)
         pager = portal_pager(
