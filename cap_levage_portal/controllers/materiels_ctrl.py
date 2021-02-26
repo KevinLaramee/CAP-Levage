@@ -34,6 +34,14 @@ class CapLevageWebsite(http.Controller):
             "date": {
                 "label": _("Date de prochain contrôle"),
                 "order": "audit_suivant desc, id asc",
+            },
+            "equipe": {
+                "label": _("Equipe"),
+                "order": "equipe_id asc, agence_id asc, id asc",
+            },
+            "agence": {
+                "label": _("Agence"),
+                "order": "agence_id asc, equipe_id asc, id asc",
             }
         }
         searchbar_inputs = {
