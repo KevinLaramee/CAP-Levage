@@ -114,8 +114,13 @@
                         <h6 class="o_wsale_products_item_title">
                             <a itemprop="name" t-att-href="product_href" t-att-content="item.name" t-field="item.name"/>
                         </h6>
-                        <div>
+                        <div class="text-left small">
+                            <label>Email :</label>
                             <a t-field="item.email"/>
+                        </div>
+                        <div class="text-left small">
+                            <label>Matériels possédés :</label>
+                            <a t-esc="len(item.ids_equipements)"/>
                         </div>
                     </div>
                 </div>

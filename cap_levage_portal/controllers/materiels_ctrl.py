@@ -6,7 +6,7 @@ from odoo.http import request
 from odoo.tools.translate import _
 
 PPG = 2
-PPR = 5
+PPR = 4
 
 
 class CapLevageWebsite(http.Controller):
@@ -37,9 +37,21 @@ class CapLevageWebsite(http.Controller):
             }
         }
         searchbar_inputs = {
+            "all": {
+                "input": "all",
+                "label": _("Rechercher dans tous éléments"),
+            },
             "allid": {
                 "input": "allid",
-                "label": _("Rechercher dans tous les identifiants matériels"),
+                "label": _("Rechercher dans tous les identifiants matériels et QRCode"),
+            },
+            "equipe": {
+                "input": "equipe",
+                "label": _("Rechercher sur toutes les équipes"),
+            },
+            "agence": {
+                "input": "agence",
+                "label": _("Rechercher sur toutes les agences"),
             },
         }
 
@@ -52,7 +64,6 @@ class CapLevageWebsite(http.Controller):
         logged_user = request.env["res.users"].browse(request.session.uid)
         search_domain = [("owner_user_id", "=", logged_user.id)]
         if search is not None and search_in is not None:
-            # TODO: chercher en plus sur ID
             search_domain += [
                 "|",
                 ("num_materiel", "ilike", search),
@@ -229,7 +240,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    def list_certificat_creation_materiel(self, materiel_id, **kw):
+    def list_certificat_creation_vgp(self, materiel_id, **kw):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         vgps = materiel.rapport_controle
 

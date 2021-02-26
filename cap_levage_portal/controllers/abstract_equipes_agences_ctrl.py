@@ -77,7 +77,7 @@ class AbstractEquipesagencesCtrl:
                 "order": "name desc, id asc",
             },
             "nbequipment": {
-                "label": _(f"Nombre d'{labels.get('singulier')}"),
+                "label": _("Nombre de matériel"),
                 "order": "ids_equipements desc, id asc",
             },
         }

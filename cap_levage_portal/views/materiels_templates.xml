@@ -29,7 +29,7 @@
                     <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
                         <!--                        Affiche la barre de recherche-->
                         <t t-call="portal.portal_searchbar">
-                            <t t-set="title" t-value="' '"/>
+                            <t t-set="title" t-value="''"/>
                             <t t-set="_classes">w-100 w-md-auto mt-2</t>
                         </t>
                     </div>
@@ -69,7 +69,7 @@
                                     </t>
                                     <t t-else="">
                                         <h3 class="mt8">Aucun résultat</h3>
-                                        <p>Aucun résultat pour le numéro de matériel"<strong t-esc='search'/>"
+                                        <p>Aucun résultat pour la recherche : "<strong t-esc='search'/>"
                                         </p>
                                     </t>
                                 </div>
@@ -100,15 +100,28 @@
                         <h6 class="o_wsale_products_item_title">
                             <a itemprop="name" t-att-href="product_href" t-att-content="materiel.category_id" t-field="materiel.category_id"/>
                         </h6>
-                        <div>
+                        <div class="small text-left">
                             <label>Numéro :</label>
                             <a t-field="materiel.num_materiel"/>
                         </div>
-                        <div>
+                        <div class="small text-left">
+                            <label>QRCode:</label>
+                            <a t-field="materiel.qr_code"/>
+                        </div>
+                        <div class="small text-left">
                             <label>Prochaine date de contrôle :</label>
                             <a t-field="materiel.audit_suivant"/>
                         </div>
-                        <div>
+                        <div class="small text-left">
+                            <label>Equipe :</label>
+                            <a t-field="materiel.equipe_id"/>
+                        </div>
+                        <div class="small text-left">
+                            <label>Agence :</label>
+                            <a t-field="materiel.agence_id"/>
+                        </div>
+                        <div class="small text-left">
+                            <label>Statut :</label>
                             <t t-call="cap_levage_portal.etat_materiel"/>
                         </div>
                     </div>
@@ -357,7 +370,7 @@
                 <t t-if="documents" t-call="portal.portal_table">
                     <thead>
                         <tr class="active">
-                            <th>Référence</th>
+                            <th>Description</th>
                             <th>Date</th>
                             <th class="text-right">Document</th>
                         </tr>
@@ -366,7 +379,7 @@
                         <t t-foreach="documents" t-as="doc">
                             <tr>
                                 <td>
-                                    <span t-field="doc.sequence"/>
+                                    <span t-field="doc.desc"/>
                                 </td>
                                 <td>
                                     <span t-field="doc.date"/>
