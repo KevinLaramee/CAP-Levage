@@ -4,6 +4,7 @@ import werkzeug
 from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl
 )
+from cap_levage_portal.controllers.utils import check_group, GroupWebsite
 from odoo import http
 
 from odoo.tools.translate import _
@@ -16,6 +17,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def __init__(self):
         super(CapLevageEquipes, self).__init__()
 
+    @check_group()
     @http.route(
         [
             "/cap_levage_portal/equipes",
@@ -67,6 +69,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def get_mandatory_fields(self):
         return MANDATORY_EQUIPE_FIELDS
 
+    @check_group()
     @http.route(
         "/cap_levage_portal/equipe/detail/<int:equipe_id>",
         auth="user",
@@ -85,6 +88,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
             "cap_levage_portal.equipe_detail", values
         )
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/equipe/edit/<int:equipe_id>",
         methods=["GET"],
@@ -95,6 +99,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_edit_data(equipe_id)
         return http.request.render("cap_levage_portal.equipe_edit", values)
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/equipe/edit/<int:equipe_id>",
         methods=["POST"],
@@ -104,6 +109,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def equipe_edit(self, equipe_id, **post):
         return self.update_res_partner(equipe_id, post, "cap_levage_portal.equipe_edit")
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/equipe/archive/<int:equipe_id>",
         methods=["POST"],
@@ -113,6 +119,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def equipe_delete(self, equipe_id):
         return self.archive_res_partner(equipe_id)
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/equipe/create",
         methods=["GET"],
@@ -123,6 +130,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_create_data()
         return http.request.render("cap_levage_portal.equipe_edit", values)
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/equipe/create",
         methods=["POST"],

@@ -19,5 +19,6 @@
         "views/equipe_manipulation_templates.xml",
         "views/agence_manipulation_templates.xml",
         "views/homepage_templates.xml",
+        "views/unauthorized.xml",
     ],
 }

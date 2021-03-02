@@ -3,6 +3,7 @@
 from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl,
 )
+from cap_levage_portal.controllers.utils import check_group, GroupWebsite
 from odoo import http
 
 from odoo.tools.translate import _
@@ -15,6 +16,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def __init__(self):
         super(CapLevageAgences, self).__init__()
 
+    @check_group()
     @http.route(
         [
             "/cap_levage_portal/agences",
@@ -66,6 +68,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def get_mandatory_fields(self):
         return MANDATORY_AGENCE_FIELDS
 
+    @check_group()
     @http.route(
         "/cap_levage_portal/agence/detail/<int:agence_id>",
         auth="user",
@@ -84,6 +87,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
             values,
         )
 
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/agence/edit/<int:agence_id>",
         methods=["GET"],
@@ -94,6 +98,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_edit_data(agence_id)
         return http.request.render("cap_levage_portal.agence_edit", values)
 
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/agence/edit/<int:agence_id>",
         methods=["POST"],
@@ -103,6 +108,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def agence_edit(self, agence_id, **post):
         return self.update_res_partner(agence_id, post, "cap_levage_portal.agence_edit")
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/agence/archive/<int:agence_id>",
         methods=["POST"],
@@ -112,6 +118,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def agence_delete(self, agence_id):
         return self.archive_res_partner(agence_id)
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/agence/create",
         methods=["GET"],
@@ -122,6 +129,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_create_data()
         return http.request.render("cap_levage_portal.agence_edit", values)
 
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/agence/create",
         methods=["POST"],

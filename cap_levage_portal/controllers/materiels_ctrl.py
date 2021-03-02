@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from cap_levage_portal.controllers.grid_utils import TableComputeCapLevage
+from cap_levage_portal.controllers.utils import check_group
 from odoo import http
 from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 from odoo.http import request
@@ -9,7 +10,7 @@ PPG = 2
 PPR = 4
 
 
-class CapLevageWebsite(http.Controller):
+class CapLevageMateriels(http.Controller):
     @http.route(
         [
             "/cap_levage_portal/materiels",
@@ -18,6 +19,7 @@ class CapLevageWebsite(http.Controller):
         auth="user",
         website=True,
     )
+    @check_group()
     def materiels_list(
         self, page=1, sortby="date", search=None, search_in="allid", **kw
     ):
@@ -70,7 +72,11 @@ class CapLevageWebsite(http.Controller):
 
         materiels = http.request.env["critt.equipment"]
         logged_user = request.env["res.users"].browse(request.session.uid)
-        search_domain = [("owner_user_id", "=", logged_user.id)]
+        search_domain = [
+            "|",
+            ("referent", "=", logged_user.partner_id.id),
+            ("referent", "child_of", logged_user.partner_id.id),
+        ]
         if search is not None and search_in is not None:
             # FIXME - faire mieux ? champs store ?
             partner_ids = (
@@ -119,6 +125,7 @@ class CapLevageWebsite(http.Controller):
         auth="user",
         website=True,
     )
+    @check_group()
     def materiel_detail(self, materiel_id, **kw):
         """
         Affiche le détail d'un matéreil en fonction de son id
@@ -223,6 +230,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
+    @check_group()
     def list_certificat_controle_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "controle", "controle", "contrôle"
@@ -234,6 +242,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
+    @check_group()
     def list_certificat_creation_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "creation", "fabrication", "fabrication"
@@ -245,6 +254,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
+    @check_group()
     def list_certificat_destruction_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "destruction", "reforme", "destruction"
@@ -256,6 +266,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
+    @check_group()
     def list_certificat_creation_vgp(self, materiel_id, **kw):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         vgps = materiel.rapport_controle
@@ -330,6 +341,7 @@ class DevisFacturesList(CustomerPortal):
         }
         return request.render(page_to_render, values)
 
+    @check_group()
     @http.route(
         [
             "/cap_levage_portal/list/devis/<int:materiel_id>",
@@ -350,6 +362,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
+    @check_group()
     @http.route(
         [
             "/cap_levage_portal/list/boncommandes/<int:materiel_id>",
@@ -370,6 +383,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
+    @check_group()
     @http.route(
         [
             "/cap_levage_portal/list/factures/<int:materiel_id>",
