@@ -1,24 +1,35 @@
 <odoo>
-    <data>
-<!--        Ajouter les entrées matériels/agences/équipes au portail par défaut Odoo-->
-        <template id="caplevage_homepage" name="caplevage_my_home" inherit_id="portal.portal_my_home" priority="10">
-            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-                <t t-if="nb_materiels_count" t-call="portal.portal_docs_entry">
-                    <t t-set="title">Vos matériels</t>
-                    <t t-set="url" t-value="'/cap_levage_portal/materiels?sortby=date&amp;search_in=allid'"/>
-                    <t t-set="count" t-value="nb_materiels_count"/>
-                </t>
-                <t t-if="nb_agences_count" t-call="portal.portal_docs_entry">
-                    <t t-set="title">Vos agences</t>
-                    <t t-set="url" t-value="'/cap_levage_portal/agences?sortby=name&amp;search_in=both'"/>
-                    <t t-set="count" t-value="nb_agences_count"/>
-                </t>
-                <t t-if="nb_equipes_count" t-call="portal.portal_docs_entry">
-                    <t t-set="title">Vos equipes</t>
-                    <t t-set="url" t-value="'/cap_levage_portal/equipes?sortby=name&amp;search_in=both'"/>
-                    <t t-set="count" t-value="nb_equipes_count"/>
-                </t>
-            </xpath>
-        </template>
-    </data>
+    <!--        Ajouter les entrées matériels/agences/équipes au portail par défaut Odoo-->
+    <template id="caplevage_homepage" name="caplevage_my_home" inherit_id="portal.portal_my_home" priority="98">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="nb_materiels_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Vos matériels</t>
+                <t t-set="url" t-value="'/cap_levage_portal/materiels?sortby=date&amp;search_in=allid'"/>
+                <t t-set="count" t-value="nb_materiels_count"/>
+            </t>
+            <t t-if="nb_agences_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Vos agences</t>
+                <t t-set="url" t-value="'/cap_levage_portal/agences?sortby=name&amp;search_in=both'"/>
+                <t t-set="count" t-value="nb_agences_count"/>
+            </t>
+            <t t-if="nb_equipes_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Vos equipes</t>
+                <t t-set="url" t-value="'/cap_levage_portal/equipes?sortby=name&amp;search_in=both'"/>
+                <t t-set="count" t-value="nb_equipes_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!--    Masque les entrées du portail : Devis/Commandes en cours -->
+    <template id="caplevage_homepage_sale_portal_override" name="caplevage_sale_portal_overribe" inherit_id="sale.portal_my_home_sale">
+        <xpath expr="//t[@t-if='quotation_count']" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-if='order_count']" position="replace">
+        </xpath>
+    </template>
+    <!--    Masque l'entrée du portail : factures -->
+    <template id="caplevage_homepage_account_portal_override" name="caplevage_account_portal_overribe" inherit_id="account.portal_my_home_invoice">
+        <xpath expr="//t[@t-if='invoice_count']" position="replace">
+        </xpath>
+    </template>
 </odoo>

@@ -2,13 +2,13 @@
     <data>
         <template id="cap_levage_portal.agence_toolbar">
             <div class="col-8"/>
-            <div class="col-1">
+            <div class="col-1" groups="certification.website_lvl_3">
                 <a t-att-href="'/cap_levage_portal/agence/edit/' + str(partner.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
                 </a>
             </div>
-            <div class="col-1">
+            <div class="col-1" groups="certification.website_lvl_3">
                 <form id="agence_edit_archive" method="POST" action="/cap_levage_portal/agence/archive/">
                     <input type="hidden" value="false" name="active"/>
                     <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
