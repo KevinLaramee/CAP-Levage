@@ -31,7 +31,7 @@
         <template id="equipes_list">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="container oe_website_sale">
+                <div class="container oe_website_sale" groups="certification.website_lvl_1">
                     <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
                         <!--                        Affiche la barre de recherche-->
                         <t t-call="portal.portal_searchbar">
@@ -40,7 +40,7 @@
                         </t>
                     </div>
                     <!--                    bouton de création -->
-                    <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer">
+                    <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer" groups="certification.website_lvl_3">
                         <i class="fa fa-plus"/>
                     </a>
                     <!--                    Affiche la liste des matériels-->
@@ -98,7 +98,7 @@
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
             <!--            FIXME supprimer le form -->
-            <div class="card oe_product_cart">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1">
                 <div class="card-body p-1 oe_product_image">
                     <a t-att-href="product_href" class="d-block h-100" itemprop="url">
                         <span t-if="item.type == 'contact'" t-field="item.image_1920"

@@ -87,7 +87,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
             values,
         )
 
-    @check_group(GroupWebsite.lvl_3)
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/agence/edit/<int:agence_id>",
         methods=["GET"],
@@ -98,7 +98,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_edit_data(agence_id)
         return http.request.render("cap_levage_portal.agence_edit", values)
 
-    @check_group(GroupWebsite.lvl_3)
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         "/cap_levage_portal/agence/edit/<int:agence_id>",
         methods=["POST"],
@@ -108,7 +108,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def agence_edit(self, agence_id, **post):
         return self.update_res_partner(agence_id, post, "cap_levage_portal.agence_edit")
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/agence/archive/<int:agence_id>",
         methods=["POST"],
@@ -118,7 +118,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     def agence_delete(self, agence_id):
         return self.archive_res_partner(agence_id)
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/agence/create",
         methods=["GET"],
@@ -129,7 +129,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_create_data()
         return http.request.render("cap_levage_portal.agence_edit", values)
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/agence/create",
         methods=["POST"],

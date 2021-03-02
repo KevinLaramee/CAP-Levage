@@ -2,7 +2,7 @@
     <data>
         <template id="cap_levage_portal.equipe_toolbar">
             <div class="col-8"/>
-            <div class="col-1" groups="certification.website_lvl_3">
+            <div class="col-1" groups="certification.website_lvl_2">
                 <a t-att-href="'/cap_levage_portal/equipe/edit/' + str(partner.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
@@ -57,7 +57,7 @@
         <template id="cap_levage_portal.equipe_detail">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="panel">
+                <div class="panel" groups="certification.website_lvl_1">
                     <div class="row">
                         <t t-call="cap_levage_portal.equipe_toolbar"/>
                     </div>
@@ -94,7 +94,7 @@
         <template id="cap_levage_portal.equipe_edit">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}">
+                <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}" groups="certification.website_lvl_2">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <div class="col-lg-12">
                         <div t-if="error_message" class="alert alert-danger" role="alert">

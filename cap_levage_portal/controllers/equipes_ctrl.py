@@ -109,7 +109,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def equipe_edit(self, equipe_id, **post):
         return self.update_res_partner(equipe_id, post, "cap_levage_portal.equipe_edit")
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/equipe/archive/<int:equipe_id>",
         methods=["POST"],
@@ -119,7 +119,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
     def equipe_delete(self, equipe_id):
         return self.archive_res_partner(equipe_id)
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/equipe/create",
         methods=["GET"],
@@ -130,7 +130,7 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         values = self.partner_get_create_data()
         return http.request.render("cap_levage_portal.equipe_edit", values)
 
-    @check_group(GroupWebsite.lvl_2)
+    @check_group(GroupWebsite.lvl_3)
     @http.route(
         "/cap_levage_portal/equipe/create",
         methods=["POST"],

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from cap_levage_portal.controllers.grid_utils import TableComputeCapLevage
-from cap_levage_portal.controllers.utils import check_group
+from cap_levage_portal.controllers.utils import check_group, GroupWebsite
 from odoo import http
 from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 from odoo.http import request
@@ -230,7 +230,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     def list_certificat_controle_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "controle", "controle", "contrôle"
@@ -242,7 +242,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     def list_certificat_creation_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "creation", "fabrication", "fabrication"
@@ -254,7 +254,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     def list_certificat_destruction_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "destruction", "reforme", "destruction"
@@ -266,7 +266,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     def list_certificat_creation_vgp(self, materiel_id, **kw):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         vgps = materiel.rapport_controle
@@ -341,7 +341,7 @@ class DevisFacturesList(CustomerPortal):
         }
         return request.render(page_to_render, values)
 
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/devis/<int:materiel_id>",
@@ -362,7 +362,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/boncommandes/<int:materiel_id>",
@@ -383,7 +383,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @check_group()
+    @check_group(GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/factures/<int:materiel_id>",

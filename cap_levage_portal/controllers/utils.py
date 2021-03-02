@@ -20,7 +20,7 @@ class GroupCertification(Enum):
     lvl_5 = "certification.certification_lvl_5"
 
 
-def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_0):
+def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_1):
     """
     Vérifie si le user connecté à les bons groupes
     """

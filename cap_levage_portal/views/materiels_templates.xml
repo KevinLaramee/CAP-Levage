@@ -20,12 +20,16 @@
             <a t-field="materiel.statut"
                t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
         </template>
+        <template id="cap_levage_portal.materiel_type">
+            <label>Type :</label>
+            <a t-field="materiel.category_id" class="font-weight-bold"/>
+        </template>
 
         <!--        Page principale listant les matériels -->
         <template id="index">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="container oe_website_sale">
+                <div class="container oe_website_sale" groups="certification.website_lvl_1">
                     <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
                         <!--                        Affiche la barre de recherche-->
                         <t t-call="portal.portal_searchbar">
@@ -87,7 +91,7 @@
         <!--        Affiche l'encart d'un matériel dans la liste -->
         <template id="cap_levage_portal.materiel_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/materiel/detail/' + str(materiel.id)"/>
-            <div class="card oe_product_cart">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1">
                 <div class="card-body p-1">
                     <a t-att-href="product_href" class="d-block h-100">
                         <span t-field="materiel.image_small"
@@ -127,11 +131,6 @@
                     </div>
                 </div>
             </div>
-        </template>
-
-        <template id="cap_levage_portal.materiel_type">
-            <label>Type :</label>
-            <a t-field="materiel.category_id" class="font-weight-bold"/>
         </template>
 
         <!--        détail des différents onglets-->
@@ -292,7 +291,7 @@
         <template id="cap_levage_portal.materiel_detail">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="panel">
+                <div class="panel" groups="certification.website_lvl_1">
                     <div class="row">
                         <div class="col-2">
                             <span t-field="materiel.image_medium" t-options="{'widget': 'image'}"/>
@@ -331,10 +330,10 @@
                                                     <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab">Certificats/VGP</a>
+                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab" groups="certification.website_lvl_2">Certificats/VGP</a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab">Devis/factures</a>
+                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab" groups="certification.website_lvl_2">Devis/factures</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
@@ -344,10 +343,10 @@
                                                 <div role="suivi_tab" class="tab-pane" id="suivi_tab">
                                                     <t t-call="cap_levage_portal.onglet_suivi"/>
                                                 </div>
-                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab">
+                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab" groups="certification.website_lvl_2">
                                                     <t t-call="cap_levage_portal.onglet_vgp"/>
                                                 </div>
-                                                <div role="devis_tab" class="tab-pane" id="devis_tab">
+                                                <div role="devis_tab" class="tab-pane" id="devis_tab" groups="certification.website_lvl_2">
                                                     <t t-call="cap_levage_portal.onglet_devis"/>
                                                 </div>
                                             </div>
