@@ -25,7 +25,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         auth="user",
         website=True,
     )
-    def list_agences(self, page=1, sortby="name", search=None, search_in="allid", **kw):
+    def list_agences(self, page=1, sortby="name", search=None, search_in="both", **kw):
         """
         Page affichange une liste de matériels.
         :param search_in: ou rechercher

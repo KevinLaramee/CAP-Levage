@@ -32,13 +32,9 @@
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
                 <div class="container oe_website_sale" groups="certification.website_lvl_1">
-                    <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
-                        <!--                        Affiche la barre de recherche-->
-                        <t t-call="portal.portal_searchbar">
-                            <t t-set="title" t-value="' '"/>
-                            <t t-set="_classes">w-100 w-md-auto mt-2</t>
-                        </t>
-                    </div>
+                    <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                    <t t-call="portal.portal_searchbar">
+                    </t>
                     <!--                    bouton de création -->
                     <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer" groups="certification.website_lvl_3">
                         <i class="fa fa-plus"/>

@@ -57,7 +57,7 @@
         <template id="cap_levage_portal.equipe_detail">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="panel" groups="certification.website_lvl_1">
+                <div class="panel mt-5" groups="certification.website_lvl_1">
                     <div class="row">
                         <t t-call="cap_levage_portal.equipe_toolbar"/>
                     </div>
@@ -96,7 +96,7 @@
                 <t t-set="title">Cap-levage</t>
                 <form id="equipe_edit_form" method="POST" enctype="multipart/form-data" t-attf-action="#{post_url}" groups="certification.website_lvl_2">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 mt-5">
                         <div t-if="error_message" class="alert alert-danger" role="alert">
                             <t t-foreach="error_message" t-as="err">
                                 <t t-esc="err"/>

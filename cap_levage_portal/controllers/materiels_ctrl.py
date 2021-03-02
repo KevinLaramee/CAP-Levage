@@ -21,7 +21,7 @@ class CapLevageMateriels(http.Controller):
     )
     @check_group()
     def materiels_list(
-        self, page=1, sortby="date", search=None, search_in="allid", **kw
+        self, page=1, sortby="date", search=None, search_in="all", **kw
     ):
         """
         Page affichant une liste de matériels.

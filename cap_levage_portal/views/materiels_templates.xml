@@ -29,14 +29,11 @@
         <template id="index">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="container oe_website_sale" groups="certification.website_lvl_1">
-                    <div class="products_pager form-inline flex-md-nowrap justify-content-between justify-content-md-center">
-                        <!--                        Affiche la barre de recherche-->
-                        <t t-call="portal.portal_searchbar">
-                            <t t-set="title" t-value="' '"/>
-                            <t t-set="_classes">w-100 w-md-auto mt-2</t>
-                        </t>
-                    </div>
+                <div groups="certification.website_lvl_1">
+                    <!--                        Affiche la barre de recherche-->
+                    <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                    <t t-call="portal.portal_searchbar">
+                    </t>
                     <!--                    Affiche la liste des matériels-->
                     <div class="row o_wsale_products_main_row">
                         <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3"/>
@@ -118,11 +115,11 @@
                         </div>
                         <div class="small text-left">
                             <label>Equipe :</label>
-                            <a t-field="materiel.equipe_id"/>
+                            <a t-field="materiel.equipe_id.name"/>
                         </div>
                         <div class="small text-left">
                             <label>Agence :</label>
-                            <a t-field="materiel.agence_id"/>
+                            <a t-field="materiel.agence_id.name"/>
                         </div>
                         <div class="small text-left">
                             <label>Statut :</label>
@@ -292,7 +289,7 @@
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
                 <div class="panel" groups="certification.website_lvl_1">
-                    <div class="row">
+                    <div class="row mt-5">
                         <div class="col-2">
                             <span t-field="materiel.image_medium" t-options="{'widget': 'image'}"/>
                         </div>
@@ -314,41 +311,43 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="prodcut-tab-wrap">
-                            <div class="container">
-                                <div class="row" id="product_more_info">
-                                    <div class="col-md-12 pd_info">
-                                        <div class="pd-more-info">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                                <li role="presentation">
-                                                    <a class="active" href="#caracteristiques_tab" aria-controls="caracteristiques_tab" role="tab"
-                                                       data-toggle="tab">
-                                                        Caractéristiques
-                                                    </a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab" groups="certification.website_lvl_2">Certificats/VGP</a>
-                                                </li>
-                                                <li role="presentation">
-                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab" groups="certification.website_lvl_2">Devis/factures</a>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <div role="caracteristiques_tab" class="tab-pane active" id="caracteristiques_tab">
-                                                    <t t-call="cap_levage_portal.onglet_caracteristiques"/>
-                                                </div>
-                                                <div role="suivi_tab" class="tab-pane" id="suivi_tab">
-                                                    <t t-call="cap_levage_portal.onglet_suivi"/>
-                                                </div>
-                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab" groups="certification.website_lvl_2">
-                                                    <t t-call="cap_levage_portal.onglet_vgp"/>
-                                                </div>
-                                                <div role="devis_tab" class="tab-pane" id="devis_tab" groups="certification.website_lvl_2">
-                                                    <t t-call="cap_levage_portal.onglet_devis"/>
-                                                </div>
+                        <div class="prodcut-tab-wrap w-100">
+                            <div class="row" id="product_more_info">
+                                <div class="col-md-12 pd_info">
+                                    <div class="pd-more-info">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation">
+                                                <a class="active" href="#caracteristiques_tab" aria-controls="caracteristiques_tab" role="tab"
+                                                   data-toggle="tab">
+                                                    Caractéristiques
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab"
+                                                   groups="certification.website_lvl_2">Certificats/VGP
+                                                </a>
+                                            </li>
+                                            <li role="presentation">
+                                                <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab"
+                                                   groups="certification.website_lvl_2">Devis/factures
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="caracteristiques_tab" class="tab-pane active" id="caracteristiques_tab">
+                                                <t t-call="cap_levage_portal.onglet_caracteristiques"/>
+                                            </div>
+                                            <div role="suivi_tab" class="tab-pane" id="suivi_tab">
+                                                <t t-call="cap_levage_portal.onglet_suivi"/>
+                                            </div>
+                                            <div role="vgp_tab" class="tab-pane" id="vgp_tab" groups="certification.website_lvl_2">
+                                                <t t-call="cap_levage_portal.onglet_vgp"/>
+                                            </div>
+                                            <div role="devis_tab" class="tab-pane" id="devis_tab" groups="certification.website_lvl_2">
+                                                <t t-call="cap_levage_portal.onglet_devis"/>
                                             </div>
                                         </div>
                                     </div>
