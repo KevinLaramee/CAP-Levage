@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from cap_levage_portal.controllers.grid_utils import TableComputeCapLevage
-from cap_levage_portal.controllers.utils import check_group, GroupWebsite
+from .grid_utils import TableComputeCapLevage
+from .utils import check_group, GroupWebsite
 from odoo import http
 from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 from odoo.http import request

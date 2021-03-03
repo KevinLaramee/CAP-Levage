@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import werkzeug
 
-from cap_levage_portal.controllers.abstract_equipes_agences_ctrl import (
+from .abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl
 )
-from cap_levage_portal.controllers.utils import check_group, GroupWebsite
+from .utils import check_group, GroupWebsite
 from odoo import http
 
 from odoo.tools.translate import _

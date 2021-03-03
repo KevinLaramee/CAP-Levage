@@ -2,7 +2,7 @@
 import base64
 from abc import abstractmethod
 
-from cap_levage_portal.controllers.grid_utils import TableComputeCapLevage
+from .grid_utils import TableComputeCapLevage
 from odoo import http, tools
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
