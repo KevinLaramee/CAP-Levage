@@ -6,12 +6,13 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from odoo.tools.misc import ustr
 
-#from odoo.addons.base.ir.ir_mail_server import MailDeliveryException
+# from odoo.addons.base.ir.ir_mail_server import MailDeliveryException
 from odoo.addons.auth_signup.models.res_partner import SignupError, now
 from datetime import datetime
 
+
 class ResUsers(models.Model):
-    _inherit = 'res.users'
+    _inherit = "res.users"
 
     equipments = fields.One2many("critt.equipment", "owner_user_id")
     # internal_user = fields.Boolean('Utilisateur interne')
@@ -28,16 +29,19 @@ class ResUsers(models.Model):
 
         # suppression du group "Employee" si l'utilisateur le possède
         try:
-            self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Employee'])
+            self.env.cr.execute(
+                "SELECT id FROM res_groups WHERE name = %s", ["Employee"]
+            )
             group_employee_id = self.env.cr.fetchone()[0]
 
             if self.partner_id:
                 if self.partner_id.customer:
-                    self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
-                                     (self.id, group_employee_id))
+                    self._cr.execute(
+                        """DELETE FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
+                        (self.id, group_employee_id),
+                    )
         except:
             res = False
-
 
         # ajout du group Equipment Manager (pour qu'un client puisse ajouter ses équipements
         # self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Equipment Manager'])
@@ -52,60 +56,61 @@ class ResUsers(models.Model):
 
         return res
 
-
     @api.model_create_multi
     def create(self, values):
         users = super(ResUsers, self).create(values)
         for user in users:
-            user.partner_id.write({'company_id': user.company_id.id, 'active': user.active})
+            user.partner_id.write(
+                {"company_id": user.company_id.id, "active": user.active}
+            )
 
             # self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Equipment Manager'])
         #    self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Certification Manager'])
         #    group_equipment_manager_id = self.env.cr.fetchone()[0]
 
-            #self._cr.execute(
-            #    """INSERT INTO critt_equipment (name,category_id,owner_user_id,orga_certif,statut,of_cap_levage,periode) VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-            #    ('new equip if group equipment manager exist', 1, user.id, 'ok', 'Cap Levage', True, 0))
+        # self._cr.execute(
+        #    """INSERT INTO critt_equipment (name,category_id,owner_user_id,orga_certif,statut,of_cap_levage,periode) VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+        #    ('new equip if group equipment manager exist', 1, user.id, 'ok', 'Cap Levage', True, 0))
 
-            # suppression du group "Employee" si l'utilisateur le possède
-            # self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Employee'])
-            # group_employee_id = self.env.cr.fetchone()[0]
-            # if user.partner_id.customer:
-            #     self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
-            #                      (user.id, group_employee_id))
+        # suppression du group "Employee" si l'utilisateur le possède
+        # self.env.cr.execute("SELECT id FROM res_groups WHERE name = %s", ['Employee'])
+        # group_employee_id = self.env.cr.fetchone()[0]
+        # if user.partner_id.customer:
+        #     self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
+        #                      (user.id, group_employee_id))
 
-            # suppression du group "User: Own Documents Only" si l'utilisateur le possède
-            #groupUserOwnDocs = self.env['res.groups'].search([('name', '=', 'User: Own Documents Only')])
-            #if groupUserOwnDocs:
-            #    self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=? AND gid=?""",
-            #                     (user.id, groupUserOwnDocs.id))
-            # suppression du group "User: All Documents" si l'utilisateur le possède
-            #groupUserAllDocuments = self.env['res.groups'].search([('name', '=', 'User: All Documents')])
-            #if groupUserAllDocuments:
-            #    self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=? AND gid=?""",
-            #                     (user.id, groupUserAllDocuments.id))
+        # suppression du group "User: Own Documents Only" si l'utilisateur le possède
+        # groupUserOwnDocs = self.env['res.groups'].search([('name', '=', 'User: Own Documents Only')])
+        # if groupUserOwnDocs:
+        #    self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=? AND gid=?""",
+        #                     (user.id, groupUserOwnDocs.id))
+        # suppression du group "User: All Documents" si l'utilisateur le possède
+        # groupUserAllDocuments = self.env['res.groups'].search([('name', '=', 'User: All Documents')])
+        # if groupUserAllDocuments:
+        #    self._cr.execute("""DELETE FROM res_groups_users_rel WHERE uid=? AND gid=?""",
+        #                     (user.id, groupUserAllDocuments.id))
 
-            # # ajout du group Equipment Manager (pour qu'un client puisse ajouter ses équipements
-            # self._cr.execute("""SELECT 1 FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
-            #                  (user.id, group_equipment_manager_id))
-            # row = self._cr.fetchone()
-            # if not row:
-            #     self._cr.execute("""INSERT INTO res_groups_users_rel (gid,uid) VALUES (%s, %s)""",
-            #                      (group_equipment_manager_id, user.id))
+        # # ajout du group Equipment Manager (pour qu'un client puisse ajouter ses équipements
+        # self._cr.execute("""SELECT 1 FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
+        #                  (user.id, group_equipment_manager_id))
+        # row = self._cr.fetchone()
+        # if not row:
+        #     self._cr.execute("""INSERT INTO res_groups_users_rel (gid,uid) VALUES (%s, %s)""",
+        #                      (group_equipment_manager_id, user.id))
 
-            #ajout du group Equipment Manager (pour qu'un client puisse ajouter ses équipements
+        # ajout du group Equipment Manager (pour qu'un client puisse ajouter ses équipements
         #    self._cr.execute("""SELECT 1 FROM res_groups_users_rel WHERE uid=2 AND gid=%s""", group_equipment_manager_id)
         #    row = self._cr.fetchone()
         #    if not row:
         #        self._cr.execute("""INSERT INTO res_groups_users_rel (gid,uid) VALUES (%s, 2)""", group_equipment_manager_id)
 
-            #self._cr.execute("""SELECT 1 FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
-            #                 (user.id, 1))
-            #row = self._cr.fetchone()
-            #if not row:
-            #    self._cr.execute("""INSERT INTO res_groups_users_rel (gid,uid) VALUES (%s, %s)""", (1, user.id))
+        # self._cr.execute("""SELECT 1 FROM res_groups_users_rel WHERE uid=%s AND gid=%s""",
+        #                 (user.id, 1))
+        # row = self._cr.fetchone()
+        # if not row:
+        #    self._cr.execute("""INSERT INTO res_groups_users_rel (gid,uid) VALUES (%s, %s)""", (1, user.id))
 
-            # Si le droit sur le model critt_certification_audit pour le group 'Equipment Manager' n'existe pas, on l'ajoute
+        # Si le droit sur le model critt_certification_audit pour le group 'Equipment Manager' n'existe pas, on l'ajoute
         #     self._cr.execute("SELECT 1 FROM ir_model_access as ma JOIN ir_model as m ON m.id = ma.model_id WHERE m.model='critt.certification.audit' AND ma.group_id=" + str(group_equipment_manager_id))
         #     row = self._cr.fetchone()
         #     if not row:
@@ -723,9 +728,8 @@ class ResUsers(models.Model):
         #                                  now.strftime("%Y-%m-%d %H:%M:%S"), 1,
         #                                  now.strftime("%Y-%m-%d %H:%M:%S")))
         #
-        partner = self.env['res.partner'].search([('id', '=', users.partner_id.id)])
+        partner = self.env["res.partner"].search([("id", "=", users.partner_id.id)])
 
         partner.has_account = True
 
         return users
-

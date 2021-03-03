@@ -1,151 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-
-        <!--
-        <record id="hr_equipment_view_kanban" model="ir.ui.view">
-            <field name="name">equipment.kanban</field>
-            <field name="model">critt.equipment</field>
-            <field name="arch" type="xml">
-                <kanban>
-                    <field name="name"/>
-                    <field name="color"/>
-                    <field name="owner_user_id"/>
-                    <field name="category_id"/>
-                    <field name="num_materiel"/>
-                    <field name="internal_no"/>
-                    <templates>
-                        <t t-name="kanban-tooltip">
-                            <ul class="oe_kanban_tooltip">
-                                <li><b>Serial Number:</b> <field name="num_materiel"/></li>
-                            </ul>
-                        </t>
-                        <t t-name="kanban-box">
-                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-                                <div class="o_dropdown_kanban dropdown">
-
-                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
-                                        <span class="fa fa-ellipsis-v"/>
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                        <t t-if="widget.editable"><li><a type="edit">Edit...</a></li></t>
-                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
-                                        <li class="divider"></li>
-                                        <li class="dropdown-header">Record Colour</li>
-                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
-                                    </ul>
-                                </div>
-                                <div class="oe_kanban_content" tooltip="kanban-tooltip">
-                                    <div style="float:right"><field name="image_small" widget="image" class="oe_avatar"/></div>
-                                    <div class="o_kanban_record_body">
-                                        <div t-if="record.num_materiel.raw_value"><field name="num_materiel"/></div>
-                                        <div t-if="!record.owner_user_id.raw_value">Unassigned</div>
-                                        <div t-if="record.owner_user_id.raw_value"><field name="owner_user_id"/></div>
-                                    </div>
-                                    <div class="o_kanban_record_bottom">
-                                        <div class="oe_kanban_bottom_left">
-                                            <div class="label label-danger" t-if="record.maintenance_open_count.raw_value" >
-                                                <t t-raw="record.maintenance_open_count.raw_value"/> Request
-                                            </div>
-                                            <div class="label label-default" t-if="record.next_action_date.raw_value" >
-                                                <t t-raw="moment(record.next_action_date.raw_value).format('MMMM Do')"/>
-                                            </div>
-                                        </div>
-                                        <div class="oe_kanban_bottom_right">
-                                            <img t-att-src="kanban_image('res.users', 'image_small', record.owner_user_id.raw_value)" t-att-title="record.owner_user_id.value" width="27" height="27" class="oe_kanban_avatar"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="oe_clear"></div>
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
-
-        &lt;!&ndash; Définition vue form recherche équipement &ndash;&gt;
-        &lt;!&ndash;<record id="vue_recherche_equipement" model="ir.ui.view">
-            <field name="name">critt.equipment.recherche.form</field>
-            <field name="model">critt.equipment.recherche</field>
-            <field name="arch" type="xml">
-                <form string="Recherche">
-                    <header>
-                        <button name="action_rechercher" string="Rechercher" type="object"/>
-                    </header>
-                    <sheet>
-                        <group string="Recherche">
-                            <field name="num_materiel" widget="char"/>
-                        </group>
-                        <group string="Recherche avancée">
-                            <field name="categorie"/>
-                            <field name="proprietaire"/>
-                            <field name="an_mise_service" widget="char"/>
-                            <field name="date_last_audit" widget="char"/>
-                            <field name="num_derniere_facture"/>
-                            <field name="test_recherche"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>&ndash;&gt;
-
-        &lt;!&ndash; action vue recherche équipement &ndash;&gt;
-        &lt;!&ndash;<record id="act_recherche_equipement" model="ir.actions.act_window">
-            <field name="name">Recherche d'équipement</field>
-            <field name="res_model">critt.equipment.recherche</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">inline</field>
-            <field name="view_id" ref="vue_recherche_equipement"/>
-        </record>&ndash;&gt;
-
-        &lt;!&ndash; Equipement - Recherche &ndash;&gt;
-        &lt;!&ndash;<menuitem
-                id="menu_recherche_equipement"
-                parent="menu_main_certification"
-                name="Recherche Équipement"
-                action="act_recherche_equipement"
-                sequence="1"/>&ndash;&gt;
-
-        -->
-
         <!-- Définition de la vue form des équipements -->
         <record id="vue_equipement_form" model="ir.ui.view">
             <field name="name">Création équipement</field>
             <field name="model">critt.equipment</field>
             <field name="arch" type="xml">
                 <form string="Equipments">
-                    <header>
-                    <!-- Boutons plus nécessaires pour le moment
-                        <button name="action_creer_devis" string="Créer devis"
-                                attrs="{'invisible': ['|', ('audit_depasse', '!=', True), ('statut', '!=', 'conforme')]}" type="object"/>
-                        <button name="action_voir_devis" string="Voir devis"
-                                attrs="{'invisible': [('statut', 'not in', ['audit_a_faire', 'diag_en_cours'])]}" type="object"/>
-                        <button name="action_creer_audit" string="Créer audit"
-                                attrs="{'invisible': [('statut', '!=', 'audit_a_faire')]}" type="object"/>
-                        <button name="action_voir_audit" string="Voir audit"
-                                attrs="{'invisible': [('statut', '!=', 'diag_en_cours')]}" type="object"/> -->
-<!--                        <button name="maj_rapport_vgp" string="Màj rapports vgp" type="object"/>-->
-                    </header>
                     <sheet>
                         <script type="text/javascript" src="/certification/static/src/js/back_office/equipment_form.js"></script>
                         <script type="text/javascript" src="/certification/static/src/js/back_office/webcam_equipment.js"></script>
-                        <!--<script type="text/javascript" src="/certification/static/src/js/nfc/backofficeNodeEdit.js"></script>-->
                         <div class="o_not_full oe_button_box">
-                            <!--<button class="btn oe_stat_button o_field_widget oe_read_only" name="update_audits_new_cols"
-                                    aria-label="Update Audits" title="Update Audits"
-                                    type="object">
-                                <div class="o_stat_info">
-                                    <span class="o_stat_text">Update Audits</span>
-                                </div>
-                            </button>-->
                             <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_lancer_diagnostic"
                                     aria-label="Lancer diagnostic" title="Lancer diagnostic" type="object"
                                     attrs="{'invisible': [('statut', '=', 'detruit')]}">
                                 <i class="fa fa-fw o_button_icon fa-pencil-square-o"></i>
                                 <div class="o_stat_info">
-                                    <span class="o_stat_text">Lancer<br/>Diagnostic</span>
+                                    <span class="o_stat_text">Lancer<br/>Diagnostic
+                                    </span>
                                 </div>
                             </button>
                             <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_detruire"
@@ -156,16 +28,13 @@
                                     <span class="o_stat_text">Détruire</span>
                                 </div>
                             </button>
-                            <!--<button class="oe_stat_button oe_read_only" name="action_lancer_diagnostic"
-                                    attrs="{'invisible': ['|', ('statut', '=', 'reforme'), ('of_cap_levage', '=', False)]}" type="object">
-                                <p><i class="fa fa-pencil-square-o fa-2x"></i>Lancer diagnostic</p>
-                            </button>-->
                             <button class="btn oe_stat_button o_field_widget oe_read_only" name="materiel_sort"
                                     aria-label="Sortie matériel" title="Sortie matériel"
                                     attrs="{'invisible': ['|', ('in_or_out', '=', 'out'), ('datetime_destruction', '!=', False)]}" type="object">
                                 <i class="fa fa-sign-out fa-fw o_button_icon"></i>
                                 <div class="o_stat_info">
-                                    <span class="o_stat_text">Sortie<br/>Matériel</span>
+                                    <span class="o_stat_text">Sortie<br/>Matériel
+                                    </span>
                                 </div>
                             </button>
                             <button class="btn oe_stat_button o_field_widget oe_read_only" name="materiel_entre"
@@ -173,22 +42,10 @@
                                     attrs="{'invisible': ['|', ('in_or_out', '=', 'in'), ('datetime_destruction', '!=', False)]}" type="object">
                                 <i class="fa fa-sign-in fa-fw o_button_icon"></i>
                                 <div class="o_stat_info">
-                                    <span class="o_stat_text">Entrée<br/>Matériel</span>
+                                    <span class="o_stat_text">Entrée<br/>Matériel
+                                    </span>
                                 </div>
                             </button>
-                            <!-- <button class="oe_stat_button" id="btnLaunchWebcam">
-                                <p><img src="/certification/static/src/img/webcam-icon.png"/>Prendre photo matériel</p>
-                            </button> -->
-                            <!-- <button class="oe_stat_button">
-                                <p>Statut: <field name="statut" attrs="{'invisible': [('statut', '!=', 'ok')]}" style="color:green;"/>
-                                            <field name="statut" attrs="{'invisible': [('statut', '!=', 'en_cours')]}" style="color:yellow;"/>
-                                            <field name="statut" attrs="{'invisible': [('statut', '!=', 'bloque')]}" style="color:red;"/>
-                                            <field name="statut" attrs="{'invisible': [('statut', '!=', 'reforme')]}" style="color:black;"/>
-                                </p>
-                            </button> -->
-                            <!-- <button class="oe_stat_button" name="voir_devis" type="object">
-                                <field name="sale_order_count" string="Devis en cours" widget="statinfo"/>
-                            </button> -->
                             <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_valider"
                                     aria-label="Valider" title="Valider"
                                     attrs="{'invisible': ['|', ('is_bloque', '=', False), ('datetime_destruction', '!=', False)]}" type="object">
@@ -197,124 +54,77 @@
                                     <span class="o_stat_text">Valider</span>
                                 </div>
                             </button>
-                            <!--<div style="float:right;" attrs="{'invisible': [('is_bloque', '=', False)]}">
-                                <button class="oe_stat_button oe_read_only" name="action_valider" type="object">
-                                    <p><i class="fa fa-check-circle fa-2x"></i> Valider</p>
-                                </button>
-                            </div>-->
-
-                                <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_valider"
-                                        aria-label="Valider" title="Valider"
-                                        attrs="{'invisible': ['|', ('is_bloque', '=', True), ('statut', '!=', 'bloque')]}" type="object">
-                                    <i class="fa fa-check-circle fa-fw o_button_icon"></i>
-                                    <div class="o_stat_info">
-                                        <span class="o_stat_text">Valider</span>
-                                    </div>
-                                </button>
-                                <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_bloquer"
-                                        aria-label="Bloquer" title="Bloquer"
-                                        attrs="{'invisible': ['|', ('is_bloque', '=', True), ('statut', '!=', 'ok')]}" type="object">
-                                    <i class="fa fa-times-circle fa-fw o_button_icon"></i>
-                                    <div class="o_stat_info">
-                                        <span class="o_stat_text">Bloquer</span>
-                                    </div>
-                                </button>
-
-                            <!--<div style="float:right;" attrs="{'invisible': [('is_bloque', '=', True)]}">
-                                 <button class="oe_stat_button oe_read_only" name="action_valider"
-                                         attrs="{'invisible': [('statut', '!=', 'bloque')]}" type="object">
-                                    <p><i class="fa fa-check-circle fa-2x"></i> Valider</p>
-                                </button>
-                                <button class="oe_stat_button oe_read_only" name="action_bloquer"
-                                        attrs="{'invisible': [('statut', '!=', 'ok')]}" type="object">
-                                    <p><i class="fa fa-times-circle fa-2x"></i>Bloquer</p>
-                                </button>
-                            </div>-->
-                        </div>
-                        <!--<div id="webcam_popup" class="modal">
-                            <div class="modal-content">
-                                <span id="webcam_popup_close" class="close">&amp;times;</span>
-                                <fieldset style="width: 100%; display: inline-block;">
-                                    <legend>Appareil photo</legend>
-                                    <center><video autoplay="1" id="videoElement"></video></center>
-                                    <br />
-                                    <div class="btn btn-light" onclick="takephoto();">Prendre une photo</div>
-                                </fieldset>
-
-                                &lt;!&ndash; <fieldset style="width: 640px; display: inline-block;">
-                                    <legend>Photo</legend>
-                                    <img id="capture_webcam_img" src="about:blank" alt="Photo" title="Photo"/>
-                                </fieldset> &ndash;&gt;
-
-                                <canvas id="canvas_webcam" style="display: none;" width="640" height="480"></canvas>
-                                <input type="hidden" id="capture_ok" value="0"></input>
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-
-                            </div>
-                        </div>-->
-                        <div id="qrCodeModal" class="modal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        <h3 id="qrCodeModalLabel">Scan QR</h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <center>
-																						<span id="qr_error" style="display: block;"></span>																									 
-                                            <input type="hidden" id="qrCodeOrigin" value=""/>
-                                            <div id="loadingMessage" hidden="">⌛ Loading video...</div>
-                                            <!--<canvas id="canvas" height="480" width="640"></canvas>-->
-                                            <canvas id="canvas" style="width:100%;max-width: 500px;"></canvas>
-                                        </center>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button id="qrCodeModalClose" class="btn" data-dismiss="modal">Fermer</button>
-                                        <!--<button id="qrCodeModalClose" class="btn">Fermer</button>-->
-                                    </div>
-                                    <script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>
-
-                                    <div id="scriptCamContent"></div>
-                                    <!--<script type="text/javascript" src="/certification/static/src/js/qr_code/QRSearch.js"></script>-->
+                            <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_valider"
+                                    aria-label="Valider" title="Valider"
+                                    attrs="{'invisible': ['|', ('is_bloque', '=', True), ('statut', '!=', 'bloque')]}" type="object">
+                                <i class="fa fa-check-circle fa-fw o_button_icon"></i>
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Valider</span>
                                 </div>
-                            </div>
+                            </button>
+                            <button class="btn oe_stat_button o_field_widget oe_read_only" name="action_bloquer"
+                                    aria-label="Bloquer" title="Bloquer"
+                                    attrs="{'invisible': ['|', ('is_bloque', '=', True), ('statut', '!=', 'ok')]}" type="object">
+                                <i class="fa fa-times-circle fa-fw o_button_icon"></i>
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Bloquer</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div id="qrCodeModal" class="modal" tabindex="-1" role="dialog">
+                            <header/>
+                            <main>
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3 id="qrCodeModalLabel">Scan QR</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <center>
+                                                <span id="qr_error" style="display: block;"></span>
+                                                <input type="hidden" id="qrCodeOrigin" value=""/>
+                                                <div id="loadingMessage" hidden="">⌛ Loading video...</div>
+                                                <canvas id="canvas" style="width:100%;max-width: 500px;"></canvas>
+                                            </center>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="qrCodeModalClose" class="btn" data-dismiss="modal">Fermer</button>
+                                        </div>
+                                        <script type="text/javascript" src="/certification/static/src/js/qr_code/jsQR.js"></script>
+
+                                        <div id="scriptCamContent"></div>
+                                    </div>
+                                </div>
+                            </main>
+                            <footer/>
                         </div>
                         <div class="panel">
                             <div id="img_materiel" class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                                 <field name="image_medium" widget="image"/>
-                                <!-- <field name="image_medium" widget="image" class="oe_avatar oe_avatar2"/> -->
-                                <!-- <div class="btn btn-light oe_edit_only" id="btnLaunchWebcam">
-                                    <p><img src="/certification/static/src/img/webcam-icon.png"/>Prendre photo matériel</p>
-                                </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                                     <div class="form-inline" attrs="{'invisible': [('is_bloque', '=', True)]}">
                                         <label for="statut"/>
                                         <span attrs="{'invisible': [('statut', '!=', 'ok')]}">
-                                            <!--<i class="fa fa-check-circle fa-3x"  style="color: green;"></i>-->
                                             <b style="color: white; background: #15CA16;">UTILISABLE</b>
                                         </span>
                                         <span attrs="{'invisible': [('statut', '!=', 'en_cours')]}">
-                                            <!--<i class="fa fa-exclamation-circle fa-3x"  style="color: orange;"></i>-->
                                             <b style="color: white; background: #FF8e60;">À RÉPARER</b>
                                         </span>
                                         <span attrs="{'invisible': [('statut', '!=', 'bloque')]}">
-                                            <!--<i class="fa fa-times-circle fa-3x" style="color: red;"></i>-->
                                             <b style="color: white; background: #e6332a;">INTERDIT D'EMPLOI</b>
                                         </span>
                                         <span attrs="{'invisible': [('statut', '!=', 'reforme')]}">
-                                            <!--<i class="fa fa-ban fa-3x"  style="color: black;"></i>-->
                                             <b style="color: white; background: #000000;">RÉFORMÉ</b>
                                         </span>
                                         <span attrs="{'invisible': [('statut', '!=', 'detruit')]}">
-                                            <!--<i class="fa fa-ban fa-3x"  style="color: black;"></i>-->
                                             <b style="color: white; background: #000000;">DÉTRUIT</b>
                                         </span>
                                     </div>
                                     <div class="form-inline" attrs="{'invisible': [('is_bloque', '=', False)]}">
                                         <label for="statut"/>
-                                        <!--<i class="fa fa-times-circle fa-3x" style="color: red;"></i>-->
                                         <b style="color: white; background: #e6332a;">INTERDIT D'EMPLOI</b>
                                     </div>
 
@@ -322,24 +132,9 @@
                                         <label for="num_materiel"/>
                                         <field name="num_materiel"/>
                                     </div>
-                                    <!--<div class="form-inline">
-                                        <label for="internal_no"/>
-                                        <field name="internal_no"/>
-                                    </div>-->
                                     <div class="form-inline">
-                                        <!--<label for="owner_user_id" style="float:left;" class="oe_edit_only"/>
-                                        <field name="owner_user_id" class="oe_edit_only"/>-->
                                         <label for="res_partner_id" style="float:left;"/>
                                         <field name="res_partner_id"/>
-                                        <!--<span class="edit_client oe_edit_only">
-                                            <field name="owner_user_id" class="oe_edit_only" style="float:left;"/>
-                                            <field name="client_link" widget="url" readonly="1" text="Voir" class="custom_link" style="float:left;"/>
-                                        </span>
-                                        <span class="oe_read_only">
-                                            <field name="client"/>
-                                            <field name="client_link" widget="url" readonly="1" text="Voir" class="custom_link"/>
-                                        </span>-->
-                                        <!-- <a href="" class="oe_read_only"></a> -->
                                     </div>
                                     <div class="form-inline">
                                         <label for="referent"/>
@@ -353,16 +148,10 @@
                                         <label for="equipe_id"/>
                                         <field name="equipe_id" context="{'default_type': 'contact', 'default_context_parent_id': res_partner_id}"/>
                                     </div>
-
-                                    <!--<div class="form-inline">
-                                         <label for="orga_certif"/>
-                                        <field name="orga_certif" attrs="{'readonly':[('of_cap_levage', '=', True)]}" force_save="1"/>
-                                    </div>-->
                                 </div>
 
                                 <div id="equipment_id" style="display:none;">
                                     <field name="id"/>
-                                    <!--<field name="is_elingue"/>-->
                                     <field name="is_bloque"/>
                                     <field name="display_nombre_brins"/>
                                     <field name="display_longueur"/>
@@ -437,20 +226,6 @@
                                         <label for="num_commande"/>
                                         <field name="num_commande" attrs="{'required':[('display_num_commande', '=', True)]}"/>
                                     </div>
-
-                                    <!-- <div class="form-inline">
-                                        <label for="name">Nom: </label>
-                                        <field name="name"/>
-                                    </div> -->
-                                    <!-- <div class="form-inline">
-                                         <label for="localisation_description"/>
-                                         <field name="localisation_description"/>
-                                     </div> -->
-                                    <!--<div id="nfc_content" class="form-inline oe_edit_only">
-                                         <div id="nfc_img" class="nfc scan"><span></span></div>
-                                         <field name="nfc"/>
-                                         &lt;!&ndash; <input type="text" id="nfc" name="nfc" class="o_field_char o_field_widget o_input o_required_modifier" t-att-value="equipment.nfc" placeholder="NFC"></input> &ndash;&gt;
-                                     </div>-->						 
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                                     <div class="form-inline">
@@ -467,7 +242,6 @@
                                     </div>
                                     <div class="form-inline">
                                         <label for="date_dernier_audit"/>
-                                        <!--<field name="date_dernier_audit" autocomplete="off" force_save="1"/>-->
                                         <field name="date_dernier_audit" autocomplete="off"/>
                                     </div>
                                     <div class="form-inline">
@@ -497,44 +271,22 @@
                                     <div class="form-inline">
                                         <button class="btn btn-primary oe_edit_only" id="search_qr_code">Scan QR</button>
                                         <button class="oe_stat_button" name="voir_devis" type="object">
-                                            <p><field name="sale_order_count" string="Ordre de réparation" widget="statinfo"/></p>
+                                            <p>
+                                                <field name="sale_order_count" string="Ordre de réparation" widget="statinfo"/>
+                                            </p>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-inline" style="padding-top: 5px;padding-bottom: 5px;">																														
-                                        <u><label for="last_general_observation"/></u>
+                                    <div class="form-inline" style="padding-top: 5px;padding-bottom: 5px;">
+                                        <u>
+                                            <label for="last_general_observation"/>
+                                        </u>
                                         <field name="last_general_observation" readonly="1" force_save="1"/>
-                                    </div>					
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-
-                        <!-- <field name="image_medium" widget="image" class="oe_avatar oe_avatar"/>
-                        <div class="oe_title">
-                            <label for="num_materiel" class="oe_edit_only"/>
-                            <h1><field name="num_materiel" string="Numéro Matériel" placeholder="Numéro Matériel"/></h1>
-                        </div>
-                        <group>
-                            <group>
-                                <group>
-                                    <field name="name"/>
-                                    <field name="category_id" options="{&quot;no_open&quot;: True}"/>
-                                    <field name="owner_user_id"/>
-                                    <field name="localisation_description"/>
-                                    <field name="periode"/>
-                                    <field name="an_mise_service"/>
-                                    <field name="date_dernier_audit"/>
-                                    <field name="audit_suivant"/>
-                                    <field name="nfc" readonly="1" force_save="1"/>
-                                </group>
-                                <group>
-                                    <field name="of_cap_levage"/>
-                                    <field name="orga_certif" attrs="{'readonly':[('of_cap_levage', '=', True)]}" force_save="1"/>
-                                </group>
-                            </group>
-                        </group> -->
                         <notebook>
                             <page string="Rapports de VGP">
                                 <field name="rapport_controle" readonly="1" no_open="1">
@@ -552,8 +304,6 @@
                                         <field name="desc"/>
                                         <field name="pdf" widget="url" class="link_pdf"/>
                                         <field name="dl_pdf" widget="url" class="link_pdf"/>
-                                        <!-- Autre solution à la vue des pdf (action à faire)
-                                        <button name="voir_pdf" type="action" string="Voir certificat"/> -->
                                     </tree>
                                 </field>
                             </page>
@@ -570,11 +320,10 @@
                                         <field name="last_work_year" attrs="{'invisible': [('invoice_ok', '=', False)]}"/>
                                         <field name="last_work_num_facture" attrs="{'invisible': [('invoice_ok', '=', False)]}"/>
                                         <field name="invoice_ok" attrs="{'invisible': [('invoice_ok', '=', False)]}"/>
-                                        <button class="btn btn-light" name="play_file" type="object" string="pdf" attrs="{'invisible': [('invoice_ok', '=', False)]}">
+                                        <button class="btn btn-light" name="play_file" type="object" string="pdf"
+                                                attrs="{'invisible': [('invoice_ok', '=', False)]}">
                                             <img height="35" src="/certification/static/src/img/pdf.png"></img>
                                         </button>
-                                        <!-- Autre solution à la vue des pdf (action à faire)
-                                        <button name="voir_pdf" type="action" string="Voir certificat"/> -->
                                     </tree>
                                 </field>
                             </page>
@@ -587,17 +336,6 @@
                                     </tree>
                                 </field>
                             </page>
-                            <!-- <page string="Localisation">
-                                <group>
-                                    <field name="localisation_description"/>
-                                    <field name="latitude"/>
-                                    <field name="longitude"/>
-                                    <button name="map" type="object" class="oe_highlight">
-                                        <img height="25" src="/certification/static/src/img/marker.png"></img>
-                                        <span>Google Maps</span>
-                                    </button>
-                                </group>
-                            </page> -->
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
@@ -620,7 +358,8 @@
                     <!-- <field name="client"/> -->
                     <field name="num_materiel"/>
                     <field name="category_id"/>
-                    <field name="statut" class="tree_equipment_statut" options='{"bg_color": "#15CA16:statut_index == 0;#FF8e60:statut_index == 1;#e6332a:statut_index == 2;#000000:statut_index == 3;"}'/>
+                    <field name="statut" class="tree_equipment_statut"
+                           options='{"bg_color": "#15CA16:statut_index == 0;#FF8e60:statut_index == 1;#e6332a:statut_index == 2;#000000:statut_index == 3;"}'/>
                     <field name="statut_index" invisible="1"/>
                     <field name="date_dernier_audit"/>
                     <field name="audit_suivant" options='{"bg_color": "#e6332a:audit_suivant_color_index == 1;#FF8e60:audit_suivant_color_index == 2;",
@@ -634,15 +373,6 @@
                     <field name="referent"/>
                     <field name="agence_id"/>
                     <field name="equipe_id"/>
-                    <!-- Boutons plus nécessaires pour le moment
-                    <button name="action_creer_devis" string="Créer devis"
-                            attrs="{'invisible': ['|', ('audit_depasse', '!=', True), ('statut', '!=', 'conforme')]}" type="object"/>
-                    <button name="action_voir_devis" string="Voir devis"
-                            attrs="{'invisible': [('statut', 'not in', ['audit_a_faire', 'diag_en_cours'])]}" type="object"/>
-                    <button name="action_creer_audit" string="Créer audit"
-                            attrs="{'invisible': [('statut', '!=', 'audit_a_faire')]}" type="object"/>
-                    <button name="action_voir_audit" string="Voir audit"
-                            attrs="{'invisible': [('statut', '!=', 'diag_en_cours')]}" type="object"/> -->
                     <field name="of_cap_levage" invisible="1"/>
                     <field name="audit_depasse" invisible="1"/>
                 </tree>
@@ -723,9 +453,8 @@
                             <field name="image" widget="image"/>
                             <field name="url_video" widget="url"/>
                         </group>
-<!--                    <field name="note" nolabel="1"/>-->
                         <notebook>
-                            <page string="Clients autorisés" >
+                            <page string="Clients autorisés">
                                 <field name="equipment_create_right_ids">
                                     <tree string="Clients autorisés" editable="bottom">
                                         <field name="res_partner_id"/>
@@ -755,7 +484,7 @@
             <field name="name">Création d'un organisme de certification</field>
             <field name="model">critt.equipment.organisme</field>
             <field name="arch" type="xml">
-                 <form string="Equipment Organisme">
+                <form string="Equipment Organisme">
                     <sheet>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only" string="Organisme Name"/>
@@ -763,7 +492,6 @@
                                 <field name="name"/>
                             </h1>
                         </div>
-<!--                    <field name="note" nolabel="1"/>-->
                     </sheet>
                 </form>
 
@@ -786,7 +514,7 @@
             <field name="name">Création d'un fabricant</field>
             <field name="model">critt.equipment.fabricant</field>
             <field name="arch" type="xml">
-                 <form string="Fabricant materiel">
+                <form string="Fabricant materiel">
                     <sheet>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only" string="Nom Fabricant"/>
@@ -799,47 +527,6 @@
 
             </field>
         </record>
-
-        <!-- Définition de la vue form des équipes -->
-        <!--<record id="vue_equipement_equipe_form" model="ir.ui.view">
-            <field name="name">Création d'une équipe</field>
-            <field name="model">critt.equipment.equipe</field>
-            <field name="arch" type="xml">
-                 <form string="Équipe">
-                    <sheet>
-                        <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Nom équipe"/>
-                            <h1>
-                                <field name="name"/>
-                            </h1>
-                            <field name="owner_user_id"/>
-                        </div>
-                    </sheet>
-                </form>
-
-            </field>
-        </record>-->
-
-        <!-- Définition de la vue form des agence/secteur -->
-        <!--<record id="vue_equipement_equipe_form" model="ir.ui.view">
-            <field name="name">Création d'une agence</field>
-            <field name="model">critt.equipment.agence</field>
-            <field name="arch" type="xml">
-                 <form string="Agence">
-                    <sheet>
-                        <div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Nom agence"/>
-                            <h1>
-                                <field name="name"/>
-                            </h1>
-                            <field name="owner_user_id"/>
-                        </div>
-                    </sheet>
-                </form>
-
-            </field>
-        </record>-->
-
         <!-- Action vue list equipment -->
         <record id="act_equipement_view" model="ir.actions.act_window">
             <field name="name">Gestion des matériels</field>
@@ -872,17 +559,13 @@
         <record id="act_organisme_view" model="ir.actions.act_window">
             <field name="name">Gestion des organismes de certification</field>
             <field name="res_model">critt.equipment.organisme</field>
-            <!-- <field name="view_type">form</field> -->
             <field name="view_mode">tree,form</field>
-            <!-- <field name="view_id" ref="vue_categorie_maintenance_tree"/> -->
         </record>
 
         <record id="act_fabricant_view" model="ir.actions.act_window">
             <field name="name">Gestion des fabricants</field>
             <field name="res_model">critt.equipment.fabricant</field>
-            <!-- <field name="view_type">form</field> -->
             <field name="view_mode">tree,form</field>
-            <!-- <field name="view_id" ref="vue_categorie_maintenance_tree"/> -->
         </record>
 
         <!-- Action générer rapport diagnostic -->
@@ -894,10 +577,10 @@
             <field name="state">code</field>
             <field name="code">
                 url = model.get_selected_ids(env.context);action = {
-                    'type': 'ir.actions.act_url',
-                    'name': "Rapport Diagnostic",
-                    'target': 'new',
-                    'url': url,
+                'type': 'ir.actions.act_url',
+                'name': "Rapport Diagnostic",
+                'target': 'new',
+                'url': url,
                 }
             </field>
         </record>
@@ -911,10 +594,10 @@
             <field name="state">code</field>
             <field name="code">
                 url = model.get_selected_ids(env.context);action = {
-                    'type': 'ir.actions.act_url',
-                    'name': "Certificats",
-                    'target': 'new',
-                    'url': url,
+                'type': 'ir.actions.act_url',
+                'name': "Certificats",
+                'target': 'new',
+                'url': url,
                 }
             </field>
         </record>
@@ -930,19 +613,6 @@
                 action = model.generate_mass_certificate_controle(env.context)
             </field>
         </record>
-
-        <!-- Action compression image de masse -->
-        <!--<record id="action_compress_image_masse" model="ir.actions.server">
-            <field name="name">Compression d'image de masse</field>
-            <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="certification.model_critt_equipment"/>
-            <field name="binding_model_id" ref="certification.model_critt_equipment"/>
-            <field name="state">code</field>
-            <field name="code">
-                action = model.mass_compress_image(env.context)
-            </field>
-        </record>-->
-
         <!-- Action entrée de masse -->
         <record id="action_entree_masse" model="ir.actions.server">
             <field name="name">Entrée de masse</field>

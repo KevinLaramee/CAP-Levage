@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <!-- Edition/création d'une agence -->
+        <template id="cap_levage_portal.unauthorized">
+            <t t-call="portal.portal_layout">
+                <t t-set="title">Cap-levage</t>
+                <span>Vous n'avez pas l'autorisation d'accéder à cette page.</span>
+            </t>
+        </template>
+    </data>
+</odoo>
