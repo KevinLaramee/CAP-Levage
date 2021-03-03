@@ -12,16 +12,18 @@ from datetime import datetime
 
 
 class AccountInvoiceInherit(models.Model):
-    _inherit = 'account.move'
+    _inherit = "account.move"
 
     @api.model
     def create(self, vals):
         res = super(AccountInvoiceInherit, self).create(vals)
 
-        sale_order = self.env['sale.order'].search([('name', '=', res.invoice_origin)])
+        sale_order = self.env["sale.order"].search([("name", "=", res.invoice_origin)])
         if sale_order:
             for equipment in sale_order.order_line_equipment:
-                equipment.equipment_id.write({'derniere_facture': res.id, 'num_derniere_facture': res.name})
+                equipment.equipment_id.write(
+                    {"derniere_facture": res.id, "num_derniere_facture": res.name}
+                )
 
         return res
 
@@ -29,9 +31,16 @@ class AccountInvoiceInherit(models.Model):
         res = super(AccountInvoiceInherit, self).write(vals)
 
         for record in self:
-            sale_order = self.env['sale.order'].search([('name', '=', record.invoice_origin)])
+            sale_order = self.env["sale.order"].search(
+                [("name", "=", record.invoice_origin)]
+            )
             if sale_order:
                 for equipment in sale_order.order_line_equipment:
-                    equipment.equipment_id.write({'derniere_facture': record.id, 'num_derniere_facture': record.name})
+                    equipment.equipment_id.write(
+                        {
+                            "derniere_facture": record.id,
+                            "num_derniere_facture": record.name,
+                        }
+                    )
 
         return res
