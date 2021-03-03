@@ -11,7 +11,7 @@
     "website": "https://www.e-cosi.fr",
     "category": "Uncategorized",
     "version": "0.1",
-    "depends": ["base", "website", "portal" "sale", "account"],
+    "depends": ["base", "website", "portal", "sale", "account"],
     # always loaded
     "data": [
         "views/materiels_templates.xml",
