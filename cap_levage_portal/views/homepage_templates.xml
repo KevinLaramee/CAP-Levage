@@ -21,15 +21,36 @@
     </template>
 
     <!--    Masque les entrées du portail : Devis/Commandes en cours -->
-    <template id="caplevage_homepage_sale_portal_override" name="caplevage_sale_portal_overribe" inherit_id="sale.portal_my_home_sale">
+    <template id="caplevage_homepage_sale_portal_override" name="caplevage_sale_portal_overwrite" inherit_id="sale.portal_my_home_sale">
         <xpath expr="//t[@t-if='quotation_count']" position="replace">
+            <div hidden="true">
+                <t t-if="quotation_count" t-call="portal.portal_docs_entry" hidden="true">
+                    <t t-set="title">Quotations</t>
+                    <t t-set="url" t-value="'/my/quotes'"/>
+                    <t t-set="count" t-value="quotation_count"/>
+                </t>
+            </div>
         </xpath>
         <xpath expr="//t[@t-if='order_count']" position="replace">
+            <div hidden="true">
+                <t t-if="order_count" t-call="portal.portal_docs_entry" hidden="true">
+                    <t t-set="title">Sales Orders</t>
+                    <t t-set="url" t-value="'/my/orders'"/>
+                    <t t-set="count" t-value="order_count"/>
+                </t>
+            </div>
         </xpath>
     </template>
     <!--    Masque l'entrée du portail : factures -->
-    <template id="caplevage_homepage_account_portal_override" name="caplevage_account_portal_overribe" inherit_id="account.portal_my_home_invoice">
+    <template id="caplevage_homepage_account_portal_override" name="caplevage_account_portal_overwrite" inherit_id="account.portal_my_home_invoice">
         <xpath expr="//t[@t-if='invoice_count']" position="replace">
+            <div hidden="true">
+                <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+                    <t t-set="title">Invoices &amp; Bills</t>
+                    <t t-set="url" t-value="'/my/invoices'"/>
+                    <t t-set="count" t-value="invoice_count"/>
+                </t>
+            </div>
         </xpath>
     </template>
 </odoo>
