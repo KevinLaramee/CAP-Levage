@@ -1,13 +1,12 @@
 import datetime
-from odoo import api, models, fields, tools, _
-from odoo.tools import pycompat
-from datetime import time, datetime, date, timedelta
-from odoo.exceptions import UserError, ValidationError
-from dateutil.relativedelta import relativedelta
+from datetime import datetime
+
 from PIL import Image
-import os
-import base64
-import requests
+from dateutil.relativedelta import relativedelta
+
+from odoo import api, models, fields, tools, _
+from odoo.exceptions import ValidationError
+from odoo.tools import pycompat, ImageProcess
 
 
 class MaintenanceEquipment(models.Model):
@@ -232,24 +231,18 @@ class MaintenanceEquipment(models.Model):
     )
 
     # image: all image fields are base64 encoded and PIL-supported
-    image = fields.Binary(
+    image = fields.Image(
         "Photo",
+        max_width=1024,
+        max_height=1024,
         attachment=True,
         help="This field holds the image used as image for the product, limited to 1024x1024px.",
     )
-    image_medium = fields.Binary(
-        "Photo",
-        attachment=True,
-        help="Medium-sized image of the product. It is automatically "
-        "resized as a 128x128px image, with aspect ratio preserved, "
-        "only when the image exceeds one of those sizes. Use this field in form views or some kanban views.",
+    image_medium = fields.Image(
+        "Image 256", related="image", max_width=128, max_height=128, store=True
     )
-    image_small = fields.Binary(
-        "Photo",
-        attachment=True,
-        help="Small-sized image of the product. It is automatically "
-        "resized as a 64x64px image, with aspect ratio preserved. "
-        "Use this field anywhere a small image is required.",
+    image_small = fields.Image(
+        "Image 128", related="image", max_width=64, max_height=64, store=True
     )
 
     # is_ok = fields.Boolean("", compute="_get_is_ok", copy=False)
@@ -483,36 +476,6 @@ class MaintenanceEquipment(models.Model):
                     # raise ValidationError(_("else"))
                     list_audits_rapport.append("None")
             rapport_vgp.list_audits = ",".join(list_audits_rapport)
-
-    # def mass_compress_image(self, context):
-    # selected_ids = context.get('active_ids', False)
-
-    # for equipment_id in selected_ids:
-    # equipment = self.env['critt.equipment'].search([('id', '=', equipment_id)])
-    # if equipment.image_medium:
-    # to_compress = tools.base64_to_image(equipment.image_medium)
-    # max_size = 100
-    # wpercent = (max_size / float(to_compress.size[0]))
-    # hpercent = (max_size / float(to_compress.size[1]))
-    # if wpercent < hpercent:
-    #    hsize = int((float(to_compress.size[1]) * float(wpercent)))
-    #    compressed = to_compress.resize((max_size, hsize), Image.ANTIALIAS)
-    # if wpercent > hpercent:
-    #    wsize = int((float(to_compress.size[0]) * float(hpercent)))
-    #    compressed = to_compress.resize((wsize, max_size), Image.ANTIALIAS)
-    # if wpercent == hpercent:
-    #    compressed = to_compress.resize((max_size, max_size), Image.ANTIALIAS)
-    # b64_image = tools.image_to_base64(compressed, 'JPEG')
-
-    # equipment.image_small = b64_image
-
-    # def _compute_sale_orders(self):
-    #     for line in self:
-    #         self.env.cr.execute("""SELECT DISTINCT csole.order_id FROM critt_sale_order_line_equipment
-    #                             WHERE csole.equipment_id = %s""", [self.id])
-    #         ids = [x[0] for x in self.env.cr.fetchall()]
-    #         sale_order = self.env['sale.order'].sudo().browse(ids)
-    #         line.sale_orders = sale_order
 
     def _work_done_on_equipment(self):
         for line in self:
@@ -1133,44 +1096,6 @@ class MaintenanceEquipment(models.Model):
             }
         )
         return maintenance_equipment
-
-    @api.depends("image_variant", "product_tmpl_id.image")
-    def _compute_images(self):
-        if self._context.get("bin_size"):
-            self.image_medium = self.image_variant
-            self.image_small = self.image_variant
-            self.image = self.image_variant
-        else:
-            resized_images = tools.image_get_resized_images(
-                self.image_variant, return_big=True, avoid_resize_medium=True
-            )
-            self.image_medium = resized_images["image_medium"]
-            self.image_small = resized_images["image_small"]
-            self.image = resized_images["image"]
-        if not self.image_medium:
-            self.image_medium = self.product_tmpl_id.image_medium
-        if not self.image_small:
-            self.image_small = self.product_tmpl_id.image_small
-        if not self.image:
-            self.image = self.product_tmpl_id.image
-
-    def _set_image(self):
-        self._set_image_value(self.image)
-
-    def _set_image_medium(self):
-        self._set_image_value(self.image_medium)
-
-    def _set_image_small(self):
-        self._set_image_value(self.image_small)
-
-    def _set_image_value(self, value):
-        if isinstance(value, pycompat.text_type):
-            value = value.encode("ascii")
-        # image = tools.image_resize_image_big(value)
-        if self.product_tmpl_id.image:
-            self.image_variant = image
-        else:
-            self.product_tmpl_id.image = image
 
     @api.onchange("of_cap_levage")
     def _onchange_of_cap_levage(self):
