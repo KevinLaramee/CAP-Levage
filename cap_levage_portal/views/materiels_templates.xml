@@ -101,7 +101,7 @@
                 <div class="card-body p-1">
                     <a t-att-href="product_href" class="d-block h-100">
                         <span t-field="materiel.image_medium"
-                              t-options="{'widget': 'image'}"
+                              t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                               class="d-flex h-100 justify-content-center align-items-center"/>
                     </a>
                 </div>
@@ -311,7 +311,7 @@
                     </div>
                     <div class="row align-items-center mt-5">
                         <div class="col-2">
-                            <span t-field="materiel.image_medium" t-options="{'widget': 'image'}"/>
+                            <span t-field="materiel.image_medium" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                         </div>
                         <div class="col-5">
                             <t t-call="cap_levage_portal.affichage_details_principaux"/>
@@ -480,7 +480,7 @@
                         <h3>Contact</h3>
                         <div class="row align-items-center mt-5">
                             <div class="col-2" id="cap_levage_portal_avatar">
-                                <input type="file" accept="image/*" name="image" t-options="{'widget': 'image'}"
+                                <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
                                 <img class="mb-3 cap_levage_portal_avatar_img"
                                      t-att-src="website.image_url(materiel, 'image_medium') if mode == 'edit' else ''"/>

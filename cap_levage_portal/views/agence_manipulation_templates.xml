@@ -61,7 +61,7 @@
                     <h3>Adresse de livraison</h3>
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <span t-field="partner.parent_id.image_1920" t-options="{'widget': 'image'}"/>
+                            <span t-field="partner.parent_id.image_1920" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                         </div>
                         <div class="col-5">
                             <t t-call="cap_levage_portal.agence_champs_col_1"/>

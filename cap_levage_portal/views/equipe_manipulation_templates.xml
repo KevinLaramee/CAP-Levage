@@ -64,7 +64,7 @@
                     <h3>Contact</h3>
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <span t-field="partner.image_128" t-options="{'widget': 'image'}"/>
+                            <span t-field="partner.image_128" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                         </div>
                         <div class="col-5">
                             <t t-call="cap_levage_portal.equipe_champs_col_1"/>
@@ -108,7 +108,7 @@
                         <h3>Contact</h3>
                         <div class="row align-items-center">
                             <div class="col-2" id="cap_levage_portal_avatar">
-                                <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image'}"
+                                <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
                                 <img class="mb-3 cap_levage_portal_avatar_img"
                                      t-att-src="website.image_url(partner, 'image_128') if mode == 'edit' else ''"/>
