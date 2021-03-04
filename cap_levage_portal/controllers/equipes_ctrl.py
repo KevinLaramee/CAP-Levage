@@ -10,7 +10,7 @@ from odoo import http
 from odoo.tools.translate import _
 
 MANDATORY_EQUIPE_FIELDS = ["name", "title", "email"]
-OPTIONAL_EQUIPE_FIELDS = ["function", "phone", "mobile", "comment", "image_1920"]
+OPTIONAL_EQUIPE_FIELDS = ["function", "phone", "mobile", "comment", "image_1920", "clear_avatar"]
 
 
 class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):

@@ -263,10 +263,12 @@ class CapLevageMateriels(http.Controller):
 
         return error, error_message
 
-    def get_optional_fields(self):
-        return ["image", "agence_id", "equipe_id", "last_general_observation"]
+    @staticmethod
+    def get_optional_fields():
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation"]
 
-    def get_mandatory_fields(self):
+    @staticmethod
+    def get_mandatory_fields():
         return ["qr_code"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)

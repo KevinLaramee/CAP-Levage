@@ -100,7 +100,7 @@
             <div class="card oe_product_cart" groups="certification.website_lvl_1">
                 <div class="card-body p-1">
                     <a t-att-href="product_href" class="d-block h-100">
-                        <span t-field="materiel.image_small"
+                        <span t-field="materiel.image_medium"
                               t-options="{'widget': 'image'}"
                               class="d-flex h-100 justify-content-center align-items-center"/>
                     </a>
@@ -483,7 +483,7 @@
                                 <input type="file" accept="image/*" name="image" t-options="{'widget': 'image'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
                                 <img class="mb-3 cap_levage_portal_avatar_img"
-                                     t-att-src="website.image_url(materiel, 'image_small') if mode == 'edit' else ''"/>
+                                     t-att-src="website.image_url(materiel, 'image_medium') if mode == 'edit' else ''"/>
                                 <div class="text-left">
                                     <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
                                         <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
@@ -539,7 +539,7 @@
                         </div>
                     <div class="row align-items-center">
                         <div class="prodcut-tab-wrap w-100">
-                            <div class="row align-items-center" id="product_more_info">
+                            <div class="row align-items-center" id="edit_product_more_info">
                                 <div class="col-md-12 pd_info">
                                     <div class="pd-more-info">
                                         <ul class="nav nav-tabs" role="tablist">
@@ -564,13 +564,13 @@
                                             </li>
                                         </ul>
                                         <div class="tab-content">
-                                            <div role="caracteristiques_tab" class="tab-pane active" id="caracteristiques_tab" groups="certification.website_lvl_3">
+                                            <div role="caracteristiques_tab" class="tab-pane active" id="edit_caracteristiques_tab" groups="certification.website_lvl_3">
                                             </div>
-                                            <div role="suivi_tab" class="tab-pane" id="suivi_tab">
+                                            <div role="suivi_tab" class="tab-pane" id="edit_suivi_tab">
                                             </div>
-                                            <div role="vgp_tab" class="tab-pane" id="vgp_tab" groups="certification.website_lvl_2">
+                                            <div role="vgp_tab" class="tab-pane" id="edit_vgp_tab" groups="certification.website_lvl_2">
                                             </div>
-                                            <div role="devis_tab" class="tab-pane" id="devis_tab" groups="certification.website_lvl_2">
+                                            <div role="devis_tab" class="tab-pane" id="edit_devis_tab" groups="certification.website_lvl_2">
                                             </div>
                                         </div>
                                     </div>
