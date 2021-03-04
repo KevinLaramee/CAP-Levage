@@ -111,11 +111,11 @@
                             <a itemprop="name" t-att-href="product_href" t-att-content="item.name" t-field="item.name"/>
                         </h6>
                         <div class="text-left small">
-                            <label>Email :</label>
+                            <a>Email : </a>
                             <a t-field="item.email"/>
                         </div>
                         <div class="text-left small">
-                            <label>Matériels possédés :</label>
+                            <a>Matériels possédés : </a>
                             <a t-esc="len(item.ids_equipements)"/>
                         </div>
                     </div>
