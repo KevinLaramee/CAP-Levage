@@ -21,8 +21,12 @@
                t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
         </template>
         <template id="cap_levage_portal.materiel_type">
-            <label>Type :</label>
+            <a>Type : </a>
             <a t-field="materiel.category_id" class="font-weight-bold"/>
+        </template>
+        <template id="cap_levage_portal.date_controle">
+            <a>Prochaine date de contrôle : </a>
+            <a t-field="materiel.audit_suivant" t-attf-style="color:#{materiel.audit_suivant_color}"/>
         </template>
 
         <!--        Page principale listant les matériels -->
@@ -102,27 +106,26 @@
                             <a itemprop="name" t-att-href="product_href" t-att-content="materiel.category_id" t-field="materiel.category_id"/>
                         </h6>
                         <div class="small text-left">
-                            <label>Numéro :</label>
+                            <a>Numéro : </a>
                             <a t-field="materiel.num_materiel"/>
                         </div>
                         <div class="small text-left">
-                            <label>QRCode:</label>
+                            <a>QRCode:</a>
                             <a t-field="materiel.qr_code"/>
                         </div>
                         <div class="small text-left">
-                            <label>Prochaine date de contrôle :</label>
-                            <a t-field="materiel.audit_suivant"/>
+                            <t t-call="cap_levage_portal.date_controle"/>
                         </div>
                         <div class="small text-left">
-                            <label>Equipe :</label>
+                            <a>Equipe : </a>
                             <a t-field="materiel.equipe_id.name"/>
                         </div>
                         <div class="small text-left">
-                            <label>Agence :</label>
+                            <a>Agence : </a>
                             <a t-field="materiel.agence_id.name"/>
                         </div>
                         <div class="small text-left">
-                            <label>Statut :</label>
+                            <a>Statut : </a>
                             <t t-call="cap_levage_portal.etat_materiel"/>
                         </div>
                     </div>
@@ -133,72 +136,71 @@
         <!--        détail des différents onglets-->
         <template id="cap_levage_portal.onglet_caracteristiques">
             <div class="col-12">
-                <div class="row">
+                <div class="row align-items-center">
                     <t t-call="cap_levage_portal.materiel_type"/>
                 </div>
-                <div class="row">
-                    <label>Fabricant :</label>
+                <div class="row align-items-center">
+                    <a>Fabricant : </a>
                     <a t-field="materiel.fabricant_id"/>
                 </div>
-                <div t-if="materiel.display_nombre_brins" class="row">
-                    <label>Nombre de brins :</label>
+                <div t-if="materiel.display_nombre_brins" class="row align-items-center">
+                    <a>Nombre de brins : </a>
                     <a t-field="materiel.nombre_brins"/>
                 </div>
-                <div t-if="materiel.display_longueur" class="row">
-                    <label>Longueur (ml) :</label>
+                <div t-if="materiel.display_longueur" class="row align-items-center">
+                    <a>Longueur (ml) : </a>
                     <a t-field="materiel.longueur"/>
                 </div>
-                <div t-if="materiel.display_cmu" class="row">
-                    <label>CMU (tonnes) :</label>
+                <div t-if="materiel.display_cmu" class="row align-items-center">
+                    <a>CMU (tonnes) : </a>
                     <a t-field="materiel.cmu"/>
                 </div>
-                <div t-if="materiel.display_tmu" class="row">
-                    <label>TMU (daN) :</label>
+                <div t-if="materiel.display_tmu" class="row align-items-center">
+                    <a>TMU (daN) : </a>
                     <a t-field="materiel.tmu"/>
                 </div>
-                <div t-if="materiel.display_model" class="row">
-                    <label>Modèle matériel :</label>
+                <div t-if="materiel.display_model" class="row align-items-center">
+                    <a>Modèle matériel : </a>
                     <a t-field="materiel.model"/>
                 </div>
-                <div t-if="materiel.display_diametre" class="row">
-                    <label>Diamètre (mm) :</label>
+                <div t-if="materiel.display_diametre" class="row align-items-center">
+                    <a>Diamètre (mm) : </a>
                     <a t-field="materiel.diametre"/>
                 </div>
-                <div t-if="materiel.display_grade" class="row">
-                    <label>Grade :</label>
+                <div t-if="materiel.display_grade" class="row align-items-center">
+                    <a>Grade : </a>
                     <a t-field="materiel.grade"/>
                 </div>
-                <div t-if="materiel.display_num_lot" class="row">
-                    <label>Numéro de lot :</label>
+                <div t-if="materiel.display_num_lot" class="row align-items-center">
+                    <a>Numéro de lot : </a>
                     <a t-field="materiel.num_lot"/>
                 </div>
-                <div t-if="materiel.display_num_commande" class="row">
-                    <label>Numéro de commande :</label>
+                <div t-if="materiel.display_num_commande" class="row align-items-center">
+                    <a>Numéro de commande : </a>
                     <a t-field="materiel.num_commande"/>
                 </div>
             </div>
         </template>
         <template id="cap_levage_portal.onglet_suivi">
             <div class="col-12">
-                <div class="row">
-                    <label>Organisme de certification :</label>
+                <div class="row align-items-center">
+                    <a>Organisme de certification : </a>
                     <a t-field="materiel.organisme_id"/>
                 </div>
-                <div class="row">
-                    <label>Date de fabrication :</label>
+                <div class="row align-items-center">
+                    <a>Date de fabrication : </a>
                     <a t-field="materiel.date_fabrication"/>
                 </div>
-                <div class="row">
-                    <label>Date de mise en service :</label>
+                <div class="row align-items-center">
+                    <a>Date de mise en service : </a>
                     <a t-field="materiel.an_mise_service"/>
                 </div>
-                <div class="row">
-                    <label>Date dernier contrôle :</label>
+                <div class="row align-items-center">
+                    <a>Date dernier contrôle : </a>
                     <a t-field="materiel.date_dernier_audit"/>
                 </div>
-                <div class="row">
-                    <label>Date prochain contrôle :</label>
-                    <a t-field="materiel.audit_suivant"/>
+                <div class="row align-items-center">
+                    <t t-call="cap_levage_portal.date_controle"/>
                 </div>
             </div>
         </template>
@@ -256,31 +258,31 @@
 
         <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
-            <div class="row">
+            <div class="row align-items-center">
                 <t t-call="cap_levage_portal.materiel_type"/>
             </div>
-            <div class="row">
-                <label>Numéro :</label>
+            <div class="row align-items-center">
+                <a>Numéro : </a>
                 <a t-field="materiel.num_materiel" class="font-weight-bold"/>
             </div>
-            <div class="row">
-                <label>Référent :</label>
+            <div class="row align-items-center">
+                <a>Référent : </a>
                 <a t-field="materiel.owner_user_id"/>
             </div>
-            <div class="row">
-                <label>Agence/secteur :</label>
+            <div class="row align-items-center">
+                <a>Agence/secteur : </a>
                 <a t-field="materiel.agence_id"/>
             </div>
-            <div class="row">
-                <label>Equipe :</label>
+            <div class="row align-items-center">
+                <a>Equipe : </a>
                 <a t-field="materiel.equipe_id"/>
             </div>
-            <div class="row">
-                <label>Identifiant QRCode :</label>
+            <div class="row align-items-center">
+                <a>Identifiant QRCode : </a>
                 <a t-field="materiel.qr_code"/>
             </div>
-            <div class="row">
-                <label>Etat :</label>
+            <div class="row align-items-center">
+                <a>Etat : </a>
                 <t t-call="cap_levage_portal.etat_materiel"/>
             </div>
         </template>
@@ -297,22 +299,21 @@
                             <t t-call="cap_levage_portal.affichage_details_principaux"/>
                         </div>
                         <div class="col-5">
-                            <div class="row">
-                                <label>Prochain contrôle :</label>
-                                <a t-field="materiel.audit_suivant" t-attf-style="background-color:#{materiel.audit_suivant_color}"/>
+                            <div class="row align-items-center">
+                                <t t-call="cap_levage_portal.date_controle"/>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col-2"/>
                         <div class="col-10" style="border-style: solid">
-                            <label>Dernière observation générale :</label>
+                            <a>Dernière observation générale : </a>
                             <a t-field="materiel.last_general_observation"/>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="prodcut-tab-wrap w-100">
-                            <div class="row" id="product_more_info">
+                            <div class="row align-items-center" id="product_more_info">
                                 <div class="col-md-12 pd_info">
                                     <div class="pd-more-info">
                                         <ul class="nav nav-tabs" role="tablist">

@@ -35,7 +35,7 @@ class CapLevageMateriels(http.Controller):
         searchbar_sortings = {
             "date": {
                 "label": _("Date de prochain contrôle"),
-                "order": "audit_suivant desc, id asc",
+                "order": "audit_suivant asc, id asc",
             },
             "equipe": {
                 "label": _("Equipe"),

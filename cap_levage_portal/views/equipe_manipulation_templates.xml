@@ -19,36 +19,36 @@
         </template>
         <template id="cap_levage_portal.equipe_champs_col_1">
             <div class="col-12">
-                <div class="row">
-                    <label>Nom :</label>
+                <div class="row align-items-center">
+                    <a>Nom : </a>
                     <a t-field="partner.name"/>
                 </div>
-                <div class="row">
-                    <label>Titre :</label>
+                <div class="row align-items-center">
+                    <a>Titre : </a>
                     <a t-field="partner.title"/>
                 </div>
-                <div class="row">
-                    <label>Poste occupé :</label>
+                <div class="row align-items-center">
+                    <a>Poste occupé : </a>
                     <a t-field="partner.function"/>
                 </div>
-                <div class="row">
-                    <label>Notes :</label>
+                <div class="row align-items-center">
+                    <a>Notes : </a>
                     <a t-field="partner.comment"/>
                 </div>
             </div>
         </template>
         <template id="cap_levage_portal.equipe_champs_col_2">
             <div class="col-12">
-                <div class="row">
-                    <label>Email :</label>
+                <div class="row align-items-center">
+                    <a>Email : </a>
                     <a t-field="partner.email"/>
                 </div>
-                <div class="row">
-                    <label>Téléphone :</label>
+                <div class="row align-items-center">
+                    <a>Téléphone : </a>
                     <a t-field="partner.phone"/>
                 </div>
-                <div class="row">
-                    <label>Mobile :</label>
+                <div class="row align-items-center">
+                    <a>Mobile : </a>
                     <a t-field="partner.mobile"/>
                 </div>
             </div>
@@ -58,11 +58,11 @@
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
                 <div class="panel mt-5" groups="certification.website_lvl_1">
-                    <div class="row">
+                    <div class="row align-items-center">
                         <t t-call="cap_levage_portal.equipe_toolbar"/>
                     </div>
                     <h3>Contact</h3>
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col-2">
                             <span t-field="partner.image_128" t-options="{'widget': 'image'}"/>
                         </div>
@@ -73,7 +73,7 @@
                             <t t-call="cap_levage_portal.equipe_champs_col_2"/>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col-12 text-right">
                             <a t-att-href="'/cap_levage_portal/materiels?sortby=date&amp;search=' + partner.name" class="btn btn-primary"
                                aria-label="Mes matériels" title="Mes matériels">
@@ -106,7 +106,7 @@
                     </div>
                     <div class="panel">
                         <h3>Contact</h3>
-                        <div class="row">
+                        <div class="row align-items-center">
                             <div class="col-2" id="cap_levage_portal_avatar">
                                 <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
