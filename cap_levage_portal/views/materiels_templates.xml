@@ -24,6 +24,10 @@
             <label>Type :</label>
             <a t-field="materiel.category_id" class="font-weight-bold"/>
         </template>
+        <template id="cap_levage_portal.date_controle">
+            <label>Prochaine date de contrôle :</label>
+            <a t-field="materiel.audit_suivant" t-attf-style="color:#{materiel.audit_suivant_color}"/>
+        </template>
 
         <!--        Page principale listant les matériels -->
         <template id="index">
@@ -110,8 +114,7 @@
                             <a t-field="materiel.qr_code"/>
                         </div>
                         <div class="small text-left">
-                            <label>Prochaine date de contrôle :</label>
-                            <a t-field="materiel.audit_suivant"/>
+                            <t t-call="cap_levage_portal.date_controle"/>
                         </div>
                         <div class="small text-left">
                             <label>Equipe :</label>
@@ -197,8 +200,7 @@
                     <a t-field="materiel.date_dernier_audit"/>
                 </div>
                 <div class="row">
-                    <label>Date prochain contrôle :</label>
-                    <a t-field="materiel.audit_suivant"/>
+                    <t t-call="cap_levage_portal.date_controle"/>
                 </div>
             </div>
         </template>
@@ -298,8 +300,7 @@
                         </div>
                         <div class="col-5">
                             <div class="row">
-                                <label>Prochain contrôle :</label>
-                                <a t-field="materiel.audit_suivant" t-attf-style="background-color:#{materiel.audit_suivant_color}"/>
+                                <t t-call="cap_levage_portal.date_controle"/>
                             </div>
                         </div>
                     </div>
