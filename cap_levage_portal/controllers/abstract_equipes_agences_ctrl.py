@@ -3,6 +3,7 @@ import base64
 from abc import abstractmethod
 
 from .grid_utils import TableComputeCapLevage
+from . import  utils
 from odoo import http, tools
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
@@ -103,10 +104,7 @@ class AbstractEquipesagencesCtrl:
 
         equipes = http.request.env["res.partner"]
         logged_user = request.env["res.users"].browse(request.session.uid)
-        search_domain = [
-            ("parent_id", "=", logged_user.partner_id.id),
-            ("type", "=", self.get_search_criteria()),
-        ]
+        search_domain = utils.partner_search_domain(logged_user.partner_id, self.get_search_criteria())
         if search is not None and search_in is not None:
             if search_in == "both":
                 search_domain += [
@@ -175,7 +173,7 @@ class AbstractEquipesagencesCtrl:
             values.update(
                 {key: post[key] for key in self.get_optional_fields() if key in post}
             )
-            for field in set(["country_id", "state_id"]) & set(values.keys()):
+            for field in {"country_id", "state_id"} & set(values.keys()):
                 try:
                     values[field] = int(values[field])
                 except:

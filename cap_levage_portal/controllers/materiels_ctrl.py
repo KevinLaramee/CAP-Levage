@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from .grid_utils import TableComputeCapLevage
-from .utils import check_group, GroupWebsite
+import base64
+
 from odoo import http
 from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 from odoo.http import request
 from odoo.tools.translate import _
+from .grid_utils import TableComputeCapLevage
+from . import utils
 
 PPG = 2
 PPR = 4
@@ -19,10 +21,8 @@ class CapLevageMateriels(http.Controller):
         auth="user",
         website=True,
     )
-    @check_group()
-    def materiels_list(
-        self, page=1, sortby="date", search=None, search_in="all", **kw
-    ):
+    @utils.check_group()
+    def materiels_list(self, page=1, sortby="date", search=None, search_in="all", **kw):
         """
         Page affichant une liste de matériels.
         :param search_in: ou rechercher
@@ -125,7 +125,7 @@ class CapLevageMateriels(http.Controller):
         auth="user",
         website=True,
     )
-    @check_group()
+    @utils.check_group()
     def materiel_detail(self, materiel_id, **kw):
         """
         Affiche le détail d'un matéreil en fonction de son id
@@ -203,6 +203,121 @@ class CapLevageMateriels(http.Controller):
             },
         )
 
+    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @http.route(
+        "/cap_levage_portal/materiel/edit/<int:materiel_id>",
+        methods=["GET"],
+        auth="user",
+        website=True,
+    )
+    def materiel_get_edit_data(self, materiel_id):
+        values = self._get_materiel_edit_data(materiel_id)
+        return http.request.render("cap_levage_portal.materiel_edit", values)
+
+    def _get_materiel_edit_data(self, materiel_id):
+        materiel = http.request.env["critt.equipment"].browse(materiel_id)
+        logged_user = request.env["res.users"].browse(request.session.uid)
+        partner = logged_user.partner_id
+        equipes = (
+            http.request.env["res.partner"]
+            .sudo()
+            .search(utils.equipe_search_domain(partner))
+        )
+        agences = (
+            http.request.env["res.partner"]
+            .sudo()
+            .search(utils.agence_search_domain(partner))
+        )
+        values = {
+            "page_name": _("mes_materiels"),
+            "materiel": materiel,
+            "edit": True,
+            "mode": "edit",
+            "error": {},
+            "equipes": equipes,
+            "agences": agences,
+        }
+        return values
+
+    def details_form_validate(self, data):
+        error = dict()
+        error_message = []
+
+        # Validation
+        for field_name in self.get_mandatory_fields():
+            if not data.get(field_name):
+                error[field_name] = "missing"
+
+        # error message for empty required fields
+        if [err for err in error.values() if err == "missing"]:
+            error_message.append(_("Some required fields are empty."))
+
+        unknown = [
+            k
+            for k in data
+            if k not in self.get_mandatory_fields() + self.get_optional_fields()
+        ]
+        if unknown:
+            error["common"] = "Unknown field"
+            error_message.append("Unknown field '%s'" % ",".join(unknown))
+
+        return error, error_message
+
+    @staticmethod
+    def get_optional_fields():
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation"]
+
+    @staticmethod
+    def get_mandatory_fields():
+        return ["qr_code"]
+
+    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @http.route(
+        "/cap_levage_portal/materiel/edit/<int:materiel_id>",
+        methods=["POST"],
+        auth="user",
+        website=True,
+    )
+    def materiel_edit(self, materiel_id, **post):
+        materiel = http.request.env["critt.equipment"].browse(materiel_id)
+        error, error_message = self.details_form_validate(post)
+        values = {}
+        if not error:
+            values.update({key: post[key] for key in self.get_mandatory_fields()})
+
+            if "image" in post:
+                image = post.get("image")
+                if image:
+                    image = image.read()
+                    image = base64.b64encode(image)
+                    materiel.sudo().write({"image": image})
+                post.pop("image")
+            if "clear_avatar" in post:
+                materiel.sudo().write({"image": False})
+                post.pop("clear_avatar")
+
+            values.update(
+                {key: post[key] for key in self.get_optional_fields() if key in post}
+            )
+            for field in {"equipe_id", "agence_id"} & set(values.keys()):
+                try:
+                    values[field] = int(values[field])
+                except:
+                    values[field] = False
+            materiel.sudo().write(values)
+            return http.request.redirect(
+                f"/cap_levage_portal/materiel/detail/{materiel_id}"
+            )
+        else:
+            values.update(self._get_materiel_edit_data(materiel_id))
+            values.update(
+                {
+                    "error": error,
+                    "error_message": error_message,
+                }
+            )
+            return http.request.render("cap_levage_portal.materiel_edit", values)
+
 
 class CertifcatsList(CustomerPortal):
     def _generic_list_certificat_materiel(
@@ -230,7 +345,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     def list_certificat_controle_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "controle", "controle", "contrôle"
@@ -242,7 +357,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     def list_certificat_creation_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "creation", "fabrication", "fabrication"
@@ -254,7 +369,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     def list_certificat_destruction_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "destruction", "reforme", "destruction"
@@ -266,11 +381,10 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     def list_certificat_creation_vgp(self, materiel_id, **kw):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         vgps = materiel.rapport_controle
-
         values = {
             "documents": vgps,
             "materiel": materiel,
@@ -341,7 +455,7 @@ class DevisFacturesList(CustomerPortal):
         }
         return request.render(page_to_render, values)
 
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/devis/<int:materiel_id>",
@@ -362,7 +476,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/boncommandes/<int:materiel_id>",
@@ -383,7 +497,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @check_group(GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
         [
             "/cap_levage_portal/list/factures/<int:materiel_id>",
