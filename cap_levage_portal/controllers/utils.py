@@ -24,13 +24,12 @@ def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_1):
     """
     Vérifie si le user connecté à les bons groupes
     """
+
     def decorator(function):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
             logged_user = http.request.env.user
-            if logged_user.has_group(
-                website_group_lvl_value.value
-            ):
+            if logged_user.has_group(website_group_lvl_value.value):
                 if (
                     logged_user.partner_id.date_fin_essai
                     and logged_user.partner_id.date_fin_essai
@@ -41,5 +40,19 @@ def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_1):
                     return function(*args, **kwargs)
             else:
                 return http.request.render("cap_levage_portal.unauthorized")
+
         return wrapper
+
     return decorator
+
+
+def partner_search_domain(partner, type):
+    return [("parent_id", "=", partner.id), ("type", "=", type)]
+
+
+def agence_search_domain(partner):
+    return partner_search_domain(partner, "delivery")
+
+
+def equipe_search_domain(partner):
+    return partner_search_domain(partner, "contact")

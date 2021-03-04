@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import utils
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.http import request
 
@@ -16,9 +17,9 @@ class CustomerPortal(CustomerPortal):
             ]
         )
         values["nb_equipes_count"] = request.env["res.partner"].search_count(
-            [("parent_id", "=", partner.id), ("type", "=", "contact")]
+            utils.equipe_search_domain(partner)
         )
         values["nb_agences_count"] = request.env["res.partner"].search_count(
-            [("parent_id", "=", partner.id), ("type", "=", "delivery")]
+            utils.agence_search_domain(partner)
         )
         return values
