@@ -35,22 +35,14 @@ class PartnerInherit(models.Model):
 
     dao = fields.Boolean(string="Service DAO")
     gest_materiel = fields.Boolean(string="Gestion matériel")
-    # certif_tiers = fields.Boolean(string="Certificats tiers")
     date_fin_essai = fields.Date(string="Fin de version d'essai")
 
-    # equipe_id = fields.Many2one('critt.equipment.equipe', string="Équipe")
-    # agence_id = fields.Many2one('critt.equipment.agence', string="Agence")
     equipe_id = fields.Many2one(
         "res.partner", string="Équipe", domain="[('type', '=', 'contact')]"
     )
     agence_id = fields.Many2one(
         "res.partner", string="Agence", domain="[('type', '=', 'delivery')]"
     )
-
-    # agence_adresse_referent = fields.Many2one('res.partner', string="Agence", domain="[('type', '=', 'delivery')]")
-
-    # lignes_couts_audit = fields.One2many('critt.certification.cout_audit', 'id_client', string = "Coûts Audits")
-
     audits_realises = fields.One2many(
         "critt.certification.audit", "id_controleur", string="Audits réalisés"
     )
@@ -64,54 +56,6 @@ class PartnerInherit(models.Model):
     has_account = fields.Boolean(string="Possède un compte", default=False)
 
     num_commande_client_required = fields.Boolean(string="N° de commande obligatoire")
-
-    # def action_agence(self):
-    #     self.ensure_one()
-    #     ir_model_data = self.env['ir.model.data']
-    #     try:
-    #         vue_referent_agence_form = ir_model_data.get_object_reference('certification', 'vue_referent_agence_form')[1]
-    #     except ValueError:
-    #         vue_referent_agence_form = False
-    #
-    #     ctx = {
-    #         'default_parent_id': self.id,
-    #         'default_type': 'delivery',
-    #     }
-    #
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'view_type': 'form',
-    #         'view_mode': 'form',
-    #         'res_model': 'res.partner',
-    #         'views': [(vue_referent_agence_form, 'form')],
-    #         'view_id': vue_referent_agence_form,
-    #         'target': 'current',
-    #         'context': ctx,
-    #     }
-
-    # def action_equipe(self):
-    #     self.ensure_one()
-    #     ir_model_data = self.env['ir.model.data']
-    #     try:
-    #         vue_referent_equipe_form = ir_model_data.get_object_reference('certification', 'vue_referent_equipe_form')[1]
-    #     except ValueError:
-    #         vue_referent_equipe_form = False
-    #
-    #     ctx = {
-    #         'default_parent_id': self.id,
-    #         'default_type': 'contact',
-    #     }
-    #
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'view_type': 'form',
-    #         'view_mode': 'form',
-    #         'res_model': 'res.partner',
-    #         'views': [(vue_referent_equipe_form, 'form')],
-    #         'view_id': vue_referent_equipe_form,
-    #         'target': 'current',
-    #         'context': ctx,
-    #     }
 
     def _get_list_equipments(self):
         for rec in self:
@@ -134,14 +78,6 @@ class PartnerInherit(models.Model):
                 ids = [x[0] for x in self.env.cr.fetchall()]
                 equipments = self.env["critt.equipment"].sudo().browse(ids)
                 rec.ids_equipements = equipments
-
-            # self.env.cr.execute("SELECT id FROM res_users WHERE partner_id = %s", [rec.id])
-            # row = self.env.cr.fetchone()
-            # if row and row[0]:
-            #    related_recordset = self.env["critt.equipment"].search([('owner_user_id', '=', row[0])])
-            #    rec.ids_equipements = related_recordset
-            # else:
-            #    rec.ids_equipements = []
 
     def _get_list_rapport_controle(self):
         for rec in self:
@@ -224,9 +160,6 @@ class PartnerInherit(models.Model):
                 self.env["res.users"].check_access_rights("write")
             partner._fields_sync(vals)
 
-        # for partner in self:
-        #     self.env.cr.execute("UPDATE res_partner SET name=%s WHERE id = %s", [partner.company_name, partner.id])
-
         return result
 
     @api.model
@@ -235,45 +168,12 @@ class PartnerInherit(models.Model):
             vals["website"] = self._clean_website(vals["website"])
         if vals.get("parent_id"):
             vals["company_name"] = False
-        # compute default image in create, because computing gravatar in the onchange
-        # cannot be easily performed if default images are in the way
-        # if not vals.get('image'):
-        #     vals['image'] = self._get_default_image(vals.get('type'), vals.get('is_company'), vals.get('parent_id'))
 
-        # tools.image_resize_images(vals)
         partner = super(PartnerInherit, self).create(vals)
         partner._fields_sync(vals)
         partner._handle_first_contact_creation()
 
-        # for partner in self:
-        # self.env.cr.execute("UPDATE res_partner SET name=%s WHERE id = %s", [partner.company_name, partner.id])
-
-        # template = {
-        #    'name': vals['company_name']
-        # }
-        # partner.write(template)
-        # self.env.cr.execute("UPDATE res_partner SET name=%s WHERE id = %s", [partner.company_name, partner.id])
-
         return partner
-
-    # @api.model
-    # def create(self, vals):
-    # if vals.get('website'):
-    #    vals['website'] = self._clean_website(vals['website'])
-    # if vals.get('parent_id'):
-    #   vals['company_name'] = False
-    # compute default image in create, because computing gravatar in the onchange
-    # cannot be easily performed if default images are in the way
-    # if not vals.get('image'):
-    #    vals['image'] = self._get_default_image(vals.get('type'), vals.get('is_company'), vals.get('parent_id'))
-    # tools.image_resize_images(vals)
-    # partner = super(PartnerInherit, self).create(vals)
-    # partner._fields_sync(vals)
-    # partner._handle_first_contact_creation()
-
-    # self._cr.execute("INSERT INTO res_groups_users_rel (gid, uid) VALUES(%s,%s)" % (13, partner.id))
-
-    # return partner
 
     def unlink(self):
         user = self.env["res.users"].search([("partner_id", "=", self.id)])
