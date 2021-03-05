@@ -72,11 +72,8 @@ class CapLevageMateriels(http.Controller):
 
         materiels = http.request.env["critt.equipment"]
         logged_user = request.env["res.users"].browse(request.session.uid)
-        search_domain = [
-            "|",
-            ("referent", "=", logged_user.partner_id.id),
-            ("referent", "child_of", logged_user.partner_id.id),
-        ]
+        equipes_list = utils.materiels_equipe_possible_list(request, logged_user.partner_id)
+        search_domain = [("equipe_id", "in", equipes_list)]
         if search is not None and search_in is not None:
             # FIXME - faire mieux ? champs store ?
             partner_ids = (

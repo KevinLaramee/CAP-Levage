@@ -15,7 +15,7 @@
                 </li>
                 <li t-if="page_name == 'mes_equipes' and is_equipe and partner" class="breadcrumb-item active">
                     <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(partner.id)">
-                        <t t-esc="partner.name"/>v
+                        <t t-esc="partner.name"/>
                     </a>
                 </li>
                 <li t-if="page_name == 'mes_agences' and is_agence and partner" class="breadcrumb-item active">
@@ -116,7 +116,7 @@
                         </div>
                         <div class="text-left small">
                             <a>Matériels possédés : </a>
-                            <a t-esc="len(item.ids_equipements)"/>
+                            <a t-esc="item.nb_equipment"/>
                         </div>
                     </div>
                 </div>

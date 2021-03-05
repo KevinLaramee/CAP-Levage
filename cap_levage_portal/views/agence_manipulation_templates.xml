@@ -72,9 +72,10 @@
                     </div>
                     <div class="row align-items-center">
                         <div class="col-12 text-right">
-                            <a t-att-href="'/cap_levage_portal/materiels?sortby=date&amp;search=' + partner.name" class="btn btn-primary"
+                            <a t-att-href="'/cap_levage_portal/materiels?sortby=date&amp;search_in=agence&amp;search=' + partner.name" class="btn btn-primary"
                                aria-label="Mes matériels" title="Mes matériels">
                                 <i class="fa fa-wrench"/>
+                                Matériels associés
                             </a>
                         </div>
                     </div>

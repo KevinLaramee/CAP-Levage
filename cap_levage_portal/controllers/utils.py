@@ -46,8 +46,9 @@ def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_1):
     return decorator
 
 
-def partner_search_domain(partner, type):
-    return [("parent_id", "=", partner.id), ("type", "=", type)]
+def partner_search_domain(partner, type_partner):
+    # The child_of operator will look for records who are children or grand-children of a given record
+    return ["&", "|", ("id", "=", partner.id), ("parent_id", "child_of", partner.id), ("type", "=", type_partner)]
 
 
 def agence_search_domain(partner):
@@ -56,3 +57,9 @@ def agence_search_domain(partner):
 
 def equipe_search_domain(partner):
     return partner_search_domain(partner, "contact")
+
+
+def materiels_equipe_possible_list(request, partner):
+    partner_model = request.env["res.partner"]
+    equipes_list = partner_model.search(equipe_search_domain(partner)).ids
+    return equipes_list

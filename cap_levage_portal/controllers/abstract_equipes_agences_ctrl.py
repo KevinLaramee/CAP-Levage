@@ -128,6 +128,7 @@ class AbstractEquipesagencesCtrl:
         all_equipes = equipes.search(
             search_domain, order=order, limit=PPG * PPR, offset=pager["offset"]
         )
+        [equipe._count_equipments() for equipe in all_equipes]
         values = self._compute_generic_values()
         values.update(
             {
