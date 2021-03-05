@@ -94,9 +94,9 @@
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
             <!--            FIXME supprimer le form -->
-            <div class="card oe_product_cart" groups="certification.website_lvl_1">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';">
                 <div class="card-body p-1 oe_product_image">
-                    <a t-att-href="product_href" class="d-block h-100" itemprop="url">
+                    <a class="d-block h-100" itemprop="url">
                         <span t-if="item.type == 'contact'" t-field="item.image_1920"
                               t-options="{'widget': 'image', 'preview_image': 'image_1920', 'class': 'o_image_128_max'}"
                               class="d-flex h-100 justify-content-center align-items-center"/>
@@ -108,7 +108,7 @@
                 <div class="card-body p-0 text-center o_wsale_product_information">
                     <div class="p-2 o_wsale_product_information_text">
                         <h6 class="o_wsale_products_item_title">
-                            <a itemprop="name" t-att-href="product_href" t-att-content="item.name" t-field="item.name"/>
+                            <a itemprop="name" t-att-content="item.name" t-field="item.name"/>
                         </h6>
                         <div class="text-left small">
                             <a>Email : </a>
