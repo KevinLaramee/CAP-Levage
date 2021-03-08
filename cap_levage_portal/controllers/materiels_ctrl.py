@@ -236,7 +236,7 @@ class CapLevageMateriels(http.Controller):
 
         # Validation
         for field_name in self.get_mandatory_fields():
-            if not data.get(field_name):
+            if data.get(field_name) is None:
                 error[field_name] = "missing"
 
         # error message for empty required fields
@@ -256,11 +256,11 @@ class CapLevageMateriels(http.Controller):
 
     @staticmethod
     def get_optional_fields():
-        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation"]
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque"]
 
     @staticmethod
     def get_mandatory_fields():
-        return ["qr_code"]
+        return ["qr_code", "num_materiel"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -296,6 +296,9 @@ class CapLevageMateriels(http.Controller):
                 except:
                     values[field] = False
             materiel.sudo().write(values)
+            if values.get("is_bloque", False):
+                materiel.action_bloquer()
+
             return http.request.redirect(
                 f"/cap_levage_portal/materiel/detail/{materiel_id}"
             )

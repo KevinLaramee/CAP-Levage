@@ -477,7 +477,7 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3>Matériel</h3>
+                        <h3>Edition matériel</h3>
                         <div class="row align-items-center mt-5">
                             <div class="col-2" id="cap_levage_portal_avatar">
                                 <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
@@ -494,8 +494,15 @@
                                 </div>
                             </div>
                             <div class="col-5">
+                                <h2 class="row align-items-center">
+                                    <t t-call="cap_levage_portal.materiel_type"/>
+                                </h2>
+                                <div class="row align-items-center">
+                                    <t t-call="cap_levage_portal.etat_materiel"/>
+                                </div>
+                                <br/>
                                 <div t-attf-class="form-group #{error.get('equipe_id') and 'o_has_error' or ''} col-12">
-                                    <label class="col-form-label" for="title_id">Equipe - agence</label>
+                                    <label class="col-form-label">Equipe - agence</label>
                                     <select name="equipe_id" t-attf-class="form-control #{error.get('equipe_id') and 'is-invalid' or ''}">
                                         <option value="">Aucune équipe</option>
                                         <t t-foreach="equipes or []" t-as="equipe_value">
@@ -505,6 +512,17 @@
                                             </option>
                                         </t>
                                     </select>
+                                </div>
+
+                                <div t-attf-class="form-group #{error.get('num_materiel') and 'o_has_error' or ''} col-12">
+                                    <label class="col-form-label" for="num_materiel">Numéro matériel</label>
+                                    <input type="text" name="num_materiel" t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
+                                           t-att-value="materiel.num_materiel if mode == 'edit' else ''"/>
+                                </div>
+                                <div class="form-group col-12">
+                                    <label class="col-form-label" for="is_bloque">Est bloqué
+                                    <input type="checkbox" name="is_bloque" class="form-control" t-att-checked="'checked' if materiel.is_bloque and mode == 'edit' else False" t-att-disabled="True if materiel.is_bloque or materiel.statut_index != 0 else False"/>
+                                    </label>
                                 </div>
 
                                 <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''} col-12">

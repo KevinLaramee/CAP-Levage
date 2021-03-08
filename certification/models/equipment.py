@@ -6,7 +6,6 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import api, models, fields, tools, _
 from odoo.exceptions import ValidationError
-from odoo.tools import pycompat, ImageProcess
 
 
 class MaintenanceEquipment(models.Model):
@@ -85,7 +84,7 @@ class MaintenanceEquipment(models.Model):
         string="Periodicité des audits (en mois)", required=True, default=0
     )
 
-    is_bloque = fields.Boolean(string="Matériel bloqué", default=False)
+    is_bloque = fields.Boolean(string="Matériel bloqué", default=False, track_visibility=True)
     date_bloque = fields.Date(string="Bloqué le")
 
     statuts = [
