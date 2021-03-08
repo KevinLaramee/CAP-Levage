@@ -142,7 +142,7 @@
                                     </div>
                                     <div class="form-inline">
                                         <label for="agence_id"/>
-                                        <field name="agence_id" context="{'default_type': 'delivery', 'default_context_parent_id': res_partner_id}"/>
+                                        <field name="agence_id"/>
                                     </div>
                                     <div class="form-inline">
                                         <label for="equipe_id"/>

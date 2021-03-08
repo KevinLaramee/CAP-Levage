@@ -18,7 +18,7 @@ class MaintenanceEquipment(models.Model):
 
     name = fields.Char("Nom", translate=True)
     active = fields.Boolean(default=True)
-    # model = fields.Char('Model')
+
     owner_user_id = fields.Many2one("res.users", string="Client", required=True)
     res_partner_id = fields.Many2one(
         "res.partner",
@@ -119,35 +119,20 @@ class MaintenanceEquipment(models.Model):
     quote_in_progress = fields.Integer(
         string="Compteur devis", compute="_count_sale_order"
     )
-
-    # client = fields.Char(string="Client", compute="_get_client_name")
-    # client_link = fields.Char(string="Link", compute="_get_client_link")
-
-    # latitude = fields.Char(string='Latitude', size=256)
-    # longitude = fields.Char(string='Longitude', size=256)
     localisation_description = fields.Char(string="Attribution")
     fabricant_id = fields.Many2one("critt.equipment.fabricant", string="Fabricant")
-    # agence = fields.Char(string="Agence / secteur")
-    # equipe = fields.Char(string="Equipe")
-    # agence_id = fields.Many2one('critt.equipment.agence', string='Agence / secteur')
-    # equipe_id = fields.Many2one('critt.equipment.equipe', string='Équipe')
     agence_id = fields.Many2one(
         "res.partner",
+        related="equipe_id.parent_id",
         string="Agence / secteur",
-        domain="[('parent_id', '=', res_partner_id), ('type', '=', 'delivery')]",
         track_visibility=True,
     )
     equipe_id = fields.Many2one(
         "res.partner",
         string="Équipe",
-        domain="[('parent_id', '=', res_partner_id), ('type', '=', 'contact')]",
+        domain="[('type', '=', 'contact')]",
         track_visibility=True,
     )
-
-    agence = fields.Many2one(
-        "res.partner", string="Agence / secteur", compute="_get_agence"
-    )
-    equipe = fields.Many2one("res.partner", string="Équipe", compute="_get_equipe")
 
     horodating_ids = fields.One2many(
         "critt.horodating", "equipment_id", string="Ids Horodatage"
@@ -284,18 +269,6 @@ class MaintenanceEquipment(models.Model):
     rapport_controle = fields.One2many(
         "critt.certification.rapport_controle", compute="_compute_rapport_controle"
     )
-
-    # factures = fields.One2many("account.move", "id_equipement", string="Factures") cf: question dans account_move.py
-
-    # ids_files = fields.One2many('critt.maintenance.equipment.file', 'equipment_id', string="Files")
-
-    #
-    # def _get_is_ok(self):
-    #     for equipment in self:
-    #         if(equipment.audit_suivant < datetime.now().strftime("%Y-%m-%d")):
-    #             equipment.is_ok = True
-    #         else:
-    #             equipment.is_ok = False
 
     def action_valider(self):
         self.statut = "ok"
@@ -510,24 +483,6 @@ class MaintenanceEquipment(models.Model):
                 .search([("id", "in", list_id_rapports_vgp)])
             )
             line.rapport_controle = rapport_vgp
-
-    def _get_agence(self):
-        for line in self:
-            line.agence = None
-            if line.agence_id:
-                res = self.env["res.partner"].search(
-                    [("id", "=", line.agence_id.id)], limit=1
-                )
-                line.agence = res
-
-    def _get_equipe(self):
-        for line in self:
-            line.equipe = None
-            if line.equipe_id:
-                res = self.env["res.partner"].search(
-                    [("id", "=", line.equipe_id.id)], limit=1
-                )
-                line.equipe = res
 
     def _get_referent(self):
         for line in self:
@@ -1477,26 +1432,6 @@ class Fabricant(models.Model):
     equipment_ids = fields.One2many(
         "critt.equipment", "fabricant_id", string="Equipments", copy=False
     )
-
-
-# class Agence(models.Model):
-#     _name = "critt.equipment.agence"
-#
-#     name = fields.Char(string="Nom", required=True)
-#
-#     referent_ids = fields.One2many('res.partner', 'agence_id', string="Référents")
-#     owner_user_id = fields.Many2one('res.users', string='Client')
-#     equipment_ids = fields.One2many('critt.equipment', 'agence_id', string='Equipments', copy=False)
-#
-# class Equipe(models.Model):
-#     _name = "critt.equipment.equipe"
-#
-#     name = fields.Char(string="Nom", required=True)
-#
-#     referent_ids = fields.One2many('res.partner', 'equipe_id', string="Référents")
-#     owner_user_id = fields.Many2one('res.users', string='Client')
-#     equipment_ids = fields.One2many('critt.equipment', 'equipe_id', string='Equipments', copy=False)
-
 
 class IrAttachment(models.Model):
     _name = "ir.attachment"

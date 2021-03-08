@@ -21,7 +21,6 @@
                t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
         </template>
         <template id="cap_levage_portal.materiel_type">
-            <a>Type :</a>
             <a t-field="materiel.category_id" class="font-weight-bold"/>
         </template>
         <template id="cap_levage_portal.date_controle">
@@ -97,7 +96,8 @@
         <!--        Affiche l'encart d'un matériel dans la liste -->
         <template id="cap_levage_portal.materiel_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/materiel/detail/' + str(materiel.id)"/>
-            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';"
+                 style="cursor: pointer">
                 <div class="card-body p-1">
                     <a class="d-block h-100">
                         <span t-field="materiel.image_medium"
@@ -110,6 +110,9 @@
                         <h6 class="o_wsale_products_item_title">
                             <a itemprop="name" t-att-content="materiel.category_id" t-field="materiel.category_id"/>
                         </h6>
+                        <div>
+                            <t t-call="cap_levage_portal.etat_materiel"/>
+                        </div>
                         <div class="small text-left">
                             <a>Numéro :</a>
                             <a t-field="materiel.num_materiel" class="font-weight-bold"/>
@@ -126,12 +129,8 @@
                             <a t-field="materiel.equipe_id.name"/>
                         </div>
                         <div class="small text-left">
-                            <a>Agence :</a>
+                            <a>Agence/secteur :</a>
                             <a t-field="materiel.agence_id.name"/>
-                        </div>
-                        <div class="small text-left">
-                            <a>Statut :</a>
-                            <t t-call="cap_levage_portal.etat_materiel"/>
                         </div>
                     </div>
                 </div>
@@ -142,6 +141,7 @@
         <template id="cap_levage_portal.onglet_caracteristiques">
             <div class="col-12">
                 <div class="row align-items-center">
+                    <a>Type :</a>
                     <t t-call="cap_levage_portal.materiel_type"/>
                 </div>
                 <div class="row align-items-center">
@@ -263,9 +263,13 @@
 
         <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
-            <div class="row align-items-center">
+            <h2 class="row align-items-center">
                 <t t-call="cap_levage_portal.materiel_type"/>
+            </h2>
+            <div class="row align-items-center">
+                <t t-call="cap_levage_portal.etat_materiel"/>
             </div>
+            <br/>
             <div class="row align-items-center">
                 <a>Numéro :</a>
                 <a t-field="materiel.num_materiel" class="font-weight-bold"/>
@@ -276,19 +280,15 @@
             </div>
             <div class="row align-items-center">
                 <a>Agence/secteur :</a>
-                <a t-field="materiel.agence_id"/>
+                <a t-field="materiel.agence_id.name"/>
             </div>
             <div class="row align-items-center">
                 <a>Equipe :</a>
-                <a t-field="materiel.equipe_id"/>
+                <a t-field="materiel.equipe_id.name"/>
             </div>
             <div class="row align-items-center">
                 <a>Identifiant QRCode :</a>
                 <a t-field="materiel.qr_code"/>
-            </div>
-            <div class="row align-items-center">
-                <a>Etat :</a>
-                <t t-call="cap_levage_portal.etat_materiel"/>
             </div>
         </template>
 
@@ -477,7 +477,7 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3>Contact</h3>
+                        <h3>Matériel</h3>
                         <div class="row align-items-center mt-5">
                             <div class="col-2" id="cap_levage_portal_avatar">
                                 <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
@@ -494,26 +494,14 @@
                                 </div>
                             </div>
                             <div class="col-5">
-                                <div t-attf-class="form-group #{error.get('agence_id') and 'o_has_error' or ''} col-12">
-                                    <label class="col-form-label" for="title_id">Agence/secteur</label>
-                                    <select name="agence_id" t-attf-class="form-control #{error.get('agence_id') and 'is-invalid' or ''}">
-                                        <option value="">Agence...</option>
-                                        <t t-foreach="agences or []" t-as="agence_value">
-                                            <option t-att-value="agence_value.id"
-                                                    t-att-selected="agence_value.id == materiel.agence_id.id if mode == 'edit' else 0">
-                                                <t t-esc="agence_value.name"/>
-                                            </option>
-                                        </t>
-                                    </select>
-                                </div>
                                 <div t-attf-class="form-group #{error.get('equipe_id') and 'o_has_error' or ''} col-12">
-                                    <label class="col-form-label" for="title_id">Equipe</label>
+                                    <label class="col-form-label" for="title_id">Equipe - agence</label>
                                     <select name="equipe_id" t-attf-class="form-control #{error.get('equipe_id') and 'is-invalid' or ''}">
-                                        <option value="">Equipe...</option>
+                                        <option value="">Aucune équipe</option>
                                         <t t-foreach="equipes or []" t-as="equipe_value">
                                             <option t-att-value="equipe_value.id"
                                                     t-att-selected="equipe_value.id == materiel.equipe_id.id if mode == 'edit' else 0">
-                                                <t t-esc="equipe_value.name"/>
+                                                <t t-esc="equipe_value.name + ' - ' + equipe_value.parent_id.name"/>
                                             </option>
                                         </t>
                                     </select>
@@ -537,47 +525,48 @@
                                        t-att-value="materiel.last_general_observation if mode == 'edit' else ''"/>
                             </div>
                         </div>
-                    <div class="row align-items-center">
-                        <div class="prodcut-tab-wrap w-100">
-                            <div class="row align-items-center" id="edit_product_more_info">
-                                <div class="col-md-12 pd_info">
-                                    <div class="pd-more-info">
-                                        <ul class="nav nav-tabs" role="tablist">
-                                            <li role="presentation">
-                                                <a class="active" href="#caracteristiques_tab" aria-controls="caracteristiques_tab" role="tab"
-                                                   data-toggle="tab">
-                                                    Caractéristiques
-                                                </a>
-                                            </li>
-                                            <li role="presentation">
-                                                <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
-                                            </li>
-                                            <li role="presentation">
-                                                <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab"
-                                                   groups="certification.website_lvl_2">Certificats/VGP
-                                                </a>
-                                            </li>
-                                            <li role="presentation">
-                                                <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab"
-                                                   groups="certification.website_lvl_2">Devis/factures
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div role="caracteristiques_tab" class="tab-pane active" id="edit_caracteristiques_tab" groups="certification.website_lvl_3">
-                                            </div>
-                                            <div role="suivi_tab" class="tab-pane" id="edit_suivi_tab">
-                                            </div>
-                                            <div role="vgp_tab" class="tab-pane" id="edit_vgp_tab" groups="certification.website_lvl_2">
-                                            </div>
-                                            <div role="devis_tab" class="tab-pane" id="edit_devis_tab" groups="certification.website_lvl_2">
+                        <div class="row align-items-center">
+                            <div class="prodcut-tab-wrap w-100">
+                                <div class="row align-items-center" id="edit_product_more_info">
+                                    <div class="col-md-12 pd_info">
+                                        <div class="pd-more-info">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li role="presentation">
+                                                    <a class="active" href="#caracteristiques_tab" aria-controls="caracteristiques_tab" role="tab"
+                                                       data-toggle="tab">
+                                                        Caractéristiques
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab"
+                                                       groups="certification.website_lvl_2">Certificats/VGP
+                                                    </a>
+                                                </li>
+                                                <li role="presentation">
+                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab"
+                                                       groups="certification.website_lvl_2">Devis/factures
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div role="caracteristiques_tab" class="tab-pane active" id="edit_caracteristiques_tab"
+                                                     groups="certification.website_lvl_3">
+                                                </div>
+                                                <div role="suivi_tab" class="tab-pane" id="edit_suivi_tab">
+                                                </div>
+                                                <div role="vgp_tab" class="tab-pane" id="edit_vgp_tab" groups="certification.website_lvl_2">
+                                                </div>
+                                                <div role="devis_tab" class="tab-pane" id="edit_devis_tab" groups="certification.website_lvl_2">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                         <div class="clearfix">
                             <button type="submit" t-att-id="materiel.id if mode == 'edit' else ''" class="btn btn-primary">
                                 <i class="fa fa-save"/>

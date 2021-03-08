@@ -220,11 +220,6 @@ class CapLevageMateriels(http.Controller):
             .sudo()
             .search(utils.equipe_search_domain(partner))
         )
-        agences = (
-            http.request.env["res.partner"]
-            .sudo()
-            .search(utils.agence_search_domain(partner))
-        )
         values = {
             "page_name": _("mes_materiels"),
             "materiel": materiel,
@@ -232,7 +227,6 @@ class CapLevageMateriels(http.Controller):
             "mode": "edit",
             "error": {},
             "equipes": equipes,
-            "agences": agences,
         }
         return values
 
