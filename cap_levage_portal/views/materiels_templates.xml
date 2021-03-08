@@ -97,7 +97,7 @@
         <!--        Affiche l'encart d'un matériel dans la liste -->
         <template id="cap_levage_portal.materiel_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/materiel/detail/' + str(materiel.id)"/>
-            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
                 <div class="card-body p-1">
                     <a class="d-block h-100">
                         <span t-field="materiel.image_medium"

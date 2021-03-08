@@ -94,7 +94,7 @@
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
             <!--            FIXME supprimer le form -->
-            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';">
+            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
                 <div class="card-body p-1 oe_product_image">
                     <a class="d-block h-100" itemprop="url">
                         <span t-if="item.type == 'contact'" t-field="item.image_1920"
