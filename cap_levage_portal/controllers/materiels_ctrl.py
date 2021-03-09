@@ -220,6 +220,7 @@ class CapLevageMateriels(http.Controller):
             .sudo()
             .search(utils.equipe_search_domain(partner))
         )
+        categories_materiel = http.request.env["critt.equipment.category"].sudo().search([], order="name asc")
         values = {
             "page_name": _("mes_materiels"),
             "materiel": materiel,
@@ -227,6 +228,7 @@ class CapLevageMateriels(http.Controller):
             "mode": "edit",
             "error": {},
             "equipes": equipes,
+            "categories_materiel": categories_materiel,
         }
         return values
 
