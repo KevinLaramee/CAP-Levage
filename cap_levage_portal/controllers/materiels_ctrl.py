@@ -215,12 +215,16 @@ class CapLevageMateriels(http.Controller):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         logged_user = request.env["res.users"].browse(request.session.uid)
         partner = logged_user.partner_id
+        company = logged_user.company_id
         equipes = (
             http.request.env["res.partner"]
             .sudo()
             .search(utils.equipe_search_domain(partner))
         )
         categories_materiel = http.request.env["critt.equipment.category"].sudo().search([], order="name asc")
+        fabricants = http.request.env["critt.equipment.fabricant"].sudo().search([], order="name asc")
+        # FIXME : à vérifier
+        referents = http.request.env["res.partner"].sudo().search([("parent_id", "=", company.id), ("type", "=", "contact")], order="name asc")
         values = {
             "page_name": _("mes_materiels"),
             "materiel": materiel,
@@ -229,6 +233,8 @@ class CapLevageMateriels(http.Controller):
             "error": {},
             "equipes": equipes,
             "categories_materiel": categories_materiel,
+            "fabricants": fabricants,
+            "referents": referents
         }
         return values
 
@@ -262,7 +268,7 @@ class CapLevageMateriels(http.Controller):
 
     @staticmethod
     def get_mandatory_fields():
-        return ["qr_code", "num_materiel", "category_id"]
+        return ["qr_code", "num_materiel", "category_id", "fabricant_id"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -292,7 +298,7 @@ class CapLevageMateriels(http.Controller):
             values.update(
                 {key: post[key] for key in self.get_optional_fields() if key in post}
             )
-            for field in {"equipe_id", "category_id"} & set(values.keys()):
+            for field in {"equipe_id", "category_id", "fabricant_id"} & set(values.keys()):
                 try:
                     values[field] = int(values[field])
                 except:
