@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import base64
+from datetime import datetime
 
 from odoo import http
 from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
 from odoo.http import request
 from odoo.tools.translate import _
-from .grid_utils import TableComputeCapLevage
 from . import utils
+from .grid_utils import TableComputeCapLevage
 
 PPG = 2
 PPR = 4
@@ -117,22 +118,7 @@ class CapLevageMateriels(http.Controller):
             },
         )
 
-    @http.route(
-        "/cap_levage_portal/materiel/detail/<int:materiel_id>",
-        auth="user",
-        website=True,
-    )
-    @utils.check_group()
-    def materiel_detail(self, materiel_id, **kw):
-        """
-        Affiche le détail d'un matéreil en fonction de son id
-        :param materiel_id:
-        :param kw:
-        :return:
-        """
-        materiels = http.request.env["critt.equipment"]
-        materiel = materiels.browse(materiel_id)
-
+    def _get_vgp_certifs_data(self, materiel):
         nb_vgp = len(materiel.rapport_controle)
         certificats = materiel.certificats
         nb_certif_creation = len(
@@ -156,8 +142,8 @@ class CapLevageMateriels(http.Controller):
         ].search([("equipment_id", "=", materiel.id)])
         sale_orders = (
             request.env["sale.order"]
-            .sudo()
-            .search(
+                .sudo()
+                .search(
                 [
                     (
                         "id",
@@ -189,6 +175,24 @@ class CapLevageMateriels(http.Controller):
             "nb_bons_commande": nb_bons_commande,
             "nb_factures": nb_factures,
         }
+        return onglet_vgp_data, onglet_devis_data
+
+    @http.route(
+        "/cap_levage_portal/materiel/detail/<int:materiel_id>",
+        auth="user",
+        website=True,
+    )
+    @utils.check_group()
+    def materiel_detail(self, materiel_id, **kw):
+        """
+        Affiche le détail d'un matéreil en fonction de son id
+        :param materiel_id:
+        :param kw:
+        :return:
+        """
+        materiels = http.request.env["critt.equipment"]
+        materiel = materiels.browse(materiel_id)
+        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
 
         return http.request.render(
             "cap_levage_portal.materiel_detail",
@@ -218,13 +222,16 @@ class CapLevageMateriels(http.Controller):
         company = logged_user.company_id
         equipes = (
             http.request.env["res.partner"]
-            .sudo()
-            .search(utils.equipe_search_domain(partner))
+                .sudo()
+                .search(utils.equipe_search_domain(partner))
         )
         categories_materiel = http.request.env["critt.equipment.category"].sudo().search([], order="name asc")
         fabricants = http.request.env["critt.equipment.fabricant"].sudo().search([], order="name asc")
         # FIXME : à vérifier
         referents = http.request.env["res.partner"].sudo().search([("parent_id", "=", company.id), ("type", "=", "contact")], order="name asc")
+
+        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
+
         values = {
             "page_name": _("mes_materiels"),
             "materiel": materiel,
@@ -234,7 +241,9 @@ class CapLevageMateriels(http.Controller):
             "equipes": equipes,
             "categories_materiel": categories_materiel,
             "fabricants": fabricants,
-            "referents": referents
+            "referents": referents,
+            "onglet_vgp": onglet_vgp_data,
+            "onglet_devis": onglet_devis_data,
         }
         return values
 
@@ -264,7 +273,7 @@ class CapLevageMateriels(http.Controller):
 
     @staticmethod
     def get_optional_fields():
-        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"]
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande", "referent", "upload_certificat_destruction_files", "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files"]
 
     @staticmethod
     def get_mandatory_fields():
@@ -282,7 +291,6 @@ class CapLevageMateriels(http.Controller):
         error, error_message = self.details_form_validate(post)
         values = {}
         if not error:
-            values.update({key: post[key] for key in self.get_mandatory_fields()})
 
             if "image" in post:
                 image = post.get("image")
@@ -295,14 +303,26 @@ class CapLevageMateriels(http.Controller):
                 materiel.sudo().write({"image": False})
                 post.pop("clear_avatar")
 
+            certificats = []
+
+            certificats.extend(self.create_certificat(post, "creation", "upload_certificat_fabrication_files"))
+            certificats.extend(self.create_certificat(post, "controle", "upload_certificat_controle_files"))
+            certificats.extend(self.create_certificat(post, "reforme", "upload_certificat_destruction_files"))
+
+            post.pop("upload_vgp_files")
+
+            values.update({key: post[key] for key in self.get_mandatory_fields()})
             values.update(
                 {key: post[key] for key in self.get_optional_fields() if key in post}
             )
-            for field in {"equipe_id", "category_id", "fabricant_id"} & set(values.keys()):
+            for field in {"equipe_id", "category_id", "fabricant_id", "referent"} & set(values.keys()):
                 try:
                     values[field] = int(values[field])
                 except:
                     values[field] = False
+
+            values.update({"certificats": certificats})
+
             materiel.sudo().write(values)
             if values.get("is_bloque", False):
                 materiel.action_bloquer()
@@ -320,10 +340,25 @@ class CapLevageMateriels(http.Controller):
             )
             return http.request.render("cap_levage_portal.materiel_edit", values)
 
+    def create_certificat(self, post, type_of_certificat, input_name):
+        new_files = []
+        if post.get('upload_certificat_fabrication_files', False):
+            file = post.get(input_name)
+            certifcat = file.read()
+            new_files.append((0, 0, {
+                "desc": file.filename,
+                'date': datetime.now(),
+                'type': type_of_certificat,
+                'fic_pdf': base64.b64encode(certifcat),
+            }))
+
+        post.pop(input_name)
+        return new_files
+
 
 class CertifcatsList(CustomerPortal):
     def _generic_list_certificat_materiel(
-        self, materiel_id, type_search, url_name, label_value, **kw
+            self, materiel_id, type_search, url_name, label_value, **kw
     ):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         certificats = [
@@ -400,14 +435,14 @@ class CertifcatsList(CustomerPortal):
 
 class DevisFacturesList(CustomerPortal):
     def _generic_search(
-        self,
-        state_search_list,
-        page_to_render,
-        route_name,
-        materiel_id,
-        page,
-        sortby,
-        **kw,
+            self,
+            state_search_list,
+            page_to_render,
+            route_name,
+            materiel_id,
+            page,
+            sortby,
+            **kw,
     ):
         sale_order_line_equipment_ids = request.env[
             "critt.sale.order.line.equipment"
@@ -516,8 +551,8 @@ class DevisFacturesList(CustomerPortal):
         ].search([("equipment_id", "=", materiel_id)])
         sale_orders = (
             request.env["sale.order"]
-            .sudo()
-            .search[
+                .sudo()
+                .search[
                 (
                     "id",
                     "in",

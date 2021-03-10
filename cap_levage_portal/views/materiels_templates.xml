@@ -494,6 +494,21 @@
                        t-att-value="attrValue if mode == 'edit' else ''"/>
             </div>
         </template>
+        <!-- affichage pour upload un odcument (niveau 3 uniquement)-->
+        <template id="cap_levage_portal.upload">
+            <div class="row" groups="certification.website_lvl_3">
+                <div class="form-group col-3">
+                    <label>
+                        <t t-esc="labelValue"/>
+                    </label>
+                </div>
+                <div class="form-group col-3">
+                    <i role="button" class="fa fa-upload">
+                        <input type="file" t-att-name="idValue" multiple="true" t-att-id="idValue" accept="image/*,application/pdf"/>
+                    </i>
+                </div>
+            </div>
+        </template>
         <!-- Edition/création d'un matériel -->
         <template id="cap_levage_portal.materiel_edit">
             <t t-call="portal.portal_layout">
@@ -708,8 +723,26 @@
                                                     <t t-call="cap_levage_portal.onglet_suivi"/>
                                                 </div>
                                                 <div role="vgp_tab" class="tab-pane" id="edit_vgp_tab" groups="certification.website_lvl_2">
+                                                    <t t-call="cap_levage_portal.onglet_vgp"/>
+                                                    <t t-call="cap_levage_portal.upload">
+                                                        <t t-set="labelValue">Ajouter un certificat de fabrication</t>
+                                                        <t t-set="idValue">upload_certificat_fabrication_files</t>
+                                                    </t>
+                                                    <t t-call="cap_levage_portal.upload">
+                                                        <t t-set="labelValue">Ajouter un certificat de contrôle</t>
+                                                        <t t-set="idValue">upload_certificat_controle_files</t>
+                                                    </t>
+                                                    <t t-call="cap_levage_portal.upload">
+                                                        <t t-set="labelValue">Ajouter un certificat de destruction</t>
+                                                        <t t-set="idValue">upload_certificat_destruction_files</t>
+                                                    </t>
+                                                    <t t-call="cap_levage_portal.upload">
+                                                        <t t-set="labelValue">Ajouter un VGP</t>
+                                                        <t t-set="idValue">upload_vgp_files</t>
+                                                    </t>
                                                 </div>
                                                 <div role="devis_tab" class="tab-pane" id="edit_devis_tab" groups="certification.website_lvl_2">
+                                                    <t t-call="cap_levage_portal.onglet_devis"/>
                                                 </div>
                                             </div>
                                         </div>
