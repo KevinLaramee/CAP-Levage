@@ -258,11 +258,11 @@ class CapLevageMateriels(http.Controller):
 
     @staticmethod
     def get_optional_fields():
-        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque"]
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"]
 
     @staticmethod
     def get_mandatory_fields():
-        return ["qr_code", "num_materiel"]
+        return ["qr_code", "num_materiel", "category_id"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -292,7 +292,7 @@ class CapLevageMateriels(http.Controller):
             values.update(
                 {key: post[key] for key in self.get_optional_fields() if key in post}
             )
-            for field in {"equipe_id", "agence_id"} & set(values.keys()):
+            for field in {"equipe_id", "category_id"} & set(values.keys()):
                 try:
                     values[field] = int(values[field])
                 except:
