@@ -215,8 +215,29 @@ class CapLevageMateriels(http.Controller):
         values = self._get_materiel_edit_data(materiel_id)
         return http.request.render("cap_levage_portal.materiel_edit", values)
 
-    def _get_materiel_edit_data(self, materiel_id):
-        materiel = http.request.env["critt.equipment"].browse(materiel_id)
+    def _generate_create_data(self):
+        values = self._generate_edit_create_data()
+        organismes_certification = http.request.env["critt.equipment.organisme"].sudo().search([], order="name asc")
+        values.update({
+            "page_name": _("mes_materiels"),
+            "mode": "create",
+            "error": {},
+            "post_url": "/cap_levage_portal/materiel/create",
+            "organismes_certification": organismes_certification,
+        })
+        return values
+
+    @utils.check_group(utils.GroupWebsite.lvl_3)
+    @http.route(
+        "/cap_levage_portal/materiel/create",
+        methods=["GET"],
+        auth="user",
+        website=True,
+    )
+    def materiel_get_create_data(self):
+        return http.request.render("cap_levage_portal.materiel_edit", self._generate_create_data())
+
+    def _generate_edit_create_data(self):
         logged_user = request.env["res.users"].browse(request.session.uid)
         partner = logged_user.partner_id
         company = logged_user.company_id
@@ -230,21 +251,27 @@ class CapLevageMateriels(http.Controller):
         # FIXME : à vérifier
         referents = http.request.env["res.partner"].sudo().search([("parent_id", "=", company.id), ("type", "=", "contact")], order="name asc")
 
-        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
-
-        values = {
-            "page_name": _("mes_materiels"),
-            "materiel": materiel,
-            "edit": True,
-            "mode": "edit",
-            "error": {},
-            "equipes": equipes,
+        return {
             "categories_materiel": categories_materiel,
             "fabricants": fabricants,
             "referents": referents,
+            "equipes": equipes,
+        }
+
+    def _get_materiel_edit_data(self, materiel_id):
+        materiel = http.request.env["critt.equipment"].browse(materiel_id)
+
+        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
+        values = {
+            "page_name": _("mes_materiels"),
+            "materiel": materiel,
+            "mode": "edit",
+            "error": {},
             "onglet_vgp": onglet_vgp_data,
             "onglet_devis": onglet_devis_data,
+            "post_url": f"/cap_levage_portal/materiel/edit/{materiel_id}"
         }
+        values.update(self._generate_edit_create_data())
         return values
 
     def details_form_validate(self, data):
@@ -273,7 +300,9 @@ class CapLevageMateriels(http.Controller):
 
     @staticmethod
     def get_optional_fields():
-        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande", "referent", "upload_certificat_destruction_files", "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files"]
+        return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu",
+                "model", "diametre", "grade", "num_lot", "num_commande", "referent", "upload_certificat_destruction_files",
+                "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files"]
 
     @staticmethod
     def get_mandatory_fields():

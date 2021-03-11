@@ -14,7 +14,10 @@
     "depends": ["base", "website", "portal", "sale", "account"],
     # always loaded
     "data": [
-        "views/materiels_templates.xml",
+        "views/materiel/materiels_commons.xml",
+        "views/materiel/materiels_details.xml",
+        "views/materiel/materiels_edition.xml",
+        "views/materiel/materiels_list.xml",
         "views/agences_equipes_templates.xml",
         "views/equipe_manipulation_templates.xml",
         "views/agence_manipulation_templates.xml",
