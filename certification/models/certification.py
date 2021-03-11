@@ -629,11 +629,10 @@ class Certificat(models.Model):
             )
             attachement_ids = [x[0] for x in self.env.cr.fetchall()]
             for attachement_id in attachement_ids:
-                # attachment = self.env['ir.attachment'].browse(int(attachement_id))
-                certificat.dl_pdf = "/web/content/%s?download=1" % attachement_id
-
-            # id_ir_attachment = self.env['ir.attachment'].search([('res_model', '=', 'critt.certification.certificat'), ('res_id', '=', certificat.id)])
-            # certificat.dl_pdf = "/web/content/%s/%s?download=1" % (id_ir_attachment, certificat.id)
+                attachment = self.env['ir.attachment'].browse(int(attachement_id))
+                access_token = attachment._generate_access_token()
+                attachment.write({"access_token": access_token})
+                certificat.dl_pdf = f"/web/content/{attachement_id}?download=1&access_token={access_token}"
         except:
             certificat.dl_pdf = ""
 
