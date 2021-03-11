@@ -504,7 +504,7 @@
                 </div>
                 <div class="form-group col-3">
                     <i role="button" class="fa fa-upload">
-                        <input type="file" t-att-name="idValue" multiple="true" t-att-id="idValue" accept="image/*,application/pdf"/>
+                        <input type="file" t-att-name="idValue" t-att-id="idValue" accept="image/*,application/pdf"/>
                     </i>
                 </div>
             </div>

@@ -305,9 +305,9 @@ class CapLevageMateriels(http.Controller):
 
             certificats = []
 
-            certificats.extend(self.create_certificat(post, "creation", "upload_certificat_fabrication_files"))
-            certificats.extend(self.create_certificat(post, "controle", "upload_certificat_controle_files"))
-            certificats.extend(self.create_certificat(post, "reforme", "upload_certificat_destruction_files"))
+            certificats.extend(self.create_certificat(post, "creation", "upload_certificat_fabrication_files", 1))
+            certificats.extend(self.create_certificat(post, "controle", "upload_certificat_controle_files", 2))
+            certificats.extend(self.create_certificat(post, "reforme", "upload_certificat_destruction_files", 3))
 
             post.pop("upload_vgp_files")
 
@@ -340,16 +340,18 @@ class CapLevageMateriels(http.Controller):
             )
             return http.request.render("cap_levage_portal.materiel_edit", values)
 
-    def create_certificat(self, post, type_of_certificat, input_name):
+    def create_certificat(self, post, type_of_certificat, input_name, sequence):
         new_files = []
         if post.get('upload_certificat_fabrication_files', False):
             file = post.get(input_name)
             certifcat = file.read()
+
             new_files.append((0, 0, {
                 "desc": file.filename,
                 'date': datetime.now(),
                 'type': type_of_certificat,
                 'fic_pdf': base64.b64encode(certifcat),
+                "sequence": sequence,
             }))
 
         post.pop(input_name)
