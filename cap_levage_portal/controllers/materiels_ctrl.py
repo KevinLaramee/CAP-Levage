@@ -302,12 +302,12 @@ class CapLevageMateriels(http.Controller):
     def get_optional_fields():
         return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu",
                 "model", "diametre", "grade", "num_lot", "num_commande", "referent", "upload_certificat_destruction_files",
-                "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files", "date_fabrication", "an_mise_service",
-                "date_dernier_audit"]
+                "upload_certificat_controle_files", "upload_certificat_fabrication_files", "date_fabrication", "an_mise_service",
+                "date_dernier_audit", "organisme_id"]
 
     @staticmethod
     def get_mandatory_fields():
-        return ["qr_code", "num_materiel", "category_id", "fabricant_id", "organisme_id"]
+        return ["qr_code", "num_materiel", "category_id", "fabricant_id"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -433,7 +433,7 @@ class CapLevageMateriels(http.Controller):
 
     def _create_certificat(self, post, type_of_certificat, input_name, sequence):
         new_files = []
-        if post.get('upload_certificat_fabrication_files', False):
+        if post.get(input_name, False):
             file = post.get(input_name)
             certifcat = file.read()
 
@@ -502,7 +502,7 @@ class CertifcatsList(CustomerPortal):
     @utils.check_group(utils.GroupWebsite.lvl_2)
     def list_certificat_destruction_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
-            materiel_id, "destruction", "reforme", "destruction"
+            materiel_id, "reforme", "destruction", "destruction"
         )
 
     @http.route(
