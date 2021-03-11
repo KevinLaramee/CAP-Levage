@@ -1,6 +1,5 @@
 <odoo>
     <data>
-
         <!--import le fichier js gérant l'affichage/masquage des options en fonction des types de catégories-->
         <template id="cap_levageassets_frontend" inherit_id="website.assets_frontend" name="Portal Assets" priority="99">
             <xpath expr="//script[last()]" position="after">
@@ -13,7 +12,7 @@
                 <t t-esc="labelValue"/>
             </label>
             <select t-att-name="idValue"
-                    t-attf-class="form-control #{error.get(idValue) and 'is-invalid' or ''}">
+                    t-attf-class="form-control #{error.get(idValue) and 'is-invalid' or ''}" t-att-required="isRequired">
                 <option value="">
                     <t t-esc="noValueLabel"/>
                 </option>
@@ -55,29 +54,31 @@
         <!-- Onglet d'edition des infos de suivi-->
         <template id="cap_levage_portal.onglet_suivi_creation">
             <div class="col-4">
-                                    <t t-call="cap_levage_portal.custom_select">
-                                        <t t-set="labelValue">Organisme de certification</t>
-                                        <t t-set="idValue">organisme_id</t>
-                                        <t t-set="currentSelectedId" t-value="0"/>
-                                        <t t-set="noValueLabel">Sélectionner un organisme</t>
-                                        <t t-set="listValue" t-value="organismes_certification"/>
-                                    </t>
+                <t t-call="cap_levage_portal.custom_select">
+                    <t t-set="labelValue">Organisme de certification</t>
+                    <t t-set="idValue">organisme_id</t>
+                    <t t-set="currentSelectedId" t-value="None"/>
+                    <t t-set="noValueLabel">Sélectionner un organisme</t>
+                    <t t-set="listValue" t-value="organismes_certification"/>
+                    <t t-set="isRequired" t-value="True"/>
+                </t>
                 <t t-call="cap_levage_portal.input_edition">
                     <t t-set="labelValue">Date de fabrication :</t>
                     <t t-set="idValue">date_fabrication</t>
-                    <t t-set="itemValue" t-value=""/>
+                    <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                 </t>
                 <t t-call="cap_levage_portal.input_edition">
                     <t t-set="labelValue">Date de mise en service :</t>
                     <t t-set="idValue">an_mise_service</t>
-                    <t t-set="itemValue" t-value=""/>
+                    <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
+                    <t t-set="isRequired" t-value="False"/>
                 </t>
                 <t t-call="cap_levage_portal.input_edition">
                     <t t-set="labelValue">Date dernier contrôle :</t>
                     <t t-set="idValue">date_dernier_audit</t>
-                    <t t-set="itemValue" t-value=""/>
+                    <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                 </t>
             </div>
@@ -138,7 +139,7 @@
                                         <label class="col-form-label" for="num_materiel">Numéro matériel</label>
                                         <input type="text" name="num_materiel"
                                                t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
-                                               t-att-value="materiel.num_materiel if mode == 'edit' else ''"/>
+                                               t-att-value="materiel.num_materiel if mode == 'edit' else ''" required="True"/>
                                     </div>
 
                                 </div>
@@ -156,7 +157,7 @@
                                     <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''} col-12">
                                         <label class="col-form-label" for="qr_code">Identifiant QRCode</label>
                                         <input type="text" name="qr_code" t-attf-class="form-control #{error.get('qr_code') and 'is-invalid' or ''}"
-                                               t-att-value="materiel.qr_code if mode == 'edit' else ''"/>
+                                               t-att-value="materiel.qr_code if mode == 'edit' else ''" required="True"/>
                                     </div>
                                 </div>
                                 <div class="row form-group col-12">
@@ -216,7 +217,9 @@
                                                             <div class="row">
                                                                 <label class="col-form-label">Type</label>
                                                                 <select id="materiel_edit_category_select" name="category_id"
-                                                                        t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}">
+                                                                        t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}"
+                                                                        required="True">
+                                                                    <option value="">Sélectionner un type</option>
                                                                     <t t-foreach="categories_materiel or []" t-as="category_value">
                                                                         <option t-att-data-display_nombre_brins="'true' if category_value.display_nombre_brins else 'false'"
                                                                                 t-att-data-display_longueur="'true' if category_value.display_longueur else 'false'"
@@ -242,6 +245,7 @@
                                                                        t-value="materiel.fabricant_id.id if materiel else 0"/>
                                                                     <t t-set="noValueLabel">Sélectionner un fabricant</t>
                                                                     <t t-set="listValue" t-value="fabricants"/>
+                                                                    <t t-set="isRequired" t-value="True"/>
                                                                 </t>
                                                             </div>
                                                         </div>

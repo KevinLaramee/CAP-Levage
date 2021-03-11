@@ -302,11 +302,12 @@ class CapLevageMateriels(http.Controller):
     def get_optional_fields():
         return ["image", "clear_avatar", "agence_id", "equipe_id", "last_general_observation", "is_bloque", "nombre_brins", "longueur", "cmu", "tmu",
                 "model", "diametre", "grade", "num_lot", "num_commande", "referent", "upload_certificat_destruction_files",
-                "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files"]
+                "upload_certificat_controle_files", "upload_certificat_fabrication_files", "upload_vgp_files", "date_fabrication", "an_mise_service",
+                "date_dernier_audit"]
 
     @staticmethod
     def get_mandatory_fields():
-        return ["qr_code", "num_materiel", "category_id", "fabricant_id"]
+        return ["qr_code", "num_materiel", "category_id", "fabricant_id", "organisme_id"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -359,6 +360,69 @@ class CapLevageMateriels(http.Controller):
             )
         else:
             values.update(self._get_materiel_edit_data(materiel_id))
+            values.update(
+                {
+                    "error": error,
+                    "error_message": error_message,
+                }
+            )
+            return http.request.render("cap_levage_portal.materiel_edit", values)
+
+    def _convert_empty_to_none(self, post):
+        new_post = {key: (value if value != "" else None) for (key, value) in post.items()}
+        return new_post
+
+    @utils.check_group(utils.GroupWebsite.lvl_3)
+    @http.route(
+        "/cap_levage_portal/materiel/create",
+        methods=["POST"],
+        auth="user",
+        website=True,
+    )
+    def materiel_create(self, **post):
+        updated_post = self._convert_empty_to_none(post)
+        error, error_message = self.details_form_validate(updated_post)
+        values = {}
+        if not error:
+
+            logged_user = request.env["res.users"].browse(request.session.uid)
+            if "image" in updated_post:
+                image = updated_post.get("image")
+                if image:
+                    image = image.read()
+                    image = base64.b64encode(image)
+                    values.update({"image": image})
+                updated_post.pop("image")
+
+            certificats = []
+
+            certificats.extend(self._create_certificat(updated_post, "creation", "upload_certificat_fabrication_files", 1))
+            certificats.extend(self._create_certificat(updated_post, "controle", "upload_certificat_controle_files", 2))
+            certificats.extend(self._create_certificat(updated_post, "reforme", "upload_certificat_destruction_files", 3))
+
+            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
+            values.update(
+                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
+            )
+            for field in {"equipe_id", "category_id", "fabricant_id", "referent", "organisme_id"} & set(values.keys()):
+                try:
+                    values[field] = int(values[field])
+                except:
+                    values[field] = False
+
+            values.update({"certificats": certificats,
+                           "res_partner_id": logged_user.partner_id.id,
+                           "owner_user_id": logged_user.id})
+
+            created_materiel = http.request.env["critt.equipment"].create(values)
+            if values.get("is_bloque", False):
+                created_materiel.action_bloquer()
+
+            return http.request.redirect(
+                f"/cap_levage_portal/materiel/detail/{created_materiel.id}"
+            )
+        else:
+            values.update(self._generate_create_data())
             values.update(
                 {
                     "error": error,

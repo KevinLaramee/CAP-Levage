@@ -37,9 +37,12 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
          * @private
          */
         _showCorrectParams: function () {
-            let $selectedCategory = this.$categorySelectorOptions.filter('[value=' + this.$categorySelector.val() + ']:first');
-            let elementList = ["nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"];
-            elementList.forEach(item => this._showOrHideDiv($selectedCategory, item));
+            let selectedVal = this.$categorySelector.val();
+            if (selectedVal !== "") {
+                let $selectedCategory = this.$categorySelectorOptions.filter('[value=' + selectedVal + ']:first');
+                let elementList = ["nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"];
+                elementList.forEach(item => this._showOrHideDiv($selectedCategory, item));
+            }
         },
 
         _showOrHideDiv: function (selectedCategory, nameValue) {
