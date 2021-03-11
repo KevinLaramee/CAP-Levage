@@ -1,4 +1,4 @@
-from cap_levage_portal.controllers import utils
+from ..controllers import utils
 from odoo import models, fields
 
 
