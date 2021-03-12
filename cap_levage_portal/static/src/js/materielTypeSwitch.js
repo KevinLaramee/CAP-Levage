@@ -9,6 +9,14 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
         events: {
             "change #materiel_edit_category_select": "_onCategoryChange",
         },
+        read_events: {
+            "click #upload_certificat_fabrication_files": "_onUploadDocClick",
+            "click #upload_certificat_controle_files": "_onUploadDocClick",
+            "click #upload_certificat_destruction_files": "_onUploadDocClick",
+            "change input[name='upload_certificat_fabrication_files']": "_onUploadChange",
+            "change input[name='upload_certificat_controle_files']": "_onUploadChange",
+            "change input[name='upload_certificat_destruction_files']": "_onUploadChange",
+        },
 
         /**
          * @override
@@ -66,6 +74,17 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
          */
         _onCategoryChange: function () {
             this._showCorrectParams();
+        },
+        _onUploadDocClick: function (ev) {
+            ev.preventDefault();
+            $(ev.currentTarget).closest('div[name="uploadDiv"]').find('input').trigger('click');
+        },
+        _onUploadChange: function (ev) {
+            if (!ev.currentTarget.files.length) {
+                return;
+            }
+            let $div = $(ev.currentTarget).closest('div[name="uploadDiv"]');
+            $div.find('span[name="uploadFileName"]').text(ev.currentTarget.files[0].name);
         },
     });
     return publicWidget.registry.CapLevageEditMaterielWidget;

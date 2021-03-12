@@ -4,7 +4,7 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
 
     let publicWidget = require('web.public.widget');
 
-    publicWidget.registry.CapLevageEditMaterielWidget = publicWidget.Widget.extend({
+    publicWidget.registry.CapLevageQrCodeScanningWidget = publicWidget.Widget.extend({
         selector: '#qrcodescan',
         events: {
             "click #buttonqrcodescan": "_onQrCodeScan",
@@ -59,5 +59,5 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
             this._launchCamera();
         },
     });
-    return publicWidget.registry.CapLevageEditMaterielWidget;
+    return publicWidget.registry.CapLevageQrCodeScanningWidget;
 });
