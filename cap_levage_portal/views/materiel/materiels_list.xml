@@ -1,5 +1,12 @@
 <odoo>
     <data>
+        <!--import le fichier js gérant l'affichage/masquage des options en fonction des types de catégories-->
+        <template id="cap_levageassets_frontend" inherit_id="website.assets_frontend" name="Portal Assets" priority="99">
+            <xpath expr="//script[last()]" position="after">
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/html5-qrcode.min.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrCodeScanning.js"/>
+            </xpath>
+        </template>
         <!--        Page principale listant les matériels -->
         <template id="index">
             <t t-call="portal.portal_layout">
@@ -14,6 +21,13 @@
                        groups="certification.website_lvl_3">
                         <i class="fa fa-plus"/>
                     </a>
+                    <!--                    qrcode scan -->
+                    <div id="qrcodescan">
+                        <div id="reader"></div>
+                        <input type="file" id="qr-input-file" accept="image/*"/>
+                    <button id="buttonqrcodescan" special="cancel" string="Scan QRCode" class="btn-primary" groups="certification.website_lvl_1">
+                        <i class="fa fa-plus"/>
+                    </button></div>
                     <!--                    Affiche la liste des matériels-->
                     <div class="row o_wsale_products_main_row">
                         <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3"/>
