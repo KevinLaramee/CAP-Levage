@@ -9,14 +9,30 @@
         </template>
         <template id="cap_levage_portal.qrcode_scanning_popup">
             <div id="qrcode_popup" role="dialog" class="modal" tabindex="-1">
-                <div class="modal-dialog" style="min-width:40%">
+                <header/>
+                <main class="modal-dialog" style="min-width:40%">
                     <div class="modal-content">
                         <span>Cliquer sur la fenêtre pour fermer le scanner.</span>
                         <div id="reader"/>
                         <input type="file" id="qr-input-file" accept="image/*" class="d-none"/>
                     </div>
-                </div>
+                </main>
+                <footer/>
             </div>
+        </template>
+
+        <template id="cap_levage_portal.materiel_search_bar" inherit_id="portal.portal_searchbar" name="Portal Assets" primary="True">
+            <xpath expr="//span[hasclass('input-group-append')]" position="after">
+                <!--                    qrcode scan -->
+                <div class="col-1" groups="certification.website_lvl_1">
+                    <div id="qrcodescan">
+                        <t t-call="cap_levage_portal.qrcode_scanning_popup"/>
+                        <a id="buttonqrcodescan" special="cancel" title="Scanner QRCode" aria-label="Scanner QRCode" class="btn btn-primary">
+                            <i class="fa fa-qrcode"/>
+                        </a>
+                    </div>
+                </div>
+            </xpath>
         </template>
 
         <!--        Page principale listant les matériels -->
@@ -26,7 +42,7 @@
                 <div groups="certification.website_lvl_1">
                     <!--                        Affiche la barre de recherche-->
                     <t t-set="breadcrumbs_searchbar" t-value="True"/>
-                    <t t-call="portal.portal_searchbar">
+                    <t t-call="cap_levage_portal.materiel_search_bar">
                     </t>
                     <div class="row">
                         <div class="col-1" groups="certification.website_lvl_3">
@@ -34,15 +50,6 @@
                             <a href="/cap_levage_portal/materiel/create/" class="btn btn-secondary" aria-label="Créer" title="Créer">
                                 <i class="fa fa-plus"/>
                             </a>
-                            <!--                    qrcode scan -->
-                        </div>
-                        <div class="col-1" groups="certification.website_lvl_1">
-                            <div id="qrcodescan">
-                                <t t-call="cap_levage_portal.qrcode_scanning_popup"/>
-                                <a id="buttonqrcodescan" special="cancel" aria-label="Scanner QRCode" class="btn btn-primary">
-                                    <i class="fa fa-qrcode"/>
-                                </a>
-                            </div>
                         </div>
                     </div>
 
