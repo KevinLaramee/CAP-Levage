@@ -63,3 +63,15 @@ def materiels_equipe_possible_list(request, partner):
     partner_model = request.env["res.partner"]
     equipes_list = partner_model.search(equipe_search_domain(partner)).ids
     return equipes_list
+
+
+def convert_empty_to_none(post):
+    """
+    Remplace les '' en None dans le dict en entrée
+    :param post:
+    :return:
+    """
+    new_post = {
+        key: (value if value != "" else None) for (key, value) in post.items()
+    }
+    return new_post

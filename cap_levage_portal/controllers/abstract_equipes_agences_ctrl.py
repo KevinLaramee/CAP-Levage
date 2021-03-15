@@ -3,7 +3,7 @@ import base64
 from abc import abstractmethod
 
 from .grid_utils import TableComputeCapLevage
-from . import  utils
+from . import utils
 from odoo import http, tools
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
@@ -154,25 +154,26 @@ class AbstractEquipesagencesCtrl:
         )
 
     def update_res_partner(self, partner_id, post, error_page):
+        updated_post = utils.convert_empty_to_none(post)
         partner = http.request.env["res.partner"].browse(partner_id)
-        error, error_message = self.details_form_validate(post)
+        error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update({key: post[key] for key in self.get_mandatory_fields()})
+            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
 
-            if "image_1920" in post:
-                image_1920 = post.get("image_1920")
+            if "image_1920" in updated_post:
+                image_1920 = updated_post.get("image_1920")
                 if image_1920:
                     image_1920 = image_1920.read()
                     image_1920 = base64.b64encode(image_1920)
                     partner.sudo().write({"image_1920": image_1920})
-                post.pop("image_1920")
-            if "clear_avatar" in post:
+                updated_post.pop("image_1920")
+            if "clear_avatar" in updated_post:
                 partner.sudo().write({"image_1920": False})
-                post.pop("clear_avatar")
+                updated_post.pop("clear_avatar")
 
             values.update(
-                {key: post[key] for key in self.get_optional_fields() if key in post}
+                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
             )
             for field in {"country_id", "state_id"} & set(values.keys()):
                 try:
@@ -236,13 +237,14 @@ class AbstractEquipesagencesCtrl:
         return values
 
     def partner_create(self, post, error_page):
+        updated_post = utils.convert_empty_to_none(post)
         logged_user = http.request.env["res.users"].browse(http.request.session.uid)
-        error, error_message = self.details_form_validate(post)
+        error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update({key: post[key] for key in self.get_mandatory_fields()})
+            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
             values.update(
-                {key: post[key] for key in self.get_optional_fields() if key in post}
+                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
             )
             values.update(
                 {
@@ -252,8 +254,8 @@ class AbstractEquipesagencesCtrl:
             )
             new_partner = http.request.env["res.partner"].create(values)
 
-            if "image_1920" in post:
-                image_1920 = post.get("image_1920")
+            if "image_1920" in updated_post:
+                image_1920 = updated_post.get("image_1920")
                 if image_1920:
                     image_1920 = image_1920.read()
                     image_1920 = base64.b64encode(image_1920)
