@@ -9,7 +9,8 @@
                 </a>
             </div>
             <div class="col-1" groups="certification.website_lvl_3">
-                <form id="equipe_edit_archive" method="POST" action="/cap_levage_portal/equipe/archive/">
+                <form id="equipe_edit_archive" method="POST" t-att-action="'/cap_levage_portal/equipe/archive/' + str(partner.id)">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" value="false" name="active"/>
                     <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
                         <i class="fa fa-trash"/>
