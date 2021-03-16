@@ -39,25 +39,20 @@ class Html5Qrcode {
      */
     constructor(elementId, verbose) {
         if (!getLazarSoftScanner) {
-            throw 'Use html5qrcode.min.js without edit, getLazarSoftScanner'
-            + 'not found.';
+            throw 'Use html5qrcode.min.js without edit, getLazarSoftScanner' + 'not found.';
         }
 
         this.qrcode = getLazarSoftScanner();
         if (!this.qrcode) {
-            throw 'qrcode is not defined, use the minified/html5-qrcode.min.js'
-            + ' for proper support';
+            throw 'qrcode is not defined, use the minified/html5-qrcode.min.js' + ' for proper support';
         }
 
         this._elementId = elementId;
         this._foreverScanTimeout = null;
         this._localMediaStream = null;
         this._shouldScan = true;
-        this._url
-            = window.URL || window.webkitURL || window.mozURL || window.msURL;
-        this._userMedia
-            = navigator.getUserMedia || navigator.webkitGetUserMedia
-            || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        this._url = window.URL || window.webkitURL || window.mozURL || window.msURL;
+        this._userMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         this._isScanning = false;
 
         Html5Qrcode.VERBOSE = verbose === true;
@@ -131,9 +126,8 @@ class Html5Qrcode {
             throw "cameraIdOrConfig is required";
         }
 
-        if (!qrCodeSuccessCallback
-            || typeof qrCodeSuccessCallback != "function") {
-            throw "qrCodeSuccessCallback is required and should be a function."
+        if (!qrCodeSuccessCallback || typeof qrCodeSuccessCallback !== "function") {
+            throw "qrCodeSuccessCallback is required and should be a function.";
         }
 
         if (!qrCodeErrorCallback) {
@@ -153,8 +147,7 @@ class Html5Qrcode {
         if (config.videoConstraints) {
             if (!this._isMediaStreamConstraintsValid(config.videoConstraints)) {
                 Html5Qrcode._logError(
-                    "'videoConstraints' is not valid 'MediaStreamConstraints, "
-                    + "it will be ignored.'",
+                    "'videoConstraints' is not valid 'MediaStreamConstraints, " + "it will be ignored.'",
                     /* experimental= */ true);
             } else {
                 videoConstraintsAvailableAndValid = true;
@@ -163,10 +156,9 @@ class Html5Qrcode {
         const videoConstraintsEnabled = videoConstraintsAvailableAndValid;
 
         // qr shaded box
-        const isShadedBoxEnabled = config.qrbox != undefined;
+        const isShadedBoxEnabled = config.qrbox !== undefined;
         const element = document.getElementById(this._elementId);
-        const width = element.clientWidth
-            ? element.clientWidth : Html5Qrcode.DEFAULT_WIDTH;
+        const width = element.clientWidth ? element.clientWidth : Html5Qrcode.DEFAULT_WIDTH;
         element.style.position = "relative";
 
         this._shouldScan = true;
@@ -180,8 +172,7 @@ class Html5Qrcode {
         if (isShadedBoxEnabled) {
             const qrboxSize = config.qrbox;
             if (qrboxSize < Html5Qrcode.MIN_QR_BOX_SIZE) {
-                throw "minimum size of 'config.qrbox' is"
-                + ` ${Html5Qrcode.MIN_QR_BOX_SIZE}px.`;
+                throw "minimum size of 'config.qrbox' is" + ` ${Html5Qrcode.MIN_QR_BOX_SIZE}px.`;
             }
 
             if (qrboxSize > width) {
@@ -200,8 +191,7 @@ class Html5Qrcode {
             const qrboxSize = config.qrbox;
             if (qrboxSize > height) {
                 // TODO(mebjas): Migrate to common logging.
-                console.warn("[Html5Qrcode] config.qrboxsize is greater "
-                    + "than video height. Shading will be ignored");
+                console.warn("[Html5Qrcode] config.qrboxsize is greater " + "than video height. Shading will be ignored");
             }
 
             const shouldShadingBeApplied
@@ -212,9 +202,7 @@ class Html5Qrcode {
                 width: width,
                 height: height
             };
-            const qrRegion = shouldShadingBeApplied
-                ? this._getShadedRegionBounds(width, height, qrboxSize)
-                : defaultQrRegion;
+            const qrRegion = shouldShadingBeApplied ? this._getShadedRegionBounds(width, height, qrboxSize) : defaultQrRegion;
 
             const canvasElement = this._createCanvasElement(
                 qrRegion.width, qrRegion.height);
@@ -232,7 +220,7 @@ class Html5Qrcode {
             $this._qrRegion = qrRegion;
             $this._context = context;
             $this._canvasElement = canvasElement;
-        }
+        };
 
         /**
          * Scans current context using the qrcode library.
@@ -327,7 +315,7 @@ class Html5Qrcode {
             }
             $this._foreverScanTimeout = setTimeout(
                 foreverScan, Html5Qrcode._getTimeoutFps(config.fps));
-        }
+        };
 
         // success callback when user media (Camera) is attached.
         const onMediaStreamReceived = mediaStream => {
@@ -346,14 +334,14 @@ class Html5Qrcode {
                         // start scanning after video feed has started
                         foreverScan();
                         resolve();
-                    }
+                    };
 
                     videoElement.srcObject = mediaStream;
                     videoElement.play();
 
                     // Set state
                     $this._videoElement = videoElement;
-                }
+                };
 
                 $this._localMediaStream = mediaStream;
                 // If videoConstraints is passed, ignore all other configs.
@@ -362,30 +350,27 @@ class Html5Qrcode {
                 } else {
                     const constraints = {
                         aspectRatio: config.aspectRatio
-                    }
+                    };
                     const track = mediaStream.getVideoTracks()[0];
                     track.applyConstraints(constraints)
                         .then(_ => setupVideo())
                         .catch(error => {
                             // TODO(mebjas): Migrate to common logging.
                             console.log(
-                                "[Warning] [Html5Qrcode] Constriants could not "
-                                + "be satisfied, ignoring constraints",
+                                "[Warning] [Html5Qrcode] Constriants could not " + "be satisfied, ignoring constraints",
                                 error);
                             setupVideo();
                         });
                 }
             });
-        }
+        };
         //#endregion
 
         return new Promise((resolve, reject) => {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 // Ignore all other video constraints if the videoConstraints
                 // is passed.
-                const videoConstraints = videoConstraintsEnabled
-                    ? config.videoConstraints
-                    : $this._createVideoConstraints(cameraIdOrConfig);
+                const videoConstraints = videoConstraintsEnabled ? config.videoConstraints : $this._createVideoConstraints(cameraIdOrConfig);
                 navigator.mediaDevices.getUserMedia(
                     {
                         audio: false,
@@ -402,10 +387,8 @@ class Html5Qrcode {
                         reject(`Error getting userMedia, error = ${err}`);
                     });
             } else if (navigator.getUserMedia) {
-                if (typeof cameraIdOrConfig != "string") {
-                    throw "The device doesn't support navigator.mediaDevices"
-                    + ", only supported cameraIdOrConfig in this case is"
-                    + " deviceId parameter (string)."
+                if (typeof cameraIdOrConfig !== "string") {
+                    throw "The device doesn't support navigator.mediaDevices" + ", only supported cameraIdOrConfig in this case is" + " deviceId parameter (string).";
                 }
                 const getCameraConfig = {
                     video: {
@@ -456,7 +439,7 @@ class Html5Qrcode {
                         Html5Qrcode.SHADED_REGION_CLASSNAME)[0];
                     $this._element.removeChild(shadedChild);
                 }
-            }
+            };
 
             const onAllTracksClosed = () => {
                 $this._localMediaStream = null;
@@ -471,7 +454,7 @@ class Html5Qrcode {
                     $this._context = null;
                 }
                 resolve(true);
-            }
+            };
 
             $this._localMediaStream.getVideoTracks().forEach(videoTrack => {
                 videoTrack.stop();
@@ -504,8 +487,7 @@ class Html5Qrcode {
     scanFile(imageFile, /* default=true */ showImage) {
         const $this = this;
         if (!imageFile || !(imageFile instanceof File)) {
-            throw "imageFile argument is mandatory and should be instance "
-            + "of File. Use 'event.target.files[0]'";
+            throw "imageFile argument is mandatory and should be instance " + "of File. Use 'event.target.files[0]'";
         }
 
         showImage = showImage === undefined ? true : showImage;
@@ -520,8 +502,7 @@ class Html5Qrcode {
             containerWidth,
             containerHeight) => {
 
-            if (imageWidth <= containerWidth
-                && imageHeight <= containerHeight) {
+            if (imageWidth <= containerWidth && imageHeight <= containerHeight) {
                 // no downsampling needed.
                 const xoffset = (containerWidth - imageWidth) / 2;
                 const yoffset = (containerHeight - imageHeight) / 2;
@@ -545,27 +526,24 @@ class Html5Qrcode {
                 }
 
                 Html5Qrcode._log(
-                    "Image downsampled from "
-                    + `${formerImageWidth}X${formerImageHeight}`
-                    + ` to ${imageWidth}X${imageHeight}.`);
+                    "Image downsampled from " + `${formerImageWidth}X${formerImageHeight}` + ` to ${imageWidth}X${imageHeight}.`);
 
                 return computeCanvasDrawConfig(
                     imageWidth, imageHeight, containerWidth, containerHeight);
             }
-        }
+        };
 
         return new Promise((resolve, reject) => {
             $this._possiblyCloseLastScanImageFile();
             $this._clearElement();
             $this._lastScanImageFile = imageFile;
 
-            const inputImage = new Image;
+            const inputImage = new Image();
             inputImage.onload = () => {
                 const imageWidth = inputImage.width;
                 const imageHeight = inputImage.height;
                 const element = document.getElementById($this._elementId);
-                const containerWidth = element.clientWidth
-                    ? element.clientWidth : Html5Qrcode.DEFAULT_WIDTH;
+                const containerWidth = element.clientWidth ? element.clientWidth : Html5Qrcode.DEFAULT_WIDTH;
                 // No default height anymore.
                 const containerHeight = Math.max(
                     element.clientHeight ? element.clientHeight : imageHeight,
@@ -615,7 +593,7 @@ class Html5Qrcode {
                 } catch (exception) {
                     reject(`QR code parse error, error = ${exception}`);
                 }
-            }
+            };
 
             inputImage.onerror = reject;
             inputImage.onabort = reject;
@@ -646,9 +624,7 @@ class Html5Qrcode {
      */
     static getCameras() {
         return new Promise((resolve, reject) => {
-            if (navigator.mediaDevices
-                && navigator.mediaDevices.enumerateDevices
-                && navigator.mediaDevices.getUserMedia) {
+            if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && navigator.mediaDevices.getUserMedia) {
                 this._log("navigator.mediaDevices used");
                 navigator.mediaDevices.getUserMedia(
                     {audio: false, video: true})
@@ -665,7 +641,7 @@ class Html5Qrcode {
                                 track.stop();
                                 stream.removeTrack(track);
                             }
-                        }
+                        };
 
                         navigator.mediaDevices.enumerateDevices()
                             .then(devices => {
@@ -689,7 +665,7 @@ class Html5Qrcode {
                     })
                     .catch(err => {
                         reject(`${err.name} : ${err.message}`);
-                    })
+                    });
             } else if (MediaStreamTrack && MediaStreamTrack.getSources) {
                 this._log("MediaStreamTrack.getSources used");
                 const callback = sourceInfos => {
@@ -705,7 +681,7 @@ class Html5Qrcode {
                     }
                     this._log(`${results.length} results found`);
                     resolve(results);
-                }
+                };
                 MediaStreamTrack.getSources(callback);
             } else {
                 this._log("unable to query supported devices.");
@@ -723,11 +699,10 @@ class Html5Qrcode {
      */
     getRunningTrackCapabilities() {
         if (this._localMediaStream == null) {
-            throw "Scanning is not in running state, call this API only when"
-            + " QR code scanning using camera is in running state.";
+            throw "Scanning is not in running state, call this API only when" + " QR code scanning using camera is in running state.";
         }
 
-        if (this._localMediaStream.getVideoTracks().length == 0) {
+        if (this._localMediaStream.getVideoTracks().length === 0) {
             throw "No video tracks found";
         }
 
@@ -758,18 +733,16 @@ class Html5Qrcode {
         }
 
         if (this._localMediaStream == null) {
-            throw "Scanning is not in running state, call this API only when"
-            + " QR code scanning using camera is in running state.";
+            throw "Scanning is not in running state, call this API only when" + " QR code scanning using camera is in running state.";
         }
 
-        if (this._localMediaStream.getVideoTracks().length == 0) {
+        if (this._localMediaStream.getVideoTracks().length === 0) {
             throw "No video tracks found";
         }
 
         return new Promise((resolve, reject) => {
             if ("aspectRatio" in videoConstaints) {
-                reject("Chaning 'aspectRatio' in run-time is not yet "
-                    + "supported.");
+                reject("Chaning 'aspectRatio' in run-time is not yet " + "supported.");
                 return;
             }
             const videoTrack = this._localMediaStream.getVideoTracks()[0];
@@ -801,7 +774,7 @@ class Html5Qrcode {
         canvasElement.style.height = `${canvasHeight}px`;
         canvasElement.style.display = "none";
         // This id is set by lazarsoft/jsqrcode
-        canvasElement.id = customId == undefined ? 'qr-canvas' : customId;
+        canvasElement.id = customId === undefined ? 'qr-canvas' : customId;
         return canvasElement;
     }
 
@@ -815,8 +788,7 @@ class Html5Qrcode {
 
     _getShadedRegionBounds(width, height, qrboxSize) {
         if (qrboxSize > width || qrboxSize > height) {
-            throw "'config.qrbox' should not be greater than the "
-            + "width and height of the HTML element.";
+            throw "'config.qrbox' should not be greater than the " + "width and height of the HTML element.";
         }
 
         return {
@@ -909,10 +881,10 @@ class Html5Qrcode {
 
     //#region private method to create correct camera selection filter.
     _createVideoConstraints(cameraIdOrConfig) {
-        if (typeof cameraIdOrConfig == "string") {
+        if (typeof cameraIdOrConfig === "string") {
             // If it's a string it should be camera device Id.
             return {deviceId: {exact: cameraIdOrConfig}};
-        } else if (typeof cameraIdOrConfig == "object") {
+        } else if (typeof cameraIdOrConfig === "object") {
             const facingModeKey = "facingMode";
             const deviceIdKey = "deviceId";
             const allowedFacingModeValues
@@ -930,18 +902,16 @@ class Html5Qrcode {
             };
 
             const keys = Object.keys(cameraIdOrConfig);
-            if (keys.length != 1) {
-                throw "'cameraIdOrConfig' object should have exactly 1 key,"
-                + ` if passed as an object, found ${keys.length} keys`;
+            if (keys.length !== 1) {
+                throw "'cameraIdOrConfig' object should have exactly 1 key," + ` if passed as an object, found ${keys.length} keys`;
             }
 
             const key = Object.keys(cameraIdOrConfig)[0];
-            if (key != facingModeKey && key != deviceIdKey) {
-                throw `Only '${facingModeKey}' and '${deviceIdKey}' `
-                + " are supported for 'cameraIdOrConfig'";
+            if (key !== facingModeKey && key !== deviceIdKey) {
+                throw `Only '${facingModeKey}' and '${deviceIdKey}' ` + " are supported for 'cameraIdOrConfig'";
             }
 
-            if (key == facingModeKey) {
+            if (key === facingModeKey) {
                 /**
                  * Supported scenarios:
                  * - { facingMode: "user" }
@@ -950,11 +920,11 @@ class Html5Qrcode {
                  * - { facingMode: { exact: "user" } }
                  */
                 const facingMode = cameraIdOrConfig[key];
-                if (typeof facingMode == "string") {
+                if (typeof facingMode === "string") {
                     if (isValidFacingModeValue(facingMode)) {
                         return {facingMode: facingMode};
                     }
-                } else if (typeof facingMode == "object") {
+                } else if (typeof facingMode === "object") {
                     if (exactKey in facingMode) {
                         if (isValidFacingModeValue(facingMode[exactKey])) {
                             return {
@@ -964,8 +934,7 @@ class Html5Qrcode {
                             };
                         }
                     } else {
-                        throw "'facingMode' should be string or object with"
-                        + ` ${exactKey} as key.`;
+                        throw "'facingMode' should be string or object with" + ` ${exactKey} as key.`;
                     }
                 } else {
                     const type = (typeof facingMode);
@@ -978,16 +947,15 @@ class Html5Qrcode {
                  * - { deviceId: "a76afe74e95e3....065c9cd89438627b3bde" }
                  */
                 const deviceId = cameraIdOrConfig[key];
-                if (typeof deviceId == "string") {
+                if (typeof deviceId === "string") {
                     return {deviceId: deviceId};
-                } else if (typeof deviceId == "object") {
+                } else if (typeof deviceId === "object") {
                     if (exactKey in deviceId) {
                         return {
                             deviceId: {exact: deviceId[exactKey]}
                         };
                     } else {
-                        throw "'deviceId' should be string or object with"
-                        + ` ${exactKey} as key.`;
+                        throw "'deviceId' should be string or object with" + ` ${exactKey} as key.`;
                     }
                 } else {
                     const type = (typeof deviceId);
@@ -1014,8 +982,7 @@ class Html5Qrcode {
         if (typeof videoConstraints !== "object") {
             const typeofVideoConstraints = typeof videoConstraints;
             Html5Qrcode._logError(
-                "videoConstraints should be of type object, the "
-                + `object passed is of type ${typeofVideoConstraints}.`,
+                "videoConstraints should be of type object, the " + `object passed is of type ${typeofVideoConstraints}.`,
                 /* experimental= */ true);
             return false;
         }

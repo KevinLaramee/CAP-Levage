@@ -492,8 +492,8 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
 
 
 class Materiels(http.Controller, MaterielCommon):
-    PPG = 2
-    PPR = 4
+    PPG = 2  # nb de lignes
+    PPR = 4  # nombre de colonnes
 
     @http.route(
         [
