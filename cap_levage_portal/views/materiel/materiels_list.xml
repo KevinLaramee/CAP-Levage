@@ -3,7 +3,8 @@
         <!--import le fichier js gérant l'affichage/masquage des options en fonction des types de catégories-->
         <template id="cap_levageassets_frontend_list" inherit_id="website.assets_frontend" name="Portal Assets" priority="99">
             <xpath expr="//script[last()]" position="after">
-                <script type="text/javascript" src="/cap_levage_portal/static/src/js/html5-qrcode.min.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/html5-qrcode.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/qrcode.js"/>
                 <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrCodeScanning.js"/>
             </xpath>
         </template>

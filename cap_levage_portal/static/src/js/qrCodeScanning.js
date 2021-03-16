@@ -52,7 +52,7 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
                     const qrCodeFailureCallback = errorMessage => {
                         // console.error("on_qrcode_scan_error", errorMessage);
                     };
-                    const config = {fps: 10, qrbox: 150};
+                    const config = {fps: 10, qrbox: 150, doNegatif: false, disableFlip: true};
                     const html5QrCode = new Html5Qrcode("reader");
                     html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, qrCodeFailureCallback)
                         .catch(err => {
