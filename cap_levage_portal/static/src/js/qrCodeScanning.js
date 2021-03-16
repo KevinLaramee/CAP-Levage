@@ -45,6 +45,7 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
                  * { id: "id", label: "label" }
                  */
                 if (devices && devices.length) {
+                    console.log(devices);
                     let frontCameraIdList = devices.filter(obj => {
                         return obj.facingMode === "environment";
                     });
