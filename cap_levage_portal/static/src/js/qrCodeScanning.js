@@ -45,17 +45,6 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
                  * { id: "id", label: "label" }
                  */
                 if (devices && devices.length) {
-                    console.log(devices);
-                    let frontCameraIdList = devices.filter(obj => {
-                        return obj.facingMode === "environment";
-                    });
-                    let cameraId;
-                    if (frontCameraIdList && frontCameraIdList.length) {
-                        cameraId = frontCameraIdList[0].id;
-                    }
-                    else {
-                        cameraId = devices[0].id;
-                    }
                     const qrCodeSuccessCallback = qrMessage => {
                         this._stopScanning(html5QrCode);
                         window.location.href = "/cap_levage_portal/materiels?search_in=allid&search=" + qrMessage;
@@ -65,7 +54,7 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
                     };
                     const config = {fps: 1, qrbox: 150};
                     const html5QrCode = new Html5Qrcode("reader");
-                    html5QrCode.start(cameraId, config, qrCodeSuccessCallback, qrCodeFailureCallback)
+                    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, qrCodeFailureCallback)
                         .catch(err => {
                             console.error("start_qrcode_scan_error", err);
                             this._stopScanning(html5QrCode);
