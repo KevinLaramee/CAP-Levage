@@ -45,7 +45,16 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
                  * { id: "id", label: "label" }
                  */
                 if (devices && devices.length) {
-                    let cameraId = devices[0].id;
+                    let frontCameraIdList = devices.filter(obj => {
+                        return obj.facingMode === "environment";
+                    });
+                    let cameraId;
+                    if (frontCameraIdList && frontCameraIdList.length) {
+                        cameraId = frontCameraIdList[0].id;
+                    }
+                    else {
+                        cameraId = devices[0].id;
+                    }
                     const qrCodeSuccessCallback = qrMessage => {
                         this._stopScanning(html5QrCode);
                         window.location.href = "/cap_levage_portal/materiels?search_in=allid&search=" + qrMessage;
