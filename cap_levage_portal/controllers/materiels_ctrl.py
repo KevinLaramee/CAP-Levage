@@ -492,7 +492,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
 
 
 class Materiels(http.Controller, MaterielCommon):
-    PPG = 2  # nb de lignes
+    PPG = 10  # nb de lignes
     PPR = 4  # nombre de colonnes
 
     @http.route(
@@ -578,13 +578,13 @@ class Materiels(http.Controller, MaterielCommon):
             url_args={"sortby": sortby, "search": search},
             total=total_items,
             page=page,
-            step=self.PPG * self.PPR,
+            step=self.PPG,
             scope=20,
         )
         all_matos = materiels.search(
             search_domain,
             order=order,
-            limit=self.PPG * self.PPR,
+            limit=self.PPG,
             offset=pager["offset"],
         )
         return http.request.render(
@@ -593,6 +593,7 @@ class Materiels(http.Controller, MaterielCommon):
                 "pager": pager,
                 "search_in": search_in,
                 "search": search,
+                'materiels': all_matos,
                 "searchbar_sortings": searchbar_sortings,
                 "searchbar_inputs": searchbar_inputs,
                 "sortby": sortby,

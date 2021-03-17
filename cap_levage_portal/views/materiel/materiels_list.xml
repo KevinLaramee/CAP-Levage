@@ -57,31 +57,19 @@
                     <!--                    Affiche la liste des matériels-->
                     <div class="row o_wsale_products_main_row">
                         <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3"/>
-                        <div id="products_grid">
+                        <div id="products_grid" class="col-12">
                             <div t-if="bins" class="o_wsale_products_grid_table_wrapper">
-                                <table class="table table-borderless m-0" t-att-data-ppg="ppg" t-att-data-ppr="ppr">
-                                    <colgroup t-ignore="true">
-                                        <!-- Force the number of columns (useful when only one row of (x < ppr) products) -->
-                                        <col t-foreach="ppr" t-as="p"/>
-                                    </colgroup>
-                                    <tbody>
-                                        <tr t-foreach="bins" t-as="tr_materiel">
-                                            <t t-foreach="tr_materiel" t-as="td_materiel">
-                                                <t t-if="td_materiel">
-                                                    <t t-set="materiel" t-value="td_materiel['item']"/>
-                                                    <td t-att-colspan="td_materiel['x'] != 1 and td_materiel['x']"
-                                                        t-att-rowspan="td_materiel['y'] != 1 and td_materiel['y']"
-                                                        t-attf-class="oe_product #{td_materiel['class']}">
-                                                        <div t-attf-class="o_wsale_product_grid_wrapper o_wsale_product_grid_wrapper_#{td_materiel['x']}_#{td_materiel['y']}">
-                                                            <t t-call="cap_levage_portal.materiel_infos"/>
-                                                        </div>
-                                                    </td>
-                                                </t>
-                                                <td t-else=""/>
+                                <div class="as-product-list">
+                                    <div class="row">
+                                        <t t-if="materiels">
+                                            <t t-foreach="materiels" t-as="materiel">
+                                                <div class="col-12 as-pro-col">
+                                                    <t t-call="cap_levage_portal.materiel_infos"/>
+                                                </div>
                                             </t>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        </t>
+                                    </div>
+                                </div>
                             </div>
                             <t t-else="">
                                 <div class="text-center text-muted">
