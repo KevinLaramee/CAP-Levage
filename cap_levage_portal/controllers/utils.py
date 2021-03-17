@@ -46,6 +46,13 @@ def check_group(website_group_lvl_value: GroupWebsite = GroupWebsite.lvl_1):
     return decorator
 
 
+def get_logged_user_company(partner):
+    result = partner
+    if partner.parent_id.active:
+        result = get_logged_user_company(partner.parent_id)
+    return result
+
+
 def partner_search_domain(partner, type_partner):
     # The child_of operator will look for records who are children or grand-children of a given record
     return ["&", "|", ("id", "=", partner.id), ("parent_id", "child_of", partner.id), ("type", "=", type_partner)]

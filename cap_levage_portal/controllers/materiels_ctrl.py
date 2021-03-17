@@ -131,11 +131,11 @@ class MaterielsCommonEditCreate(MaterielCommon):
             .search(utils.equipe_search_domain(partner))
         )
 
-        # FIXME compangy.paartner.id ?
+        logged_user_company = utils.get_logged_user_company(logged_user.partner_id)
         categ_rights = (
             http.request.env["critt.equipment.create_right"]
             .sudo()
-            .search([("res_partner_id", "=", company.partner_id.id)])
+            .search([("res_partner_id", "=",logged_user_company.id)])
             .ids
         )
         categories_materiel = (
@@ -146,12 +146,12 @@ class MaterielsCommonEditCreate(MaterielCommon):
             .sudo()
             .search([], order="name asc")
         )
-        # FIXME compangy.paartner.id ?
+
         referents = (
             http.request.env["res.partner"]
             .sudo()
             .search(
-                [("parent_id", "=", company.partner_id.id), ("type", "=", "contact")],
+                [("parent_id", "=", logged_user_company.id), ("type", "=", "contact")],
                 order="name asc",
             )
         )
@@ -312,11 +312,10 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
                 except:
                     values[field] = False
 
-            # FIXME compangy.paartner.id ?
             values.update(
                 {
                     "certificats": certificats,
-                    "res_partner_id": logged_user.company_id.partner_id.id,
+                    "res_partner_id": utils.get_logged_user_company(logged_user.partner_id),
                     "owner_user_id": logged_user.id,
                 }
             )

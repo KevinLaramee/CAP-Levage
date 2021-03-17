@@ -176,18 +176,18 @@
                 </div>
                 <div class="row align-items-center">
                     <a>Date de fabrication :</a>
-                    <a t-field="materiel.date_fabrication"/>
+                    <a t-field="materiel.date_fabrication" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
                     <a>Date de mise en service :</a>
-                    <a t-field="materiel.an_mise_service"/>
+                    <a t-field="materiel.an_mise_service" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
                     <a>Date dernier contrôle :</a>
-                    <a t-field="materiel.date_dernier_audit"/>
+                    <a t-field="materiel.date_dernier_audit" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
-                    <t t-call="cap_levage_portal.date_controle"/>
+                    <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
             </div>
         </template>
