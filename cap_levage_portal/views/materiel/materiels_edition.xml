@@ -103,13 +103,13 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3>Edition matériel</h3>
+                        <h3 t-esc="'Edition matériel' if mode == 'edit' else 'Création matériel'"/>
                         <div class="row align-items-center mt-5">
                             <div class="col-2" id="cap_levage_portal_avatar">
                                 <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
                                 <img class="mb-3 cap_levage_portal_avatar_img"
-                                     t-att-src="website.image_url(materiel, 'image_medium') if mode == 'edit' else ''"/>
+                                     t-att-src="website.image_url(materiel, 'image_medium') if mode == 'edit' else '/web/image/'"/>
                                 <div class="text-left">
                                     <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
                                         <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
@@ -221,7 +221,15 @@
                                                                 <select id="materiel_edit_category_select" name="category_id"
                                                                         t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}"
                                                                         required="True">
-                                                                    <option value="">Sélectionner un type</option>
+                                                                    <option value="" display_nombre_brins="false"
+                                                                                display_longueur="false"
+                                                                                display_cmu="false"
+                                                                                display_tmu="false"
+                                                                                display_model="false"
+                                                                                display_diametre="false"
+                                                                                display_grade="false"
+                                                                                display_num_lot="false"
+                                                                                display_num_commande="false">Sélectionner un type</option>
                                                                     <t t-foreach="categories_materiel or []" t-as="category_value">
                                                                         <option t-att-data-display_nombre_brins="'true' if category_value.display_nombre_brins else 'false'"
                                                                                 t-att-data-display_longueur="'true' if category_value.display_longueur else 'false'"

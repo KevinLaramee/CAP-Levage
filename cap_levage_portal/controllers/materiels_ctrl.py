@@ -130,22 +130,25 @@ class MaterielsCommonEditCreate(MaterielCommon):
             .sudo()
             .search(utils.equipe_search_domain(partner))
         )
+
+        # FIXME compangy.paartner.id ?
+        categ_rights = http.request.env["critt.equipment.create_right"].sudo().search([("res_partner_id", "=", company.partner_id.id)]).ids
         categories_materiel = (
             http.request.env["critt.equipment.category"]
             .sudo()
-            .search([], order="name asc")
+            .browse(categ_rights)
         )
         fabricants = (
             http.request.env["critt.equipment.fabricant"]
             .sudo()
             .search([], order="name asc")
         )
-        # FIXME : à vérifier
+        # FIXME compangy.paartner.id ?
         referents = (
             http.request.env["res.partner"]
             .sudo()
             .search(
-                [("parent_id", "=", company.id), ("type", "=", "contact")],
+                [("parent_id", "=", company.partner_id.id), ("type", "=", "contact")],
                 order="name asc",
             )
         )
@@ -248,7 +251,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
     )
     def materiel_create(self, **post):
         updated_post = utils.convert_empty_to_none(post)
-        error, error_message = self.details_form_validate(updated_post)
+        error, error_message = self.validate_form(updated_post)
         values = {}
         if not error:
 
@@ -301,10 +304,11 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
                 except:
                     values[field] = False
 
+            # FIXME compangy.paartner.id ?
             values.update(
                 {
                     "certificats": certificats,
-                    "res_partner_id": logged_user.company_id.id,
+                    "res_partner_id": logged_user.company_id.partner_id.id,
                     "owner_user_id": logged_user.id,
                 }
             )
@@ -393,7 +397,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
     def materiel_edit(self, materiel_id, **post):
         updated_post = utils.convert_empty_to_none(post)
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
-        error, error_message = self.details_form_validate(updated_post)
+        error, error_message = self.validate_form(updated_post)
         values = {}
         if not error:
 

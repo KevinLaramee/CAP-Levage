@@ -275,6 +275,7 @@ class AbstractEquipesagencesCtrl:
             )
             return http.request.render(error_page, values)
 
+
     def details_form_validate(self, data):
         error = dict()
         error_message = []

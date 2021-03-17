@@ -113,7 +113,7 @@
                                 <input type="file" accept="image/*" name="image_1920" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                        class="d-none cap_levage_portal_avatar_upload"/>
                                 <img class="mb-3 cap_levage_portal_avatar_img"
-                                     t-att-src="website.image_url(partner, 'image_128') if mode == 'edit' else ''"/>
+                                     t-att-src="website.image_url(partner, 'image_128') if mode == 'edit' else '/web/image/'"/>
                                 <div class="text-left">
                                     <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
                                         <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
