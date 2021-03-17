@@ -132,11 +132,14 @@ class MaterielsCommonEditCreate(MaterielCommon):
         )
 
         # FIXME compangy.paartner.id ?
-        categ_rights = http.request.env["critt.equipment.create_right"].sudo().search([("res_partner_id", "=", company.partner_id.id)]).ids
-        categories_materiel = (
-            http.request.env["critt.equipment.category"]
+        categ_rights = (
+            http.request.env["critt.equipment.create_right"]
             .sudo()
-            .browse(categ_rights)
+            .search([("res_partner_id", "=", company.partner_id.id)])
+            .ids
+        )
+        categories_materiel = (
+            http.request.env["critt.equipment.category"].sudo().browse(categ_rights)
         )
         fabricants = (
             http.request.env["critt.equipment.fabricant"]
@@ -224,11 +227,16 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
         "date_fabrication",
-        "an_mise_service",
         "date_dernier_audit",
+    ]
+    MANDATORY_FIELDS = [
+        "qr_code",
+        "num_materiel",
+        "category_id",
+        "fabricant_id",
+        "an_mise_service",
         "organisme_id",
     ]
-    MANDATORY_FIELDS = ["qr_code", "num_materiel", "category_id", "fabricant_id"]
 
     @utils.check_group(utils.GroupWebsite.lvl_3)
     @http.route(
@@ -334,8 +342,8 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         values = self._generate_edit_create_data()
         organismes_certification = (
             http.request.env["critt.equipment.organisme"]
-                .sudo()
-                .search([], order="name asc")
+            .sudo()
+            .search([], order="name asc")
         )
         values.update(
             {
@@ -380,10 +388,6 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_destruction_files",
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
-        "date_fabrication",
-        "an_mise_service",
-        "date_dernier_audit",
-        "organisme_id",
     ]
     MANDATORY_FIELDS = ["qr_code", "num_materiel", "category_id", "fabricant_id"]
 
@@ -430,9 +434,15 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
                 )
             )
 
-            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
             values.update(
-                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
+                {key: updated_post[key] for key in self.get_mandatory_fields()}
+            )
+            values.update(
+                {
+                    key: updated_post[key]
+                    for key in self.get_optional_fields()
+                    if key in updated_post
+                }
             )
             for field in {"equipe_id", "category_id", "fabricant_id", "referent"} & set(
                 values.keys()
@@ -597,7 +607,7 @@ class Materiels(http.Controller, MaterielCommon):
                 "pager": pager,
                 "search_in": search_in,
                 "search": search,
-                'materiels': all_matos,
+                "materiels": all_matos,
                 "searchbar_sortings": searchbar_sortings,
                 "searchbar_inputs": searchbar_inputs,
                 "sortby": sortby,

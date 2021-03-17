@@ -103,9 +103,9 @@
                         <div class="row align-items-center">
                             <div class="col-5">
                                 <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-12">
-                                    <label class="col-form-label" for="name">Name</label>
+                                    <label class="col-form-label" for="name">Nom</label>
                                     <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}"
-                                           t-att-value="partner.name if mode == 'edit' else ''"/>
+                                           t-att-value="partner.name if mode == 'edit' else ''" required="True"/>
                                 </div>
 
                                 <div t-attf-class="form-group #{error.get('street') and 'o_has_error' or ''} col-12">

@@ -8,8 +8,8 @@ from odoo import http
 
 from odoo.tools.translate import _
 
-MANDATORY_AGENCE_FIELDS = ["name", "street", "country_id", "city", "zip"]
-OPTIONAL_AGENCE_FIELDS = ["email", "phone", "mobile", "comment"]
+MANDATORY_AGENCE_FIELDS = ["name"]
+OPTIONAL_AGENCE_FIELDS = ["email", "phone", "mobile", "comment", "street", "country_id", "city", "zip"]
 
 
 class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
