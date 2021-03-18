@@ -45,6 +45,7 @@
         "views/horodating.xml",
         "security/security.xml",
         "security/ir.model.access.csv",
+        "data/ir_cron_data.xml",
         #'views/email.xml',
         # 'views/res_users.xml',
     ],

@@ -1,4 +1,5 @@
 import datetime
+import logging
 from datetime import datetime
 
 from PIL import Image
@@ -14,6 +15,7 @@ class MaintenanceEquipment(models.Model):
     _description = "Equipment"
     _order = "owner_user_id"
     _rec_name = "num_materiel"
+    logger = logging.getLogger(__name__)
 
     name = fields.Char("Nom", translate=True)
     active = fields.Boolean(default=True)
@@ -435,8 +437,8 @@ class MaintenanceEquipment(models.Model):
                     i = 0
                     while not audit_avant_rapport and i < len(list_audits_equipment):
                         if (
-                            list_audits_equipment[i].create_date
-                            < rapport_vgp.create_date
+                                list_audits_equipment[i].create_date
+                                < rapport_vgp.create_date
                         ):
                             list_audits_rapport.append(str(list_audits_equipment[0].id))
                             audit_avant_rapport = True
@@ -468,8 +470,8 @@ class MaintenanceEquipment(models.Model):
         for line in self:
             rapports_vgp_client = (
                 self.env["critt.certification.rapport_controle"]
-                .sudo()
-                .search([("client", "=", self.res_partner_id.id)])
+                    .sudo()
+                    .search([("client", "=", self.res_partner_id.id)])
             )
             list_id_rapports_vgp = []
             for rapport_vgp_client in rapports_vgp_client:
@@ -478,8 +480,8 @@ class MaintenanceEquipment(models.Model):
                     list_id_rapports_vgp.append(rapport_vgp_client.id)
             rapport_vgp = (
                 self.env["critt.certification.rapport_controle"]
-                .sudo()
-                .search([("id", "in", list_id_rapports_vgp)])
+                    .sudo()
+                    .search([("id", "in", list_id_rapports_vgp)])
             )
             line.rapport_controle = rapport_vgp
 
@@ -569,19 +571,8 @@ class MaintenanceEquipment(models.Model):
             else:
                 record.audit_depasse = True
 
-    # def _get_client_name(self):
-    #     for equipment in self:
-    #         equipment.client = equipment.owner_user_id.company_name
-    #
-    #
-    # def _get_client_link(self):
-    #     for equipment in self:
-    #         equipment.client_link = "/web#id=%d&view_type=form&model=res.partner&action=certification.act_client_view&menu_id=" % (equipment.owner_user_id.partner_id.id,)
-    #         #""https://external site/invoice?num=%d" % (rec.ext_invoice_number,)
-
     def _get_image_photo(self):
         for equipment in self:
-            # photo = self.env['ir.attachment'].search([('res_id', '=', equipment.id), ('res_model', '=', 'critt.equipment'), ('name', '=', 'image_medium')])
             equipment.image_photo = ""
             if equipment.id:
                 self.env.cr.execute(
@@ -590,20 +581,12 @@ class MaintenanceEquipment(models.Model):
                 )
                 row = self.env.cr.fetchone()
                 if row and row[0]:
-                    # url = "http://image.jeuxvideo.com/medias-md/156916/1569155082-4033-card.jpg"
-                    # url = 'http://localhost:8069/web/image?model=critt.equipment&id=' + str(
-                    #     equipment.id) + '&field=image_medium'
-                    # url = 'http://caplevage.critt-informatique.fr:8069/web/image?model=critt.equipment&id=1&field=image_medium'
-                    # response = requests.get(url)
-                    # convertedData = ("data:" + response.headers['Content-Type'] + ";" + "base64," + str(
-                    #    base64.b64encode(response.content).decode("utf-8")))
                     if equipment.image_medium:
                         equipment.image_photo = (
                             equipment.image_medium
-                        )  # equipment.image_small
+                        )
                     else:
                         equipment.image_photo = equipment.image_small
-                    # equipment.image_photo = '/web/image?model=critt.equipment&id=' + str(equipment.id) + '&field=image_medium'
 
     def _get_image_photo_exist(self):
         for equipment in self:
@@ -631,7 +614,6 @@ class MaintenanceEquipment(models.Model):
 
     def _get_image_photo_mime_type(self):
         for equipment in self:
-            # photo = self.env['ir.attachment'].search([('res_id', '=', equipment.id), ('res_model', '=', 'critt.equipment'), ('name', '=', 'image_medium')])
             equipment.image_photo_mime_type = "pas ok" + str(equipment.id)
             if equipment.id:
                 self.env.cr.execute(
@@ -645,7 +627,6 @@ class MaintenanceEquipment(models.Model):
     @api.onchange("category_id")
     def _onchange_category_id(self):
         if self.category_id:
-            # elingue = ['élingue', 'elingue', 'Élingue', 'Elingue']
             self.periode = self.category_id.periode
 
             self.of_cap_levage = self.category_id.of_cap_levage
@@ -659,10 +640,6 @@ class MaintenanceEquipment(models.Model):
                 date = datetime.now() + relativedelta(months=+int(self.periode))
                 self.audit_suivant = date
 
-            # if any(element in self.category_id.name for element in elingue):
-            #     self.is_elingue = True
-            # else:
-            #     self.is_elingue = False
             self.display_nombre_brins = self.category_id.display_nombre_brins
             if not self.display_nombre_brins:
                 self.nombre_brins = None
@@ -713,21 +690,36 @@ class MaintenanceEquipment(models.Model):
 
     @api.onchange("periode")
     def _onchange_periode(self):
-        if self.date_dernier_audit:
-            date = self.date_dernier_audit + relativedelta(months=+int(self.periode))
-            self.audit_suivant = date
-        else:
-            date = datetime.now() + relativedelta(months=+int(self.periode))
-            self.audit_suivant = date
+        for record in self:
+            if record.date_dernier_audit:
+                date = record.date_dernier_audit + relativedelta(months=+int(record.periode))
+                record.audit_suivant = date
+            else:
+                date = datetime.now() + relativedelta(months=+int(record.periode))
+                record.audit_suivant = date
 
     @api.onchange("date_dernier_audit")
     def _onchange_date_dernier_audit(self):
-        if self.date_dernier_audit:
-            date = self.date_dernier_audit + relativedelta(months=+int(self.periode))
-            self.audit_suivant = date
-        else:
-            date = datetime.now() + relativedelta(months=+int(self.periode))
-            self.audit_suivant = date
+        for record in self:
+            if record.date_dernier_audit:
+                date = self.date_dernier_audit + relativedelta(months=+int(record.periode))
+                record.audit_suivant = date
+            else:
+                date = datetime.now() + relativedelta(months=+int(record.periode))
+                record.audit_suivant = date
+
+    @api.onchange("audit_suivant")
+    def _onchange_audit_suivant(self):
+        for record in self:
+            if record.audit_suivant < fields.Date.today():
+                self.action_bloquer()
+
+    @api.model
+    def _cron_bloquer_materiel(self):
+        concerned_equipment = self.search([('audit_suivant', '<', fields.Date.today()), ('statut', '=', 'ok')])
+        for materiel in concerned_equipment:
+            self.logger.warning(f"CRON - Blocage du matériel {materiel} - {materiel.audit_suivant}")
+            materiel.action_bloquer()
 
     def materiel_entre(self):
         self.in_or_out = "in"
@@ -825,8 +817,8 @@ class MaintenanceEquipment(models.Model):
             if row and row[0]:
                 equipment.date_last_audit_string = (
                     datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
-                    .date()
-                    .strftime("%d/%m/%Y")
+                        .date()
+                        .strftime("%d/%m/%Y")
                 )
             else:
                 equipment.date_last_audit_string = ""
@@ -841,8 +833,8 @@ class MaintenanceEquipment(models.Model):
             if row and row[0]:
                 equipment.date_last_audit = (
                     datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
-                    .date()
-                    .strftime("%d/%m/%Y")
+                        .date()
+                        .strftime("%d/%m/%Y")
                 )
             else:
                 equipment.date_last_audit = ""
@@ -854,19 +846,8 @@ class MaintenanceEquipment(models.Model):
                 [("equipement", "=", equipment.id)], limit=1, order="fin desc"
             )
             if audits:
-                # equipment.last_audit = -2
-                # if audits[0].commande:
-                if audits[0].acces_certif:  # and audits[0].commande.state == 'sale':
+                if audits[0].acces_certif:
                     equipment.last_audit = audits[0].id
-
-    # def _get_last_certificat(self):
-    #     for equipment in self:
-    #         equipment.last_certificat = ''
-    #         certificats = self.env['critt.certification.certificat'].search([('id_equipment', '=', equipment.id)],
-    #                                                               limit=1, order='create_date desc')
-    #         if certificats:
-    #             if certificats[0].id_audit.acces_certif:
-    #                 equipment.last_certificat = certificats[0].pdf
 
     def _get_last_certificat(self):
         for equipment in self:
@@ -902,31 +883,6 @@ class MaintenanceEquipment(models.Model):
             else:
                 equipment.statut_index = -1
 
-    # def update_audits_new_cols(self):
-    #    liste_certif = self.env['critt.certification.certificat'].search([('type', '=', 'controle')])
-    #    for certif in liste_certif:
-    #        audit = self.env['critt.certification.audit'].search([('equipement', '=', certif.id_equipment.id)])
-
-    #        audit.e_date_pro = audit.equipement.audit_suivant
-    #        audit.e_type = audit.equipement.category_id.name
-    #        audit.e_num = audit.equipement.num_materiel
-    #        audit.e_an_mise_serv = audit.equipement.an_mise_service
-    #        audit.e_fab = audit.equipement.fabricant_id.name
-    #        audit.e_coef_secu = audit.equipement.category_id.coef_secu
-    #        audit.e_cmu = audit.equipement.cmu
-    #        audit.e_nb_brins = audit.equipement.nombre_brins
-    #        audit.e_long = audit.equipement.longueur
-    #        audit.e_tmu = audit.equipement.tmu
-    #        audit.e_model = audit.equipement.model
-
-    #        audit.display_cmu = audit.equipement.display_cmu
-    #        audit.display_nb_brins = audit.equipement.display_nombre_brins
-    #        audit.display_long = audit.equipement.display_longueur
-    #        audit.display_tmu = audit.equipement.display_tmu
-    #        audit.display_model = audit.equipement.display_model
-
-    #    return True
-
     def map(self):
         return {
             "type": "ir.actions.act_url",
@@ -938,12 +894,7 @@ class MaintenanceEquipment(models.Model):
     # gestion image
     @api.model
     def create(self, vals):
-        # Equipment = self.env['critt.equipment']
         Certificat = self.env["critt.certification.certificat"]
-        # tools.image_resize_images(vals)
-        # if vals.get('image_medium'):
-        #     compressed_image = Equipment.compressImage(vals.get('image_medium'))
-        #     vals.update({'image_small': compressed_image})
         partner_create = (
             self.env["res.users"].search([("id", "=", self.env.uid)]).partner_id.id
         )
@@ -997,8 +948,6 @@ class MaintenanceEquipment(models.Model):
         return equipment
 
     def write(self, vals):
-        # Equipment = self.env['critt.equipment']
-        # tools.image_resize_images(vals)
 
         if vals.get("qr_code"):
             qr_code = vals.get("qr_code")
@@ -1031,9 +980,8 @@ class MaintenanceEquipment(models.Model):
         if self.is_duplicated:
             vals.update({"date_dernier_audit": datetime.now(), "is_duplicated": False})
 
-        # if vals.get('image_medium'):
-        #     compressed_image = Equipment.compressImage(vals.get('image_medium'))
-        #     vals.update({'image_small': compressed_image})
+        if self.audit_suivant < fields.Date.today():
+            vals.update({"statut": "bloque"})
 
         return super(MaintenanceEquipment, self).write(vals)
 
@@ -1225,8 +1173,8 @@ class MaintenanceEquipment(models.Model):
         for devis in list_devis:
             equipment = (
                 self.env["critt.sale.order.line.equipment"]
-                .search([("order_id", "=", devis.id)])
-                .equipment_id
+                    .search([("order_id", "=", devis.id)])
+                    .equipment_id
             )
             equipment.update({"statut": "ok"})
 
@@ -1275,8 +1223,8 @@ class MaintenanceEquipment(models.Model):
         for devis in list_devis:
             equipment = (
                 self.env["critt.sale.order.line.equipment"]
-                .search([("order_id", "=", devis.id)])
-                .equipment_id
+                    .search([("order_id", "=", devis.id)])
+                    .equipment_id
             )
             equipment.update({"statut": "reforme", "audit_suivant": None})
 
@@ -1286,12 +1234,6 @@ class MaintenanceEquipment(models.Model):
             "UNIQUE(num_materiel)",
             "Ce numéro de matériel existe déjà",
         ),
-        # ('unique_nfc',
-        #  'UNIQUE(nfc)',
-        #  "Cet identifiant NFC existe déjà"),
-        # ('unique_internal_no',
-        #  'UNIQUE(internal_no)',
-        #  "Ce numéro interne existe déjà"),
     ]
 
 
@@ -1432,6 +1374,7 @@ class Fabricant(models.Model):
         "critt.equipment", "fabricant_id", string="Equipments", copy=False
     )
 
+
 class IrAttachment(models.Model):
     _name = "ir.attachment"
     _inherit = "ir.attachment"
@@ -1451,8 +1394,8 @@ class IrAttachment(models.Model):
     @api.model
     def create(self, vals):
         if (
-            vals.get("res_model") == "critt.equipment"
-            and vals.get("res_field") == "image_medium"
+                vals.get("res_model") == "critt.equipment"
+                and vals.get("res_field") == "image_medium"
         ):
             compressed_image = self.compressImage(vals.get("datas"))
             ir_attachment = super(IrAttachment, self).create(vals)
@@ -1510,27 +1453,6 @@ class IrAttachment(models.Model):
             compressed = to_compress.resize((max_size, max_size), Image.ANTIALIAS)
         b64_image = tools.image_to_base64(compressed, "JPEG")
         return b64_image
-
-
-# Début essai création formulaire de recherche, lié dans "equipement.xml" à la vue d'id="vue_recherche_equipement",
-# à l'action d'id="act_recherche_equipement" et au menuitem d'id="menu_recherche_equipement"
-# class RechercheEquipment(models.Model):
-#     _name = 'critt.equipment.recherche'
-#     _description = "Modèle servant à la recherche d'un ou plusieurs équipemnts"
-#
-#     num_materiel = fields.Integer(string="Numéro Matériel")
-#     categorie = fields.Char(string="Catégorie")
-#     proprietaire = fields.Char(string="Propriétaire")
-#     an_mise_service = fields.Integer(string="Année de mise en service")
-#     date_last_audit = fields.Integer(string="Date dernier contrôle", size=4)
-#     num_derniere_facture = fields.Char(string="Numéro dernière facture")
-#     test_recherche = fields.Char(string="Test Recherche")
-#
-#
-#     def action_rechercher(self):
-#         result = self.env['critt.equipment'].search(
-#             [('num_materiel', '=', self.num_materiel), ('proprietaire', '=', self.owner_user_id)])
-#         self.test_recherche = result[0].name
 
 
 class EquipmentCreateRight(models.Model):
