@@ -728,6 +728,7 @@ class DevisFacturesList(CustomerPortal):
         materiel_id,
         page,
         sortby,
+        listName,
         **kw,
     ):
         sale_order_line_equipment_ids = request.env[
@@ -768,7 +769,7 @@ class DevisFacturesList(CustomerPortal):
         request.session["my_quotations_history"] = quotations.ids[:100]
 
         values = {
-            "quotations": quotations.sudo(),
+            listName: quotations.sudo(),
             "page_name": "quote",
             "pager": pager,
             "archive_groups": [],
@@ -796,6 +797,7 @@ class DevisFacturesList(CustomerPortal):
             materiel_id,
             page,
             sortby,
+            "quotations",
             **kw,
         )
 
@@ -817,6 +819,7 @@ class DevisFacturesList(CustomerPortal):
             materiel_id,
             page,
             sortby,
+            "orders",
             **kw,
         )
 
