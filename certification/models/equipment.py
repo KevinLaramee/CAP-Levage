@@ -980,7 +980,7 @@ class MaintenanceEquipment(models.Model):
         if self.is_duplicated:
             vals.update({"date_dernier_audit": datetime.now(), "is_duplicated": False})
 
-        if self.audit_suivant < fields.Date.today():
+        if self.audit_suivant and self.audit_suivant < fields.Date.today():
             vals.update({"statut": "bloque"})
 
         return super(MaintenanceEquipment, self).write(vals)
