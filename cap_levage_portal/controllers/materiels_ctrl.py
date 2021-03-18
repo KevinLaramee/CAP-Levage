@@ -124,7 +124,6 @@ class MaterielsCommonEditCreate(MaterielCommon):
         """
         logged_user = request.env["res.users"].browse(request.session.uid)
         partner = logged_user.partner_id
-        company = logged_user.company_id
         equipes = (
             http.request.env["res.partner"]
             .sudo()
@@ -135,12 +134,9 @@ class MaterielsCommonEditCreate(MaterielCommon):
         categ_rights = (
             http.request.env["critt.equipment.create_right"]
             .sudo()
-            .search([("res_partner_id", "=",logged_user_company.id)])
-            .ids
+            .search([("res_partner_id", "=", logged_user_company.id)])
         )
-        categories_materiel = (
-            http.request.env["critt.equipment.category"].sudo().browse(categ_rights)
-        )
+        categories_materiel = [categ.category_id for categ in categ_rights]
         fabricants = (
             http.request.env["critt.equipment.fabricant"]
             .sudo()
@@ -315,7 +311,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
             values.update(
                 {
                     "certificats": certificats,
-                    "res_partner_id": utils.get_logged_user_company(logged_user.partner_id),
+                    "res_partner_id": utils.get_logged_user_company(logged_user.partner_id).id,
                     "owner_user_id": logged_user.id,
                 }
             )

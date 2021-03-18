@@ -46,21 +46,29 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
          */
         _showCorrectParams: function () {
             let selectedVal = this.$categorySelector.val();
-            let $selectedCategory = this.$categorySelectorOptions.filter('[value=' + selectedVal + ']:first');
             let elementList = ["nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"];
-            elementList.forEach(item => this._showOrHideDiv($selectedCategory, item));
+            if (selectedVal !== "") {
+                let $selectedCategory = this.$categorySelectorOptions.filter('[value=' + selectedVal + ']:first');
+                elementList.forEach(item => this._showOrHideDiv($selectedCategory, item));
+            }
+            else {
+                elementList.forEach(item => this._set_divs_attr(item, true));
+            }
+        },
+
+        _set_divs_attr(nameValue, isHidden){
+                const divId = "#materiel_".concat(nameValue);
+                const inputIdId = "#materiel_input_".concat(nameValue);
+                let $concernedDiv = this.$(divId);
+                let $concernedInput = this.$(inputIdId);
+                $concernedDiv.attr('hidden', isHidden);
+                $concernedInput.attr('disabled', isHidden);
         },
 
         _showOrHideDiv: function (selectedCategory, nameValue) {
-            const divId = "#materiel_".concat(nameValue);
-            const inputIdId = "#materiel_input_".concat(nameValue);
             const displayAttr = "data-display_".concat(nameValue);
-
-            let $concernedDiv = this.$(divId);
-            let $concernedInput = this.$(inputIdId);
             let showDiv = selectedCategory.attr(displayAttr) !== "true";
-            $concernedDiv.attr('hidden', showDiv);
-            $concernedInput.attr('disabled', showDiv);
+            this._set_divs_attr(nameValue, showDiv);
         },
 
         //--------------------------------------------------------------------------

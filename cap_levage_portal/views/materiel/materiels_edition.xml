@@ -75,7 +75,7 @@
                     <t t-set="idValue">an_mise_service</t>
                     <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
-                    <t t-set="isRequired" t-value="False"/>
+                    <t t-set="isRequired" t-value="True"/>
                 </t>
                 <t t-call="cap_levage_portal.input_edition">
                     <t t-set="labelValue">Date dernier contrôle :</t>
