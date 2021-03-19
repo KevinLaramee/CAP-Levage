@@ -214,13 +214,11 @@
                                                     <a href="#suivi_tab" aria-controls="suivi_tab" role="tab" data-toggle="tab">Suivi</a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab"
-                                                       groups="certification.website_lvl_2">Certificats/VGP
+                                                    <a href="#vgp_tab" aria-controls="vgp_tab" role="tab" data-toggle="tab">Certificats/VGP
                                                     </a>
                                                 </li>
                                                 <li role="presentation">
-                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab"
-                                                       groups="certification.website_lvl_2">Devis/factures
+                                                    <a href="#devis_tab" aria-controls="devis_tab" role="tab" data-toggle="tab">Devis/factures
                                                     </a>
                                                 </li>
                                             </ul>
@@ -231,11 +229,11 @@
                                                 <div role="suivi_tab" class="tab-pane" id="suivi_tab">
                                                     <t t-call="cap_levage_portal.onglet_suivi"/>
                                                 </div>
-                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab" groups="certification.website_lvl_2">
-                                                    <t t-call="cap_levage_portal.onglet_vgp"/>
+                                                <div role="vgp_tab" class="tab-pane" id="vgp_tab">
+                                                    <t t-call="cap_levage_portal.onglet_vgp" groups="certification.website_lvl_2"/>
                                                 </div>
-                                                <div role="devis_tab" class="tab-pane" id="devis_tab" groups="certification.website_lvl_2">
-                                                    <t t-call="cap_levage_portal.onglet_devis"/>
+                                                <div role="devis_tab" class="tab-pane" id="devis_tab">
+                                                    <t t-call="cap_levage_portal.onglet_devis" groups="certification.website_lvl_2"/>
                                                 </div>
                                             </div>
                                         </div>
