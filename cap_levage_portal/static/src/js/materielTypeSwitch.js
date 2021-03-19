@@ -33,7 +33,7 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
             let rel = this._super.apply(this, arguments);
             this.$categorySelector = this.$('select[name="category_id"]');
             this.$categorySelectorOptions = this.$categorySelector.find('option');
-            this._showCorrectParams();
+            this._showCorrectParams(true);
             return rel;
         },
 
@@ -44,31 +44,43 @@ odoo.define('cap_levage.materiel_edit_portal', function (require) {
         /**
          * @private
          */
-        _showCorrectParams: function () {
+        _showCorrectParams: function (firstSet=false) {
             let selectedVal = this.$categorySelector.val();
             let elementList = ["nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"];
             if (selectedVal !== "") {
                 let $selectedCategory = this.$categorySelectorOptions.filter('[value=' + selectedVal + ']:first');
-                elementList.forEach(item => this._showOrHideDiv($selectedCategory, item));
-            }
-            else {
-                elementList.forEach(item => this._set_divs_attr(item, true));
+                elementList.forEach(item => this._showOrHideDiv($selectedCategory, item, firstSet));
+            } else {
+                elementList.forEach(item => this._set_divs_attr(item, true, 0, firstSet));
             }
         },
 
-        _set_divs_attr(nameValue, isHidden){
-                const divId = "#materiel_".concat(nameValue);
-                const inputIdId = "#materiel_input_".concat(nameValue);
-                let $concernedDiv = this.$(divId);
-                let $concernedInput = this.$(inputIdId);
-                $concernedDiv.attr('hidden', isHidden);
-                $concernedInput.attr('disabled', isHidden);
+        _set_divs_attr(nameValue, isHidden, periodeValue, firstSet) {
+            const divId = "#materiel_".concat(nameValue);
+            const inputIdId = "#materiel_input_".concat(nameValue);
+            const periodeDivId = "#periode";
+            let $concernedDiv = this.$(divId);
+            let $concernedInput = this.$(inputIdId);
+            let $periodeInput = this.$(periodeDivId);
+            $concernedDiv.attr('hidden', isHidden);
+            $concernedInput.attr('disabled', isHidden);
+            if (periodeValue !== 0) {
+                if (!firstSet) {
+                    $periodeInput.attr('value', periodeValue);
+                }
+                $periodeInput.attr('required', false);
+            } else {
+                $periodeInput.attr('value', "");
+                $periodeInput.attr('required', true);
+
+            }
         },
 
-        _showOrHideDiv: function (selectedCategory, nameValue) {
+        _showOrHideDiv: function (selectedCategory, nameValue,firstSet) {
             const displayAttr = "data-display_".concat(nameValue);
             let showDiv = selectedCategory.attr(displayAttr) !== "true";
-            this._set_divs_attr(nameValue, showDiv);
+            let periodeValue = selectedCategory.attr("data-periode");
+            this._set_divs_attr(nameValue, showDiv, periodeValue, firstSet);
         },
 
         //--------------------------------------------------------------------------

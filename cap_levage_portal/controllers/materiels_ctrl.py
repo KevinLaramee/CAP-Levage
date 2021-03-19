@@ -224,6 +224,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_fabrication_files",
         "date_fabrication",
         "date_dernier_audit",
+        "periode",
     ]
     MANDATORY_FIELDS = [
         "qr_code",
@@ -317,6 +318,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
             )
 
             created_materiel = http.request.env["critt.equipment"].create(values)
+            created_materiel._onchange_date_dernier_audit()
             if values.get("is_bloque", False):
                 created_materiel.action_bloquer()
 
@@ -383,8 +385,9 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_destruction_files",
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
+        "periode"
     ]
-    MANDATORY_FIELDS = ["qr_code", "num_materiel", "category_id", "fabricant_id"]
+    MANDATORY_FIELDS = ["qr_code", "num_materiel", "category_id", "fabricant_id", "an_mise_service"]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -450,6 +453,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
             values.update({"certificats": certificats})
 
             materiel.sudo().write(values)
+            materiel._onchange_date_dernier_audit()
             logged_user = http.request.env.user
             if values.get("is_bloque", False):
                 materiel.action_bloquer()

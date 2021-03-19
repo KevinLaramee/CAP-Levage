@@ -34,7 +34,7 @@
 <!--        Affiche un input de type text par défaut, prend les param : idValue/itemValue/labelValue, optionnel inputType/isRequired -->
         <template id="cap_levage_portal.input_edition">
             <label class="col-form-label"><t t-esc="labelValue"/></label>
-            <input t-att-type="text if inputType is None else inputType" t-att-name="idValue" t-att-required="True if isRequired else False"
+            <input t-att-type="text if inputType is None else inputType" t-att-name="idValue" t-att-id="idValue" t-att-required="True if isRequired else False"
                    t-attf-class="form-control #{error.get(idValue) and 'is-invalid' or ''}"
                    t-att-value="itemValue"/>
         </template>

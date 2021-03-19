@@ -695,7 +695,7 @@ class MaintenanceEquipment(models.Model):
                 date = record.date_dernier_audit + relativedelta(months=+int(record.periode))
                 record.audit_suivant = date
             else:
-                date = datetime.now() + relativedelta(months=+int(record.periode))
+                date = self.an_mise_service + relativedelta(months=+int(record.periode))
                 record.audit_suivant = date
 
     @api.onchange("date_dernier_audit")
@@ -705,13 +705,13 @@ class MaintenanceEquipment(models.Model):
                 date = self.date_dernier_audit + relativedelta(months=+int(record.periode))
                 record.audit_suivant = date
             else:
-                date = datetime.now() + relativedelta(months=+int(record.periode))
+                date = self.an_mise_service + relativedelta(months=+int(record.periode))
                 record.audit_suivant = date
 
     @api.onchange("audit_suivant")
     def _onchange_audit_suivant(self):
         for record in self:
-            if record.audit_suivant < fields.Date.today():
+            if record.audit_suivant < fields.Date.today() and record.statut == "ok":
                 self.action_bloquer()
 
     @api.model

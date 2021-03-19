@@ -54,6 +54,45 @@
         </template>
 
         <!-- Onglet d'edition des infos de suivi-->
+        <template id="cap_levage_portal.periode_field">
+            <t t-call="cap_levage_portal.input_edition">
+                <t t-set="labelValue">Periodicité :</t>
+                <t t-set="idValue">periode</t>
+                <t t-set="itemValue" t-value="materiel.periode if materiel else 0"/>
+                <t t-set="inputType">number</t>
+            </t>
+        </template>
+        <template id="cap_levage_portal.onglet_suivi_edition">
+            <div class="row">
+                <div class="col-4">
+                    <div class="row align-items-center">
+                        <a>Organisme de certification :</a>
+                        <a t-field="materiel.organisme_id"/>
+                    </div>
+                    <div class="row align-items-center">
+                        <a>Date de fabrication :</a>
+                        <a t-field="materiel.date_fabrication" t-options='{"format": "dd/MM/yyyy"}'/>
+                    </div>
+                    <div class="row align-items-center">
+                        <a>Date dernier contrôle :</a>
+                        <a t-field="materiel.date_dernier_audit" t-options='{"format": "dd/MM/yyyy"}'/>
+                    </div>
+                    <div class="row align-items-center">
+                        <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <t t-call="cap_levage_portal.input_edition">
+                        <t t-set="labelValue">Date de mise en service :</t>
+                        <t t-set="idValue">an_mise_service</t>
+                        <t t-set="itemValue" t-value="materiel.an_mise_service if materiel else None"/>
+                        <t t-set="inputType">date</t>
+                        <t t-set="isRequired" t-value="True"/>
+                    </t>
+                    <t t-call="cap_levage_portal.periode_field"/>
+                </div>
+            </div>
+        </template>
         <template id="cap_levage_portal.onglet_suivi_creation">
             <div class="col-4">
                 <t t-call="cap_levage_portal.custom_select">
@@ -83,6 +122,7 @@
                     <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                 </t>
+                <t t-call="cap_levage_portal.periode_field"/>
             </div>
         </template>
 
@@ -230,14 +270,15 @@
                                                                                 t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}"
                                                                                 required="True">
                                                                             <option value="" display_nombre_brins="false"
-                                                                                    display_longueur="false"
-                                                                                    display_cmu="false"
-                                                                                    display_tmu="false"
-                                                                                    display_model="false"
-                                                                                    display_diametre="false"
-                                                                                    display_grade="false"
-                                                                                    display_num_lot="false"
-                                                                                    display_num_commande="false">Sélectionner un type
+                                                                                    data-display_longueur="false"
+                                                                                    data-display_cmu="false"
+                                                                                    data-display_tmu="false"
+                                                                                    data-display_model="false"
+                                                                                    data-display_diametre="false"
+                                                                                    data-display_grade="false"
+                                                                                    data-display_num_lot="false"
+                                                                                    data-display_num_commande="false"
+                                                                                    data-periode="0">Sélectionner un type
                                                                             </option>
                                                                             <t t-foreach="categories_materiel or []" t-as="category_value">
                                                                                 <option t-att-data-display_nombre_brins="'true' if category_value.display_nombre_brins else 'false'"
@@ -249,6 +290,7 @@
                                                                                         t-att-data-display_grade="'true' if category_value.display_grade else 'false'"
                                                                                         t-att-data-display_num_lot="'true' if category_value.display_num_lot else 'false'"
                                                                                         t-att-data-display_num_commande="'true' if category_value.display_num_commande else 'false'"
+                                                                                        t-att-data-periode="category_value.periode"
                                                                                         t-att-value="category_value.id"
                                                                                         t-att-selected="category_value.id == materiel.category_id.id if mode == 'edit' else 0">
                                                                                     <t t-esc="category_value.name"/>
@@ -321,7 +363,7 @@
                                                             </div>
                                                         </div>
                                                         <div role="suivi_tab" class="tab-pane" id="edit_suivi_tab">
-                                                            <t t-call="cap_levage_portal.onglet_suivi" t-if="mode == 'edit'"/>
+                                                            <t t-call="cap_levage_portal.onglet_suivi_edition" t-if="mode == 'edit'"/>
                                                             <t t-call="cap_levage_portal.onglet_suivi_creation" t-if="mode == 'create'"/>
                                                         </div>
                                                         <div role="vgp_tab" class="tab-pane" id="edit_vgp_tab" groups="certification.website_lvl_2">

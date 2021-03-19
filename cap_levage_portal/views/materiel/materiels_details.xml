@@ -80,6 +80,10 @@
                 <div class="row align-items-center">
                     <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
+                <div class="row align-items-center">
+                    <a>Périodicité :</a>
+                    <a t-field="materiel.periode"/>
+                </div>
             </div>
         </template>
         <template id="cap_levage_portal.onglet_vgp">
