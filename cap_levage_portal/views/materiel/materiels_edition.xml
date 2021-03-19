@@ -339,10 +339,6 @@
                                                                 <t t-set="idValue">upload_certificat_destruction_files</t>
                                                             </t>
                                                         </div>
-                                                        <div role="devis_tab" class="tab-pane" id="edit_devis_tab"
-                                                             groups="certification.website_lvl_2">
-                                                            <t t-call="cap_levage_portal.onglet_devis" t-if="mode == 'edit'"/>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
