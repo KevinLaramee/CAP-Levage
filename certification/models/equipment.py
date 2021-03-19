@@ -1006,13 +1006,6 @@ class MaintenanceEquipment(models.Model):
         else:
             self.orga_certif = ""
 
-    # @api.onchange('from_cap_levage')
-    # def _onchange_from_cap_levage(self):
-    #     if self.from_cap_levage:
-    #         self.fabricant_id = "Cap Levage"
-    #     else:
-    #         self.fabricant = ""
-
     def voir_devis(self):
         self.ensure_one()
         ir_model_data = self.env["ir.model.data"]
