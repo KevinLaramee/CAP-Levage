@@ -131,10 +131,10 @@
                                         <div t-attf-class="form-group #{error.get('country_id') and 'o_has_error' or ''} col-12">
                                             <label class="col-form-label" for="country_id">Pays</label>
                                             <select name="country_id" t-attf-class="form-control #{error.get('country_id') and 'is-invalid' or ''}">
-                                                <option value="">Country...</option>
+                                                <option value="">Sélectionner un pays</option>
                                                 <t t-foreach="countries or []" t-as="country">
                                                     <option t-att-value="country.id"
-                                                            t-att-selected="country.id == int(partner.country_id) if mode == 'edit' else 0">
+                                                            t-att-selected="country.id == int(partner.country_id) if mode == 'edit' else country.id == 75">
                                                         <t t-esc="country.name"/>
                                                     </option>
                                                 </t>
