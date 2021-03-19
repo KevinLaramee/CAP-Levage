@@ -150,10 +150,10 @@
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="form-group col-12">
-                                                        <label class="col-form-label" for="is_bloque">Est bloqué
+                                                        <label class="col-form-label" for="is_bloque">Bloquer le matériel
                                                             <input type="checkbox" name="is_bloque" class="form-control"
                                                                    t-att-checked="'checked' if materiel is not None and (materiel.is_bloque and mode == 'edit') else False"
-                                                                   t-att-disabled="True if materiel is not None and (materiel.is_bloque or materiel.statut_index != 0) else False"/>
+                                                                   t-att-disabled="True if materiel is not None and ((materiel.is_bloque or materiel.statut_index != 0) and not request.env.user.has_group('certification.website_lvl_3')) else False"/>
                                                         </label>
                                                     </div>
                                                 </div>

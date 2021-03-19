@@ -450,8 +450,11 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
             values.update({"certificats": certificats})
 
             materiel.sudo().write(values)
+            logged_user = http.request.env.user
             if values.get("is_bloque", False):
                 materiel.action_bloquer()
+            elif logged_user.has_group(utils.GroupWebsite.lvl_3.value):
+                materiel.action_valider()
 
             return http.request.redirect(
                 f"/cap_levage_portal/materiel/detail/{materiel_id}"
