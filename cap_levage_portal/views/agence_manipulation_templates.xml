@@ -1,29 +1,26 @@
 <odoo>
     <data>
         <template id="cap_levage_portal.agence_toolbar">
-            <div class="col-8"/>
-            <div class="col-1" groups="certification.website_lvl_2">
+            <div class="col-2 text-right" groups="certification.website_lvl_2">
                 <a t-att-href="'/cap_levage_portal/agence/edit/' + str(partner.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
+                    <span>Modifier</span>
                 </a>
             </div>
-            <div class="col-1" groups="certification.website_lvl_3">
+            <div class="col-2" groups="certification.website_lvl_3">
                 <form id="agence_edit_archive" method="POST" t-att-action="'/cap_levage_portal/agence/archive/' + str(partner.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" value="false" name="active"/>
                     <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
                         <i class="fa fa-trash"/>
+                        <span>Supprimer</span>
                     </button>
                 </form>
             </div>
         </template>
         <template id="cap_levage_portal.agence_champs_col_1">
             <div class="col-12">
-                <div class="row align-items-center">
-                    <a>Nom :</a>
-                    <a t-field="partner.name"/>
-                </div>
                 <div class="row">
                     <a>Adresse :</a>
                     <address t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
@@ -60,16 +57,24 @@
                         <div class="row align-items-center">
                             <t t-call="cap_levage_portal.agence_toolbar"/>
                         </div>
-                        <h3>Adresse de livraison</h3>
                         <div class="row">
                             <div class="col-2">
                                 <span t-field="partner.parent_id.image_1920" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                             </div>
-                            <div class="col-5">
-                                <t t-call="cap_levage_portal.agence_champs_col_1"/>
-                            </div>
-                            <div class="col-5">
-                                <t t-call="cap_levage_portal.agence_champs_col_2"/>
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-12 s_wsale_products_recently_viewed">
+                                        <h3 class="text-center" t-field="partner.name"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <t t-call="cap_levage_portal.agence_champs_col_1"/>
+                                    </div>
+                                    <div class="col-5">
+                                        <t t-call="cap_levage_portal.agence_champs_col_2"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row align-items-center">
@@ -104,9 +109,9 @@
                                 </div>
                             </div>
                             <div class="panel">
-                                <h3>Contact</h3>
+                                <h3 t-esc="page_title"/>
                                 <div class="row">
-                                    <div class="col-5">
+                                    <div class="col-8">
                                         <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-12">
                                             <label class="col-form-label" for="name">Nom</label>
                                             <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}"
@@ -146,8 +151,6 @@
                                                    t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
                                                    t-att-value="partner.comment if mode == 'edit' else ''"/>
                                         </div>
-                                    </div>
-                                    <div class="col-5">
                                         <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-12">
                                             <label class="col-form-label" for="email">Email</label>
                                             <input type="email" name="email" t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}"
@@ -168,11 +171,13 @@
                                 <div class="clearfix">
                                     <button type="submit" t-att-id="partner.id if mode == 'edit' else ''" class="btn btn-primary">
                                         <i class="fa fa-save"/>
+                                        <span>Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/agence/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/agences'"
                                        class="btn btn-danger"
                                        aria-label="Annuler" title="Annuler">
                                         <span class="fa fa-ban"/>
+                                        <span>Annuler</span>
                                     </a>
                                 </div>
                             </div>

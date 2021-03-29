@@ -215,6 +215,7 @@ class AbstractEquipesagencesCtrl:
                 "edit": True,
                 "error": {},
                 "mode": "create",
+                "page_title": _(f"{self.get_labels().get('create_title')}"),
                 "post_url": f"/cap_levage_portal/{self.get_detail_url()}/create",
             }
         )
@@ -233,6 +234,7 @@ class AbstractEquipesagencesCtrl:
                 "countries": countries,
                 "edit": True,
                 "mode": "edit",
+                "page_title": _(f"{self.get_labels().get('edit_title')}"),
                 "post_url": f"/cap_levage_portal/{self.get_detail_url()}/edit/{partner_id}",
             }
         )

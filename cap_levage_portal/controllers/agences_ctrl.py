@@ -45,7 +45,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         }
         :return:
         """
-        return {"singulier": "agence", "pluriel": "agences", "page_name": "agences", "create_button_name": "Créer une agence"}
+        return {"singulier": "agence", "pluriel": "agences", "page_name": "agences", "create_button_name": "Créer une agence", "create_title": "Nouvelle agence", "edit_title": "Modifier l'agence"}
 
     def get_url_value(self):
         return "agences"

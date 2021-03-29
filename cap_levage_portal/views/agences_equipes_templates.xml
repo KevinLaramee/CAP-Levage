@@ -85,9 +85,7 @@
         <!--        Affiche l'encart d'une agence/equipe dans la liste -->
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
-
-
-            <div class="as-product">
+            <div class="as-product" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
                 <div class="asp-inner">
                     <div class="pro-img">
                         <a class="d-block h-100 asp-img">
