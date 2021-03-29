@@ -3,10 +3,11 @@
         <!--        Affiche les liens d'edition d'un matériel-->
         <template id="cap_levage_portal.materiel_toolbar">
             <div class="col-8"/>
-            <div class="col-1" groups="certification.website_lvl_2">
+            <div class="col-2" groups="certification.website_lvl_2">
                 <a t-att-href="'/cap_levage_portal/materiel/edit/' + str(materiel.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
+                    <span>Modifier</span>
                 </a>
             </div>
         </template>
@@ -140,23 +141,23 @@
 
         <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
-            <div class="row align-items-center">
+            <div>
                 <a>Numéro :</a>
                 <a t-field="materiel.num_materiel" class="font-weight-bold"/>
             </div>
-            <div class="row align-items-center">
+            <div>
                 <a>Référent :</a>
                 <a t-field="materiel.owner_user_id"/>
             </div>
-            <div class="row align-items-center">
+            <div>
                 <a>Agence/secteur :</a>
                 <a t-field="materiel.agence_id.name"/>
             </div>
-            <div class="row align-items-center">
+            <div>
                 <a>Equipe :</a>
                 <a t-field="materiel.equipe_id.name"/>
             </div>
-            <div class="row align-items-center">
+            <div>
                 <a>Identifiant QRCode :</a>
                 <a t-field="materiel.qr_code"/>
             </div>
@@ -172,34 +173,22 @@
                             <t t-call="cap_levage_portal.materiel_toolbar"/>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-2">
-                                <span t-field="materiel.image_medium" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
+                            <div class="col-5">
+                                <span t-field="materiel.image" t-options="{'widget': 'image'}"/>
                             </div>
-                            <div class="col-10">
-                                <h2 class="row align-items-center">
+                            <div class="col-5">
+                                <h2>
                                     <t t-call="cap_levage_portal.materiel_type"/>
                                 </h2>
-                                <div class="row align-items-center">
-                                    <t t-call="cap_levage_portal.etat_materiel"/>
+                                <t t-call="cap_levage_portal.etat_materiel">
+                                    <t t-set="classes" t-value="'w-100 text-center'"/>
+                                </t>
+                                <t t-call="cap_levage_portal.affichage_details_principaux"/>
+                                <div style="border-bottom:solid;border-top:solid;">
+                                    <a>Dernière observation générale :</a>
+                                    <a t-field="materiel.last_general_observation"/>
                                 </div>
-                                <br/>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <t t-call="cap_levage_portal.affichage_details_principaux"/>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="row align-items-center">
-                                            <t t-call="cap_levage_portal.date_controle"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-2"/>
-                            <div class="col-10" style="border-style: solid">
-                                <a>Dernière observation générale :</a>
-                                <a t-field="materiel.last_general_observation"/>
+                                <t t-call="cap_levage_portal.date_controle"/>
                             </div>
                         </div>
                         <div class="row align-items-center">
