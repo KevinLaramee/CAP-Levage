@@ -22,20 +22,6 @@
             </div>
         </template>
 
-        <template id="cap_levage_portal.materiel_search_bar" inherit_id="portal.portal_searchbar" name="Portal Assets" primary="True">
-            <xpath expr="//span[hasclass('input-group-append')]" position="after">
-                <!--                    qrcode scan -->
-                <div class="col-1" groups="certification.website_lvl_1">
-                    <div id="qrcodescan">
-                        <t t-call="cap_levage_portal.qrcode_scanning_popup"/>
-                        <a id="buttonqrcodescan" special="cancel" title="Scanner QRCode" aria-label="Scanner QRCode" class="btn btn-primary">
-                            <i class="fa fa-qrcode"/>
-                        </a>
-                    </div>
-                </div>
-            </xpath>
-        </template>
-
         <!--        Page principale listant les matériels -->
         <template id="cap_levage_portal.materiels_list">
             <t t-call="portal.portal_layout">
@@ -43,14 +29,25 @@
                 <div groups="certification.website_lvl_1">
                     <!--                        Affiche la barre de recherche-->
                     <t t-set="breadcrumbs_searchbar" t-value="True"/>
-                    <t t-call="cap_levage_portal.materiel_search_bar">
+                    <t t-call="portal.portal_searchbar">
                     </t>
                     <div class="row">
                         <div class="col-3" groups="certification.website_lvl_3">
                             <!--                    bouton de création -->
                             <a href="/cap_levage_portal/materiel/create/" class="btn btn-secondary" aria-label="Créer" title="Créer">
-                                <i class="fa fa-plus"/><span>Création d'un matériel</span>
+                                <i class="fa fa-plus"/>
+                                <span>Création d'un matériel</span>
                             </a>
+                        </div>
+                        <!--                    qrcode scan -->
+                        <div class="col-3" groups="certification.website_lvl_1">
+                            <div id="qrcodescan">
+                                <t t-call="cap_levage_portal.qrcode_scanning_popup"/>
+                                <a id="buttonqrcodescan" special="cancel" title="Scanner QRCode" aria-label="Scanner QRCode" class="btn btn-primary">
+                                    <i class="fa fa-qrcode"/>
+                                    <span>Scanner QR code</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -96,39 +93,42 @@
         <!--        Affiche l'encart d'un matériel dans la liste -->
         <template id="cap_levage_portal.materiel_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/materiel/detail/' + str(materiel.id)"/>
-            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';"
-                 style="cursor: pointer">
-                <div class="card-body p-1">
-                    <a class="d-block h-100">
-                        <span t-field="materiel.image_medium"
-                              t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
-                              class="d-flex h-100 justify-content-center align-items-center"/>
-                    </a>
-                </div>
-                <div class="card-body p-0 text-center o_wsale_product_information">
-                    <div class="p-2 o_wsale_product_information_text">
+            <div class="as-product" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
+
+                <div class="asp-inner">
+                    <div class="pro-img">
+                        <a class="d-block h-100 asp-img">
+                            <span t-field="materiel.image_medium"
+                                  t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
+                                  class="d-flex h-100 justify-content-center align-items-center"/>
+                        </a>
+                    </div>
+
+                    <div class="pro-info o_wsale_product_information_text">
                         <h6 class="o_wsale_products_item_title">
                             <a itemprop="name" t-att-content="materiel.category_id" t-field="materiel.category_id"/>
                         </h6>
-                        <div>
-                            <t t-call="cap_levage_portal.etat_materiel"/>
+                        <div class="w-100">
+                            <t t-call="cap_levage_portal.etat_materiel">
+                                <t t-set="classes" t-value="'w-100 text-center'"/>
+                            </t>
                         </div>
-                        <div class="small text-left">
+                        <div class="w-100 small text-left">
                             <a>Numéro :</a>
                             <a t-field="materiel.num_materiel" class="font-weight-bold"/>
                         </div>
-                        <div class="small text-left">
+                        <div class="w-100 small text-left">
                             <a>QRCode :</a>
                             <a t-field="materiel.qr_code" class="font-weight-bold"/>
                         </div>
-                        <div class="small text-left">
+                        <div class="w-100 small text-left">
                             <t t-call="cap_levage_portal.date_controle"/>
                         </div>
-                        <div class="small text-left">
+                        <div class="w-100 small text-left">
                             <a>Equipe :</a>
                             <a t-field="materiel.equipe_id.name"/>
                         </div>
-                        <div class="small text-left">
+                        <div class="w-100 small text-left">
                             <a>Agence/secteur :</a>
                             <a t-field="materiel.agence_id.name"/>
                         </div>
@@ -136,6 +136,5 @@
                 </div>
             </div>
         </template>
-
     </data>
 </odoo>

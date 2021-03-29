@@ -18,8 +18,8 @@
 
 <!--        Affiche l'etat d'un matériel avec les couleurs-->
         <template id="cap_levage_portal.etat_materiel">
-            <a t-field="materiel.statut"
-               t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"/>
+            <div t-field="materiel.statut"
+               t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}" t-attf-class="#{classes}"/>
         </template>
 <!--        Affiche le type d'un matériel avec les couleurs-->
         <template id="cap_levage_portal.materiel_type">
