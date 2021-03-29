@@ -37,7 +37,7 @@
         </template>
 
         <!--        Page principale listant les matériels -->
-        <template id="index">
+        <template id="cap_levage_portal.materiels_list">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
                 <div groups="certification.website_lvl_1">
@@ -46,10 +46,10 @@
                     <t t-call="cap_levage_portal.materiel_search_bar">
                     </t>
                     <div class="row">
-                        <div class="col-1" groups="certification.website_lvl_3">
+                        <div class="col-3" groups="certification.website_lvl_3">
                             <!--                    bouton de création -->
                             <a href="/cap_levage_portal/materiel/create/" class="btn btn-secondary" aria-label="Créer" title="Créer">
-                                <i class="fa fa-plus"/>
+                                <i class="fa fa-plus"/><span>Création d'un matériel</span>
                             </a>
                         </div>
                     </div>

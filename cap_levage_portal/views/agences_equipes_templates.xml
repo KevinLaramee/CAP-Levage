@@ -31,42 +31,34 @@
         <template id="equipes_list">
             <t t-call="portal.portal_layout">
                 <t t-set="title">Cap-levage</t>
-                <div class="container oe_website_sale" groups="certification.website_lvl_1">
+                <div groups="certification.website_lvl_1">
                     <t t-set="breadcrumbs_searchbar" t-value="True"/>
                     <t t-call="portal.portal_searchbar">
                     </t>
                     <!--                    bouton de création -->
-                    <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer" groups="certification.website_lvl_3">
-                        <i class="fa fa-plus"/>
-                    </a>
+                    <div class="row">
+                        <div class="col-3" groups="certification.website_lvl_3">
+                            <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer">
+                                <i class="fa fa-plus"/>
+                                <span t-esc="create_button_name"/>
+                            </a>
+                        </div>
+                    </div>
                     <!--                    Affiche la liste des matériels-->
                     <div class="row o_wsale_products_main_row">
-                        <div t-if="enable_left_column" id="products_grid_before" class="col-lg-3"/>
                         <div id="products_grid">
                             <div t-if="bins" class="o_wsale_products_grid_table_wrapper">
-                                <table class="table table-borderless m-0" t-att-data-ppg="ppg" t-att-data-ppr="ppr">
-                                    <colgroup t-ignore="true">
-                                        <!-- Force the number of columns (useful when only one row of (x < ppr) products) -->
-                                        <col t-foreach="ppr" t-as="p"/>
-                                    </colgroup>
-                                    <tbody>
-                                        <tr t-foreach="bins" t-as="tr_item">
-                                            <t t-foreach="tr_item" t-as="td_item">
-                                                <t t-if="td_item">
-                                                    <t t-set="item" t-value="td_item['item']"/>
-                                                    <td t-att-colspan="td_item['x'] != 1 and td_item['x']"
-                                                        t-att-rowspan="td_item['y'] != 1 and td_item['y']"
-                                                        t-attf-class="oe_product #{td_item['class']}">
-                                                        <div t-attf-class="o_wsale_product_grid_wrapper o_wsale_product_grid_wrapper_#{td_item['x']}_#{td_item['y']}">
-                                                            <t t-call="cap_levage_portal.item_infos"/>
-                                                        </div>
-                                                    </td>
-                                                </t>
-                                                <td t-else=""/>
+                                <div class="as-product-list">
+                                    <div class="row">
+                                        <t t-if="items">
+                                            <t t-foreach="items" t-as="item">
+                                                <div class="col-12 as-pro-col">
+                                                    <t t-call="cap_levage_portal.item_infos"/>
+                                                </div>
                                             </t>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        </t>
+                                    </div>
+                                </div>
                             </div>
                             <t t-else="">
                                 <div class="text-center text-muted">
@@ -93,30 +85,32 @@
         <!--        Affiche l'encart d'une agence/equipe dans la liste -->
         <template id="cap_levage_portal.item_infos">
             <t t-set="product_href" t-value="'/cap_levage_portal/' + str(detail_url) + '/detail/' + str(item.id)"/>
-            <!--            FIXME supprimer le form -->
-            <div class="card oe_product_cart" groups="certification.website_lvl_1" t-attf-onclick="location.href='#{product_href}';" style="cursor: pointer">
-                <div class="card-body p-1 oe_product_image">
-                    <a class="d-block h-100" itemprop="url">
-                        <span t-if="item.type == 'contact'" t-field="item.image_1920"
-                              t-options="{'widget': 'image', 'preview_image': 'image_1920', 'class': 'o_image_128_max'}"
-                              class="d-flex h-100 justify-content-center align-items-center"/>
-                        <span t-if="item.type == 'delivery'" t-field="item.parent_id.image_1920"
-                              t-options="{'widget': 'image', 'preview_image': 'image_1920', 'class': 'o_image_128_max'}"
-                              class="d-flex h-100 justify-content-center align-items-center"/>
-                    </a>
-                </div>
-                <div class="card-body p-0 text-center o_wsale_product_information">
-                    <div class="p-2 o_wsale_product_information_text">
+
+
+            <div class="as-product">
+                <div class="asp-inner">
+                    <div class="pro-img">
+                        <a class="d-block h-100 asp-img">
+                            <span t-if="item.type == 'contact'" t-field="item.image_1920"
+                                  t-options="{'widget': 'image', 'preview_image': 'image_1920', 'class': 'o_image_128_max'}"
+                                  class="d-flex h-100 justify-content-center align-items-center"/>
+                            <span t-if="item.type == 'delivery'" t-field="item.parent_id.image_1920"
+                                  t-options="{'widget': 'image', 'preview_image': 'image_1920', 'class': 'o_image_128_max'}"
+                                  class="d-flex h-100 justify-content-center align-items-center"/>
+                        </a>
+                    </div>
+
+                    <div class="pro-info o_wsale_product_information_text">
                         <h6 class="o_wsale_products_item_title">
                             <a itemprop="name" t-att-content="item.name" t-field="item.name"/>
                         </h6>
                         <div class="text-left small">
-                            <a>Email : </a>
+                            <a>Email :</a>
                             <a t-field="item.email"/>
                         </div>
                         <div class="text-left small">
-                            <a>Matériels possédés : </a>
-                            <a t-esc="item.nb_equipment"/>
+                            <a>Matériels possédés :</a>
+                            <a style="color: red;" t-esc="item.nb_equipment"/>
                         </div>
                     </div>
                 </div>

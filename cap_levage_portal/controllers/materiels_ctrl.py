@@ -604,7 +604,7 @@ class Materiels(http.Controller, MaterielCommon):
             offset=pager["offset"],
         )
         return http.request.render(
-            "cap_levage_portal.index",
+            "cap_levage_portal.materiels_list",
             {
                 "pager": pager,
                 "search_in": search_in,

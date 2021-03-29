@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-odoo.define('cap_levage.materiel_edit_portal', function (require) {
+odoo.define('cap_levage_portal.materiel_edit_portal', function (require) {
     'use strict';
 
     let publicWidget = require('web.public.widget');
