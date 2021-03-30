@@ -65,11 +65,9 @@
                                 <span t-field="partner.image_128" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                             </div>
                             <div class="col-10">
-                                <div class="row">
-                                    <div class="col-12 s_wsale_products_recently_viewed">
-                                        <h3 class="text-center" t-field="partner.name"/>
-                                    </div>
-                                </div>
+                                <t t-call="cap_levage_portal.caplevage_title">
+                                    <t t-set="title_value" t-value="partner.name"/>
+                                </t>
                                 <div class="row">
                                     <div class="col-5">
                                         <t t-call="cap_levage_portal.equipe_champs_col_1"/>
@@ -117,7 +115,9 @@
                                 </div>
                             </div>
                             <div class="panel">
-                                <h3 t-esc="page_title"/>
+                                <t t-call="cap_levage_portal.caplevage_title">
+                                    <t t-set="title_value" t-value="page_title"/>
+                                </t>
                                 <div class="row">
                                     <div class="col">
                                         <div id="cap_levage_portal_avatar">

@@ -38,5 +38,21 @@
                    t-attf-class="form-control #{error.get(idValue) and 'is-invalid' or ''}"
                    t-att-value="itemValue"/>
         </template>
+        <template id="cap_levage_portal.date_input_edition">
+            <label class="col-form-label">
+                <t t-esc="labelValue"/>
+            </label>
+            <div class="input-group date">
+                <input type="date" t-att-name="idValue" t-att-id="idValue"
+                       t-att-required="True if isRequired else False"
+                       t-attf-class="form-control datetimepicker-input #{error.get(idValue) and 'is-invalid' or ''} #{classes}"
+                       t-att-value="itemValue"/>
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <span class="fa fa-calendar" role="img" aria-label="Calendar"/>
+                    </span>
+                </div>
+            </div>
+        </template>
     </data>
 </odoo>

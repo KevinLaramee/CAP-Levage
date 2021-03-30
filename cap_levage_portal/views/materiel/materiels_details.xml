@@ -177,9 +177,9 @@
                                 <span t-field="materiel.image" t-options="{'widget': 'image'}"/>
                             </div>
                             <div class="col-5">
-                                <h2>
-                                    <t t-call="cap_levage_portal.materiel_type"/>
-                                </h2>
+                                <t t-call="cap_levage_portal.caplevage_title">
+                                    <t t-set="title_value" t-value="cap_levage_portal.materiel_typ"/>
+                                </t>
                                 <t t-call="cap_levage_portal.etat_materiel">
                                     <t t-set="classes" t-value="'w-100 text-center'"/>
                                 </t>

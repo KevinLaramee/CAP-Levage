@@ -26,7 +26,7 @@
         </template>
         <!-- affichage des champs dynamique en fonction des catégories, via le widget cap_levage_portal/static/src/js/materielTypeSwitch.js-->
         <template id="cap_levage_portal.dynamic_categories">
-            <div t-att-id="'materiel_' + concernedAttr" t-attf-class="row ml-1 #{error.get(concernedAttr) and 'o_has_error' or ''}">
+            <div t-att-id="'materiel_' + concernedAttr" t-attf-class="#{error.get(concernedAttr) and 'o_has_error' or ''}">
                 <label class="col-form-label">
                     <t t-esc="labelValue"/>
                 </label>
@@ -37,7 +37,7 @@
         </template>
         <!-- affichage pour upload un document (niveau 3 uniquement)-->
         <template id="cap_levage_portal.upload">
-            <div class="row" groups="certification.website_lvl_3">
+            <div class="row no-gutters align-items-center" groups="certification.website_lvl_3">
                 <div class="form-group col-3">
                     <label>
                         <t t-esc="labelValue"/>
@@ -45,8 +45,9 @@
                 </div>
                 <div class="form-group col-3" name="uploadDiv">
                     <input type="file" class="d-none" t-att-name="idValue" accept="image/*,application/pdf"/>
-                    <a t-att-id="idValue" class="btn btn-primary" aria-label="Edit">
-                        <i class="fa fa-upload fa-1g float-sm-none float-md-left" title="Ajouter un document"/>
+                    <a t-att-id="idValue" class="btn border-primary" aria-label="Edit">
+                        <i class="fa fa-upload"/>
+                        <span> Ajouter un document</span>
                     </a>
                     <span name="uploadFileName"/>
                 </div>
@@ -64,7 +65,7 @@
         </template>
         <template id="cap_levage_portal.onglet_suivi_edition">
             <div class="row">
-                <div class="col-4">
+                <div class="col-10">
                     <div class="row align-items-center">
                         <a>Organisme de certification :</a>
                         <a t-field="materiel.organisme_id"/>
@@ -94,7 +95,7 @@
             </div>
         </template>
         <template id="cap_levage_portal.onglet_suivi_creation">
-            <div class="col-4">
+            <div class="col-10">
                 <t t-call="cap_levage_portal.custom_select">
                     <t t-set="labelValue">Organisme de certification</t>
                     <t t-set="idValue">organisme_id</t>
@@ -103,20 +104,20 @@
                     <t t-set="listValue" t-value="organismes_certification"/>
                     <t t-set="isRequired" t-value="True"/>
                 </t>
-                <t t-call="cap_levage_portal.input_edition">
+                <t t-call="cap_levage_portal.date_input_edition">
                     <t t-set="labelValue">Date de fabrication :</t>
                     <t t-set="idValue">date_fabrication</t>
                     <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                 </t>
-                <t t-call="cap_levage_portal.input_edition">
+                <t t-call="cap_levage_portal.date_input_edition">
                     <t t-set="labelValue">Date de mise en service :</t>
                     <t t-set="idValue">an_mise_service</t>
                     <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                     <t t-set="isRequired" t-value="True"/>
                 </t>
-                <t t-call="cap_levage_portal.input_edition">
+                <t t-call="cap_levage_portal.date_input_edition">
                     <t t-set="labelValue">Date dernier contrôle :</t>
                     <t t-set="idValue">date_dernier_audit</t>
                     <t t-set="itemValue" t-value="None"/>
@@ -144,9 +145,11 @@
                                 </div>
                             </div>
                             <div class="panel">
-                                <h3 t-esc="'Edition matériel' if mode == 'edit' else 'Création matériel'"/>
+                                <t t-call="cap_levage_portal.caplevage_title">
+                                    <t t-set="title_value" t-value="'Edition matériel' if mode == 'edit' else 'Nouveau matériel'"/>
+                                </t>
                                 <div class="row align-items-center mt-5">
-                                    <div class="col-2" id="cap_levage_portal_avatar">
+                                    <div class="col-10" id="cap_levage_portal_avatar">
                                         <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                                class="d-none cap_levage_portal_avatar_upload"/>
                                         <img class="mb-3 cap_levage_portal_avatar_img"
@@ -159,75 +162,50 @@
                                                 <i class="fa fa-trash-o float-sm-none float-md-right"/>
                                             </a>
                                         </div>
-                                    </div>
-                                    <div class="col-10">
-                                        <h2 class="row align-items-center" t-if="mode is None or mode != 'create'">
+                                        <h2 t-if="mode is None or mode != 'create'">
                                             <t t-call="cap_levage_portal.materiel_type"/>
                                         </h2>
-                                        <div class="row align-items-center" t-if="mode is None or mode != 'create'">
+                                        <div t-if="mode is None or mode != 'create'">
                                             <t t-call="cap_levage_portal.etat_materiel"/>
                                         </div>
-                                        <br/>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="row form-group col-12">
-                                                    <t t-call="cap_levage_portal.custom_select">
-                                                        <t t-set="labelValue">Equipe - agence</t>
-                                                        <t t-set="idValue">equipe_id</t>
-                                                        <t t-set="currentSelectedId" t-value="materiel.equipe_id.id if materiel else 0"/>
-                                                        <t t-set="listValue" t-value="equipes"/>
-                                                        <t t-set="noValueLabel">Sélectionner une équipe</t>
-                                                    </t>
-                                                </div>
-                                                <div class="row">
-                                                    <div t-attf-class="form-group #{error.get('num_materiel') and 'o_has_error' or ''} col-12">
-                                                        <label class="col-form-label" for="num_materiel">Numéro matériel</label>
-                                                        <input type="text" name="num_materiel"
-                                                               t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
-                                                               t-att-value="materiel.num_materiel if mode == 'edit' else ''" required="True"/>
-                                                    </div>
-
-                                                </div>
-                                                <div class="row form-group">
-                                                    <div class="form-group col-12">
-                                                        <label class="col-form-label" for="is_bloque">Bloquer le matériel
-                                                            <input type="checkbox" name="is_bloque" class="form-control"
-                                                                   t-att-checked="'checked' if materiel is not None and (materiel.is_bloque and mode == 'edit') else False"
-                                                                   t-att-disabled="True if materiel is not None and ((materiel.is_bloque or materiel.statut_index != 0) and not request.env.user.has_group('certification.website_lvl_3')) else False"/>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''} col-12">
-                                                        <label class="col-form-label" for="qr_code">Identifiant QRCode</label>
-                                                        <input type="text" name="qr_code"
-                                                               t-attf-class="form-control #{error.get('qr_code') and 'is-invalid' or ''}"
-                                                               t-att-value="materiel.qr_code if mode == 'edit' else ''" required="True"/>
-                                                    </div>
-                                                </div>
-                                                <div class="row form-group col-12">
-                                                    <t t-call="cap_levage_portal.custom_select">
-                                                        <t t-set="labelValue">Référent</t>
-                                                        <t t-set="idValue">referent</t>
-                                                        <t t-set="currentSelectedId" t-value="materiel.referent.id if materiel else 0"/>
-                                                        <t t-set="noValueLabel">Sélectionner un référent</t>
-                                                        <t t-set="listValue" t-value="referents"/>
-                                                    </t>
-                                                </div>
-                                            </div>
+                                        <t t-call="cap_levage_portal.custom_select">
+                                            <t t-set="labelValue">Equipe - agence</t>
+                                            <t t-set="idValue">equipe_id</t>
+                                            <t t-set="currentSelectedId" t-value="materiel.equipe_id.id if materiel else 0"/>
+                                            <t t-set="listValue" t-value="equipes"/>
+                                            <t t-set="noValueLabel">Sélectionner une équipe</t>
+                                        </t>
+                                        <div t-attf-class="form-group #{error.get('num_materiel') and 'o_has_error' or ''}">
+                                            <label class="col-form-label" for="num_materiel">Numéro matériel</label>
+                                            <input type="text" name="num_materiel"
+                                                   t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
+                                                   t-att-value="materiel.num_materiel if mode == 'edit' else ''" required="True"/>
                                         </div>
+                                        <label class="col-form-label" for="is_bloque">Bloquer le matériel
+                                            <input type="checkbox" name="is_bloque" class="form-control"
+                                                   t-att-checked="'checked' if materiel is not None and (materiel.is_bloque and mode == 'edit') else False"
+                                                   t-att-disabled="True if materiel is not None and ((materiel.is_bloque or materiel.statut_index != 0) and not request.env.user.has_group('certification.website_lvl_3')) else False"/>
+                                        </label>
+                                        <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''}">
+                                            <label class="col-form-label" for="qr_code">Identifiant QRCode</label>
+                                            <input type="text" name="qr_code"
+                                                   t-attf-class="form-control #{error.get('qr_code') and 'is-invalid' or ''}"
+                                                   t-att-value="materiel.qr_code if mode == 'edit' else ''" required="True"/>
+                                        </div>
+                                        <t t-call="cap_levage_portal.custom_select">
+                                            <t t-set="labelValue">Référent</t>
+                                            <t t-set="idValue">referent</t>
+                                            <t t-set="currentSelectedId" t-value="materiel.referent.id if materiel else 0"/>
+                                            <t t-set="noValueLabel">Sélectionner un référent</t>
+                                            <t t-set="listValue" t-value="referents"/>
+                                        </t>
                                     </div>
                                 </div>
-                                <div class="row align-items-center">
-                                    <div class="col-2"/>
-                                    <div t-attf-class="form-group #{error.get('last_general_observation') and 'o_has_error' or ''} col-10">
-                                        <label class="col-form-label" for="last_general_observation">Dernière observation générale :</label>
-                                        <input type="text" name="last_general_observation"
-                                               t-attf-class="form-control #{error.get('last_general_observation') and 'is-invalid' or ''}"
-                                               t-att-value="materiel.last_general_observation if mode == 'edit' else ''"/>
-                                    </div>
+                                <div t-attf-class="form-group #{error.get('last_general_observation') and 'o_has_error' or ''}">
+                                    <label class="col-form-label" for="last_general_observation">Dernière observation générale :</label>
+                                    <input type="text" name="last_general_observation"
+                                           t-attf-class="form-control #{error.get('last_general_observation') and 'is-invalid' or ''}"
+                                           t-att-value="materiel.last_general_observation if mode == 'edit' else ''"/>
                                 </div>
                                 <div class="row align-items-center">
                                     <div class="prodcut-tab-wrap w-100">
@@ -253,7 +231,7 @@
                                                                groups="certification.website_lvl_2">Certificats/VGP
                                                             </a>
                                                         </li>
-                                                        <li role="presentation">
+                                                        <li role="presentation" t-if="mode == 'edit'">
                                                             <a href="#edit_devis_tab" aria-controls="edit_devis_tab" role="tab" data-toggle="tab"
                                                                groups="certification.website_lvl_2">Devis/factures
                                                             </a>
@@ -263,54 +241,48 @@
                                                         <div role="caracteristiques_tab" class="tab-pane active" id="edit_caracteristiques_tab"
                                                              groups="certification.website_lvl_3">
                                                             <div class="row">
-                                                                <div class="col-5">
-                                                                    <div class="row">
-                                                                        <label class="col-form-label">Type</label>
-                                                                        <select id="materiel_edit_category_select" name="category_id"
-                                                                                t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}"
-                                                                                required="True">
-                                                                            <option value="" display_nombre_brins="false"
-                                                                                    data-display_longueur="false"
-                                                                                    data-display_cmu="false"
-                                                                                    data-display_tmu="false"
-                                                                                    data-display_model="false"
-                                                                                    data-display_diametre="false"
-                                                                                    data-display_grade="false"
-                                                                                    data-display_num_lot="false"
-                                                                                    data-display_num_commande="false"
-                                                                                    data-periode="0">Sélectionner un type
+                                                                <div class="col-10">
+                                                                    <label class="col-form-label">Type</label>
+                                                                    <select id="materiel_edit_category_select" name="category_id"
+                                                                            t-attf-class="form-control #{error.get('category_id') and 'is-invalid' or ''}"
+                                                                            required="True">
+                                                                        <option value="" display_nombre_brins="false"
+                                                                                data-display_longueur="false"
+                                                                                data-display_cmu="false"
+                                                                                data-display_tmu="false"
+                                                                                data-display_model="false"
+                                                                                data-display_diametre="false"
+                                                                                data-display_grade="false"
+                                                                                data-display_num_lot="false"
+                                                                                data-display_num_commande="false"
+                                                                                data-periode="0">Sélectionner un type
+                                                                        </option>
+                                                                        <t t-foreach="categories_materiel or []" t-as="category_value">
+                                                                            <option t-att-data-display_nombre_brins="'true' if category_value.display_nombre_brins else 'false'"
+                                                                                    t-att-data-display_longueur="'true' if category_value.display_longueur else 'false'"
+                                                                                    t-att-data-display_cmu="'true' if category_value.display_cmu else 'false'"
+                                                                                    t-att-data-display_tmu="'true' if category_value.display_tmu else 'false'"
+                                                                                    t-att-data-display_model="'true' if category_value.display_model else 'false'"
+                                                                                    t-att-data-display_diametre="'true' if category_value.display_diametre else 'false'"
+                                                                                    t-att-data-display_grade="'true' if category_value.display_grade else 'false'"
+                                                                                    t-att-data-display_num_lot="'true' if category_value.display_num_lot else 'false'"
+                                                                                    t-att-data-display_num_commande="'true' if category_value.display_num_commande else 'false'"
+                                                                                    t-att-data-periode="category_value.periode"
+                                                                                    t-att-value="category_value.id"
+                                                                                    t-att-selected="category_value.id == materiel.category_id.id if mode == 'edit' else 0">
+                                                                                <t t-esc="category_value.name"/>
                                                                             </option>
-                                                                            <t t-foreach="categories_materiel or []" t-as="category_value">
-                                                                                <option t-att-data-display_nombre_brins="'true' if category_value.display_nombre_brins else 'false'"
-                                                                                        t-att-data-display_longueur="'true' if category_value.display_longueur else 'false'"
-                                                                                        t-att-data-display_cmu="'true' if category_value.display_cmu else 'false'"
-                                                                                        t-att-data-display_tmu="'true' if category_value.display_tmu else 'false'"
-                                                                                        t-att-data-display_model="'true' if category_value.display_model else 'false'"
-                                                                                        t-att-data-display_diametre="'true' if category_value.display_diametre else 'false'"
-                                                                                        t-att-data-display_grade="'true' if category_value.display_grade else 'false'"
-                                                                                        t-att-data-display_num_lot="'true' if category_value.display_num_lot else 'false'"
-                                                                                        t-att-data-display_num_commande="'true' if category_value.display_num_commande else 'false'"
-                                                                                        t-att-data-periode="category_value.periode"
-                                                                                        t-att-value="category_value.id"
-                                                                                        t-att-selected="category_value.id == materiel.category_id.id if mode == 'edit' else 0">
-                                                                                    <t t-esc="category_value.name"/>
-                                                                                </option>
-                                                                            </t>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="row">
-                                                                        <t t-call="cap_levage_portal.custom_select">
-                                                                            <t t-set="labelValue">Fabricant</t>
-                                                                            <t t-set="idValue">fabricant_id</t>
-                                                                            <t t-set="currentSelectedId"
-                                                                               t-value="materiel.fabricant_id.id if materiel else 0"/>
-                                                                            <t t-set="noValueLabel">Sélectionner un fabricant</t>
-                                                                            <t t-set="listValue" t-value="fabricants"/>
-                                                                            <t t-set="isRequired" t-value="True"/>
                                                                         </t>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-5">
+                                                                    </select>
+                                                                    <t t-call="cap_levage_portal.custom_select">
+                                                                        <t t-set="labelValue">Fabricant</t>
+                                                                        <t t-set="idValue">fabricant_id</t>
+                                                                        <t t-set="currentSelectedId"
+                                                                           t-value="materiel.fabricant_id.id if materiel else 0"/>
+                                                                        <t t-set="noValueLabel">Sélectionner un fabricant</t>
+                                                                        <t t-set="listValue" t-value="fabricants"/>
+                                                                        <t t-set="isRequired" t-value="True"/>
+                                                                    </t>
                                                                     <t t-call="cap_levage_portal.dynamic_categories">
                                                                         <t t-set="concernedAttr">nombre_brins</t>
                                                                         <t t-set="labelValue">Nombre de brins</t>
@@ -372,7 +344,7 @@
                                                                 <t t-set="idValue">upload_certificat_fabrication_files</t>
                                                             </t>
                                                             <t t-call="cap_levage_portal.upload">
-                                                                <t t-set="labelValue">Ajouter un certificat de contrôle</t>
+                                                                <t t-set="labelValue">Ajouter un rapport de contrôle</t>
                                                                 <t t-set="idValue">upload_certificat_controle_files</t>
                                                             </t>
                                                             <t t-call="cap_levage_portal.upload">
@@ -388,12 +360,14 @@
                                 </div>
                                 <div class="clearfix">
                                     <button type="submit" t-att-id="materiel.id if mode == 'edit' else ''" class="btn btn-primary">
-                                        <i class="fa fa-save"/><span> Enregistrer</span>
+                                        <i class="fa fa-save"/>
+                                        <span>Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/materiel/detail/' + str(materiel.id) if mode == 'edit' else '/cap_levage_portal/materiels'"
                                        class="btn btn-danger"
                                        aria-label="Annuler" title="Annuler">
-                                        <span class="fa fa-ban"/><span> Annuler</span>
+                                        <span class="fa fa-ban"/>
+                                        <span>Annuler</span>
                                     </a>
                                 </div>
                             </div>
