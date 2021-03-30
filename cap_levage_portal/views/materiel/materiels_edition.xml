@@ -199,12 +199,12 @@
                                             <t t-set="noValueLabel">Sélectionner un référent</t>
                                             <t t-set="listValue" t-value="referents"/>
                                         </t>
-                                    </div>
-                                    <div t-attf-class="form-group #{error.get('last_general_observation') and 'o_has_error' or ''}">
-                                        <label class="col-form-label" for="last_general_observation">Dernière observation générale :</label>
-                                        <input type="text" name="last_general_observation"
-                                               t-attf-class="form-control #{error.get('last_general_observation') and 'is-invalid' or ''}"
-                                               t-att-value="materiel.last_general_observation if mode == 'edit' else ''"/>
+                                        <div t-attf-class="form-group #{error.get('last_general_observation') and 'o_has_error' or ''}">
+                                            <label class="col-form-label" for="last_general_observation">Dernière observation générale :</label>
+                                            <input type="text" name="last_general_observation"
+                                                   t-attf-class="form-control #{error.get('last_general_observation') and 'is-invalid' or ''}"
+                                                   t-att-value="materiel.last_general_observation if mode == 'edit' else ''"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row align-items-center">
