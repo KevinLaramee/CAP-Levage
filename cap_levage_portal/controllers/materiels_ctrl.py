@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import base64
+import logging
 from abc import abstractmethod
 from datetime import datetime
 
@@ -9,7 +10,6 @@ from odoo.http import request
 from odoo.tools.translate import _
 from . import utils
 from .grid_utils import TableComputeCapLevage
-
 
 class MaterielCommon:
     """
@@ -511,6 +511,23 @@ class Materiels(http.Controller, MaterielCommon):
     PPG = 10  # nb de lignes
     PPR = 4  # nombre de colonnes
 
+    _logger = logging.getLogger(__name__)
+
+    @staticmethod
+    def get_search_statut_from_str(search: str) -> str:
+        statuts = [
+            ("ok", "UTILISABLE"),
+            ("en_cours", "À RÉPARER"),
+            ("bloque", "INTERDIT D'EMPLOI"),
+            ("reforme", "RÉFORMÉ"),
+            ("detruit", "DÉTRUIT"),
+        ]
+        corresponding_value = search
+        for existing_statut in statuts:
+            if search.lower() == existing_statut[1].lower():
+                corresponding_value = existing_statut[0]
+        return corresponding_value
+
     @http.route(
         [
             "/cap_levage_portal/materiels",
@@ -543,6 +560,14 @@ class Materiels(http.Controller, MaterielCommon):
                 "label": _("Agence"),
                 "order": "agence_id asc, equipe_id asc, id asc",
             },
+            "type": {
+                "label": _("Type matériel"),
+                "order": "category_id asc, id asc",
+            },
+            "etat": {
+                "label": _("Etat matériel"),
+                "order": "statut asc, id asc",
+            },
         }
         searchbar_inputs = {
             "all": {
@@ -561,6 +586,18 @@ class Materiels(http.Controller, MaterielCommon):
                 "input": "agence",
                 "label": _("Rechercher sur toutes les agences"),
             },
+            "type": {
+                "input": "type",
+                "label": _("Rechercher sur tous les types de matériel"),
+            },
+            "etat": {
+                "input": "etat",
+                "label": _("Rechercher sur tous les états matériel"),
+            },
+            "date_prochain_controle": {
+                "input": "date_prochain_controle",
+                "label": _("Rechercher sur la date de prochain contrôle"),
+            },
         }
 
         # default sort by value
@@ -575,19 +612,40 @@ class Materiels(http.Controller, MaterielCommon):
         )
         search_domain = [("equipe_id", "in", equipes_list)]
         if search is not None and search_in is not None:
-            # FIXME - faire mieux ? champs store ?
             partner_ids = (
                 http.request.env["res.partner"].search([("name", "ilike", search)]).ids
             )
-            search_domain += [
-                "|",
-                "|",
-                "|",
-                ("num_materiel", "ilike", search),
-                ("qr_code", "ilike", search),
-                ("equipe_id", "in", partner_ids),
-                ("agence_id", "in", partner_ids),
-            ]
+            category_ids = (
+                http.request.env["critt.equipment.category"].search([("name", "ilike", search)]).ids
+            )
+            search_statut = self.get_search_statut_from_str(search)
+            search_or, search_domain_list = [], []
+            if search_in == ("all" or "allid"):
+                search_or += ["|"]
+                search_domain_list += [
+                    ("num_materiel", "ilike", search),
+                    ("qr_code", "ilike", search)
+                ]
+            if search_in == ("all" or "equipe"):
+                search_or += ["|"]
+                search_domain_list += [("equipe_id", "in", partner_ids)]
+            if search_in == ("all" or "agence"):
+                search_or += ["|"]
+                search_domain_list += [("agence_id", "in", partner_ids)]
+            if search_in == ("all" or "type"):
+                search_or += ["|"]
+                search_domain_list += [("category_id", "in", category_ids)]
+            if search_in == ("all" or "etat"):
+                search_or += ["|"]
+                search_domain_list += [("statut", "=", search_statut)]
+            if search_in == ("all" or "date_prochain_controle"):
+                try:
+                    date_search = datetime.strptime(search, '%d/%m/%Y').date()
+                    search_or += ["|"]
+                    search_domain_list += [("audit_suivant", "=", date_search)]
+                except ValueError:
+                    self._logger.warning(f"Mauvaise date : {search}")
+            search_domain += search_or + search_domain_list
         total_items = materiels.search_count(search_domain)
         pager = portal_pager(
             url="/cap_levage_portal/materiels",
