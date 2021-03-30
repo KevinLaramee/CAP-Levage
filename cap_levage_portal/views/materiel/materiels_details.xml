@@ -178,10 +178,10 @@
                             </div>
                             <div class="col-5">
                                 <t t-call="cap_levage_portal.caplevage_title">
-                                    <t t-set="title_value" t-value="cap_levage_portal.materiel_type"/>
+                                    <t t-set="title_value" t-value="materiel.category_id.name"/>
                                 </t>
                                 <t t-call="cap_levage_portal.etat_materiel">
-                                    <t t-set="classes" t-value="'w-100 text-center'"/>
+                                    <t t-set="classes" t-value="'w-100 mt-2 text-center'"/>
                                 </t>
                                 <t t-call="cap_levage_portal.affichage_details_principaux"/>
                                 <div style="border-bottom:solid;border-top:solid;">
