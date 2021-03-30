@@ -248,6 +248,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <!-- chatter -->
+                            <div id="materiel_chatter" class="mt-4 col-12">
+                                <t t-call="portal.message_thread">
+                                    <t t-set="object" t-value="materiel"/>
+                                </t>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </t>
