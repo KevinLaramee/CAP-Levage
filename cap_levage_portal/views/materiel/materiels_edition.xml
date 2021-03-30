@@ -181,11 +181,6 @@
                                                    t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
                                                    t-att-value="materiel.num_materiel if mode == 'edit' else ''" required="True"/>
                                         </div>
-                                        <label class="col-form-label" for="is_bloque">Bloquer le matériel
-                                            <input type="checkbox" name="is_bloque" class="form-control"
-                                                   t-att-checked="'checked' if materiel is not None and (materiel.is_bloque and mode == 'edit') else False"
-                                                   t-att-disabled="True if materiel is not None and ((materiel.is_bloque or materiel.statut_index != 0) and not request.env.user.has_group('certification.website_lvl_3')) else False"/>
-                                        </label>
                                         <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''}">
                                             <label class="col-form-label" for="qr_code">Identifiant QRCode</label>
                                             <input type="text" name="qr_code"

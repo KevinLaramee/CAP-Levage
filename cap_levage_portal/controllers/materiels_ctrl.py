@@ -208,7 +208,6 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         "agence_id",
         "equipe_id",
         "last_general_observation",
-        "is_bloque",
         "nombre_brins",
         "longueur",
         "cmu",
@@ -319,8 +318,6 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
 
             created_materiel = http.request.env["critt.equipment"].create(values)
             created_materiel._onchange_date_dernier_audit()
-            if values.get("is_bloque", False):
-                created_materiel.action_bloquer()
 
             return http.request.redirect(
                 f"/cap_levage_portal/materiel/detail/{created_materiel.id}"
@@ -371,7 +368,6 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "agence_id",
         "equipe_id",
         "last_general_observation",
-        "is_bloque",
         "nombre_brins",
         "longueur",
         "cmu",
@@ -454,11 +450,6 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
 
             materiel.sudo().write(values)
             materiel._onchange_date_dernier_audit()
-            logged_user = http.request.env.user
-            if values.get("is_bloque", False):
-                materiel.action_bloquer()
-            elif logged_user.has_group(utils.GroupWebsite.lvl_3.value):
-                materiel.action_valider()
 
             return http.request.redirect(
                 f"/cap_levage_portal/materiel/detail/{materiel_id}"
@@ -679,6 +670,51 @@ class Materiels(http.Controller, MaterielCommon):
             },
         )
 
+    @http.route(
+        "/cap_levage_portal/materiel/bloquer/<int:materiel_id>",
+        auth="user",
+        website=True,
+    )
+    @utils.check_group(utils.GroupWebsite.lvl_3)
+    def bloquer_materiel(self, materiel_id, **kw):
+        materiels = http.request.env["critt.equipment"]
+        materiel = materiels.browse(materiel_id)
+        materiel.action_bloquer()
+        materiel.write({"is_bloque": True})
+        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
+
+        return http.request.render(
+            "cap_levage_portal.materiel_detail",
+            {
+                "materiel": materiel,
+                "onglet_vgp": onglet_vgp_data,
+                "onglet_devis": onglet_devis_data,
+                "page_name": _("mes_materiels"),
+            },
+        )
+
+    @http.route(
+        "/cap_levage_portal/materiel/activer/<int:materiel_id>",
+        auth="user",
+        website=True,
+    )
+    @utils.check_group(utils.GroupWebsite.lvl_3)
+    def valider_materiel(self, materiel_id, **kw):
+        materiels = http.request.env["critt.equipment"]
+        materiel = materiels.browse(materiel_id)
+        materiel.action_valider()
+        materiel.write({"is_bloque": False})
+        onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
+
+        return http.request.render(
+            "cap_levage_portal.materiel_detail",
+            {
+                "materiel": materiel,
+                "onglet_vgp": onglet_vgp_data,
+                "onglet_devis": onglet_devis_data,
+                "page_name": _("mes_materiels"),
+            },
+        )
     @http.route(
         "/cap_levage_portal/materiel/detail/<int:materiel_id>",
         auth="user",
