@@ -623,25 +623,25 @@ class Materiels(http.Controller, MaterielCommon):
             )
             search_statut = self.get_search_statut_from_str(search)
             search_or, search_domain_list = [], []
-            if search_in == ("all" or "allid"):
+            if search_in == "all" or search_in == "allid":
                 search_or += ["|"]
                 search_domain_list += [
                     ("num_materiel", "ilike", search),
                     ("qr_code", "ilike", search),
                 ]
-            if search_in == ("all" or "equipe"):
+            if search_in == "all" or search_in == "equipe":
                 search_or += ["|"]
                 search_domain_list += [("equipe_id", "in", partner_ids)]
-            if search_in == ("all" or "agence"):
+            if search_in == "all" or search_in == "agence":
                 search_or += ["|"]
                 search_domain_list += [("agence_id", "in", partner_ids)]
-            if search_in == ("all" or "type"):
+            if search_in == "all" or search_in == "type":
                 search_or += ["|"]
                 search_domain_list += [("category_id", "in", category_ids)]
-            if search_in == ("all" or "etat"):
+            if search_in == "all" or search_in == "etat":
                 search_or += ["|"]
                 search_domain_list += [("statut", "=", search_statut)]
-            if search_in == ("all" or "date_prochain_controle"):
+            if search_in == "all" or search_in == "date_prochain_controle":
                 try:
                     date_search = datetime.strptime(search, "%d/%m/%Y").date()
                     search_or += ["|"]
