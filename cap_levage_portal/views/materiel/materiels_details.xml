@@ -10,14 +10,14 @@
                 </a>
             </div>
             <div class="col-8"/>
-            <div class="col-2" groups="certification.website_lvl_3" t-if="materiel.is_bloque">
+            <div class="col-2" groups="certification.website_lvl_3" t-if="materiel.statut_index != 0">
                 <a t-att-href="'/cap_levage_portal/materiel/activer/' + str(materiel.id)" class="btn btn-secondary"
                    aria-label="Activer le matériel" title="Activer">
                     <i class="fa fa-power-off"/>
                     <span>Activer le matériel</span>
                 </a>
             </div>
-            <div class="col-2" groups="certification.website_lvl_3" t-if="not materiel.is_bloque">
+            <div class="col-2" groups="certification.website_lvl_3" t-if="materiel.statut_index != 2">
                 <a t-att-href="'/cap_levage_portal/materiel/bloquer/' + str(materiel.id)" class="btn btn-primary"
                    aria-label="Bloquer le matériel" title="Bloquer">
                     <i class="fa fa-ban"/>

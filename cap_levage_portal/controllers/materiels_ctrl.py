@@ -691,7 +691,6 @@ class Materiels(http.Controller, MaterielCommon):
         materiels = http.request.env["critt.equipment"]
         materiel = materiels.browse(materiel_id)
         materiel.action_bloquer()
-        materiel.write({"is_bloque": True})
         onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
 
         return http.request.render(
@@ -714,7 +713,6 @@ class Materiels(http.Controller, MaterielCommon):
         materiels = http.request.env["critt.equipment"]
         materiel = materiels.browse(materiel_id)
         materiel.action_valider()
-        materiel.write({"is_bloque": False})
         onglet_vgp_data, onglet_devis_data = self._get_vgp_certifs_data(materiel)
 
         return http.request.render(
