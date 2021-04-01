@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import werkzeug
 
 from .abstract_equipes_agences_ctrl import (
     AbstractEquipesagencesCtrl
