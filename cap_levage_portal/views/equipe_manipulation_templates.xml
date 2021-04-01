@@ -1,14 +1,14 @@
 <odoo>
     <data>
         <template id="cap_levage_portal.equipe_toolbar">
-            <div class="col-2 text-right" groups="certification.website_lvl_3">
+            <div class="text-right" groups="certification.website_lvl_3">
                 <a t-att-href="'/cap_levage_portal/equipe/edit/' + str(partner.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
                     <span>Modifier</span>
                 </a>
             </div>
-            <div class="col-2" groups="certification.website_lvl_3">
+            <div class="ml-2" groups="certification.website_lvl_3">
                 <form id="equipe_edit_archive" method="POST" t-att-action="'/cap_levage_portal/equipe/archive/' + str(partner.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" value="false" name="active"/>

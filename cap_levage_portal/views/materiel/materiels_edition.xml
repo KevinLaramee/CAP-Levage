@@ -168,6 +168,10 @@
                                         <div t-if="mode is None or mode != 'create'">
                                             <t t-call="cap_levage_portal.etat_materiel"/>
                                         </div>
+                                        <div t-if="mode == 'edit'">
+                                            <a>Numéro matériel :</a>
+                                            <a t-field="materiel.num_materiel" class="font-weight-bold"/>
+                                        </div>
                                         <t t-call="cap_levage_portal.custom_select">
                                             <t t-set="labelValue">Equipe - agence</t>
                                             <t t-set="idValue">equipe_id</t>
@@ -175,11 +179,11 @@
                                             <t t-set="listValue" t-value="equipes"/>
                                             <t t-set="noValueLabel">Sélectionner une équipe</t>
                                         </t>
-                                        <div t-attf-class="form-group #{error.get('num_materiel') and 'o_has_error' or ''}">
+                                        <div t-attf-class="form-group #{error.get('num_materiel') and 'o_has_error' or ''}" t-if="mode == 'create'">
                                             <label class="col-form-label" for="num_materiel">Numéro matériel</label>
                                             <input type="text" name="num_materiel"
                                                    t-attf-class="form-control #{error.get('num_materiel') and 'is-invalid' or ''}"
-                                                   t-att-value="materiel.num_materiel if mode == 'edit' else ''" required="True"/>
+                                                   t-att-value="''" required="True"/>
                                         </div>
                                         <div t-attf-class="form-group #{error.get('qr_code') and 'o_has_error' or ''}">
                                             <label class="col-form-label" for="qr_code">Identifiant QRCode</label>

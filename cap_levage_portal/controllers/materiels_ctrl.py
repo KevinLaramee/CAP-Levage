@@ -389,7 +389,6 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
     ]
     MANDATORY_FIELDS = [
         "qr_code",
-        "num_materiel",
         "category_id",
         "fabricant_id",
         "an_mise_service",

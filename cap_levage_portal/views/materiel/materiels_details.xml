@@ -283,7 +283,7 @@
                                         <span t-field="doc.desc"/>
                                     </td>
                                     <td>
-                                        <span t-field="doc.date"/>
+                                        <span t-field="doc.date" t-options='{"format": "dd/MM/yyyy"}'/>
                                     </td>
                                     <td class="text-right">
                                         <div class="btn-group flex-grow-1 mr-1 mb-1">
@@ -325,7 +325,7 @@
                                         <span t-field="doc.number"/>
                                     </td>
                                     <td>
-                                        <span t-field="doc.create_date"/>
+                                        <span t-field="doc.create_date" t-options='{"format": "dd/MM/yyyy"}'/>
                                     </td>
                                     <td class="text-right">
                                         <div class="btn-group flex-grow-1 mr-1 mb-1">
