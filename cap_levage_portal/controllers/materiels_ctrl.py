@@ -647,7 +647,9 @@ class Materiels(http.Controller, MaterielCommon):
                     search_domain_list += [("audit_suivant", "=", date_search)]
                 except ValueError:
                     self._logger.warning(f"Mauvaise date : {search}")
-            search_domain += search_or + search_domain_list
+            if search_in == "all" or search_in == "allid":
+                search_domain += search_or
+            search_domain += search_domain_list
         total_items = materiels.search_count(search_domain)
         pager = portal_pager(
             url="/cap_levage_portal/materiels",

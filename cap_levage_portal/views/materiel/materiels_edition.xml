@@ -90,7 +90,7 @@
                         <t t-set="inputType">date</t>
                         <t t-set="isRequired" t-value="True"/>
                     </t>
-                    <t t-call="cap_levage_portal.periode_field"/>
+                    <t t-call="cap_levage_portal.periode_field" groups="certification.website_lvl_3"/>
                 </div>
             </div>
         </template>
@@ -123,7 +123,7 @@
                     <t t-set="itemValue" t-value="None"/>
                     <t t-set="inputType">date</t>
                 </t>
-                <t t-call="cap_levage_portal.periode_field"/>
+                <t t-call="cap_levage_portal.periode_field" groups="certification.website_lvl_3"/>
             </div>
         </template>
 
