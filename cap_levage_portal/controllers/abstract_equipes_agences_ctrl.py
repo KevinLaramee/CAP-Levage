@@ -2,12 +2,13 @@
 import base64
 from abc import abstractmethod
 
-from .grid_utils import TableComputeCapLevage
-from . import utils
 from odoo import http, tools
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
 from odoo.tools.translate import _
+
+from . import utils
+from .grid_utils import TableComputeCapLevage
 
 PPG = 2
 PPR = 5
@@ -104,7 +105,9 @@ class AbstractEquipesagencesCtrl:
 
         equipes = http.request.env["res.partner"]
         logged_user = request.env["res.users"].browse(request.session.uid)
-        search_domain = utils.partner_search_domain(logged_user.partner_id, self.get_search_criteria())
+        search_domain = utils.partner_search_domain(
+            logged_user.partner_id, self.get_search_criteria()
+        )
         if search is not None and search_in is not None:
             if search_in == "both":
                 search_domain += [
@@ -161,7 +164,9 @@ class AbstractEquipesagencesCtrl:
         error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
+            values.update(
+                {key: updated_post[key] for key in self.get_mandatory_fields()}
+            )
 
             if "image_1920" in updated_post:
                 image_1920 = updated_post.get("image_1920")
@@ -175,7 +180,11 @@ class AbstractEquipesagencesCtrl:
                 updated_post.pop("clear_avatar")
 
             values.update(
-                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
+                {
+                    key: updated_post[key]
+                    for key in self.get_optional_fields()
+                    if key in updated_post
+                }
             )
             for field in {"country_id", "state_id"} & set(values.keys()):
                 try:
@@ -246,9 +255,15 @@ class AbstractEquipesagencesCtrl:
         error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update({key: updated_post[key] for key in self.get_mandatory_fields()})
             values.update(
-                {key: updated_post[key] for key in self.get_optional_fields() if key in updated_post}
+                {key: updated_post[key] for key in self.get_mandatory_fields()}
+            )
+            values.update(
+                {
+                    key: updated_post[key]
+                    for key in self.get_optional_fields()
+                    if key in updated_post
+                }
             )
             values.update(
                 {
@@ -278,7 +293,6 @@ class AbstractEquipesagencesCtrl:
                 }
             )
             return http.request.render(error_page, values)
-
 
     def details_form_validate(self, data):
         error = dict()

@@ -1,5 +1,6 @@
+from odoo import fields, models
+
 from ..controllers import utils
-from odoo import models, fields
 
 
 class ResPartner(models.Model):
@@ -7,8 +8,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     nb_equipment = fields.Integer(
-        string="Equipements liés à ce partner",
-        compute="_count_equipments"
+        string="Equipements liés à ce partner", compute="_count_equipments"
     )
 
     def _count_equipments(self):

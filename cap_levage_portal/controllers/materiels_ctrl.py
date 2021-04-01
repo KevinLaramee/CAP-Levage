@@ -5,11 +5,13 @@ from abc import abstractmethod
 from datetime import datetime
 
 from odoo import http
-from odoo.addons.portal.controllers.portal import pager as portal_pager, CustomerPortal
+from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.http import request
 from odoo.tools.translate import _
+
 from . import utils
 from .grid_utils import TableComputeCapLevage
+
 
 class MaterielCommon:
     """
@@ -311,7 +313,9 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
             values.update(
                 {
                     "certificats": certificats,
-                    "res_partner_id": utils.get_logged_user_company(logged_user.partner_id).id,
+                    "res_partner_id": utils.get_logged_user_company(
+                        logged_user.partner_id
+                    ).id,
                     "owner_user_id": logged_user.id,
                 }
             )
@@ -381,9 +385,15 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_destruction_files",
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
-        "periode"
+        "periode",
     ]
-    MANDATORY_FIELDS = ["qr_code", "num_materiel", "category_id", "fabricant_id", "an_mise_service"]
+    MANDATORY_FIELDS = [
+        "qr_code",
+        "num_materiel",
+        "category_id",
+        "fabricant_id",
+        "an_mise_service",
+    ]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -607,7 +617,9 @@ class Materiels(http.Controller, MaterielCommon):
                 http.request.env["res.partner"].search([("name", "ilike", search)]).ids
             )
             category_ids = (
-                http.request.env["critt.equipment.category"].search([("name", "ilike", search)]).ids
+                http.request.env["critt.equipment.category"]
+                .search([("name", "ilike", search)])
+                .ids
             )
             search_statut = self.get_search_statut_from_str(search)
             search_or, search_domain_list = [], []
@@ -615,7 +627,7 @@ class Materiels(http.Controller, MaterielCommon):
                 search_or += ["|"]
                 search_domain_list += [
                     ("num_materiel", "ilike", search),
-                    ("qr_code", "ilike", search)
+                    ("qr_code", "ilike", search),
                 ]
             if search_in == ("all" or "equipe"):
                 search_or += ["|"]
@@ -631,7 +643,7 @@ class Materiels(http.Controller, MaterielCommon):
                 search_domain_list += [("statut", "=", search_statut)]
             if search_in == ("all" or "date_prochain_controle"):
                 try:
-                    date_search = datetime.strptime(search, '%d/%m/%Y').date()
+                    date_search = datetime.strptime(search, "%d/%m/%Y").date()
                     search_or += ["|"]
                     search_domain_list += [("audit_suivant", "=", date_search)]
                 except ValueError:
@@ -715,6 +727,7 @@ class Materiels(http.Controller, MaterielCommon):
                 "page_name": _("mes_materiels"),
             },
         )
+
     @http.route(
         "/cap_levage_portal/materiel/detail/<int:materiel_id>",
         auth="user",

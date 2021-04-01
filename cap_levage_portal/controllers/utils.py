@@ -1,6 +1,6 @@
 import datetime
-from enum import Enum
 import functools
+from enum import Enum
 
 from odoo import http
 
@@ -55,7 +55,13 @@ def get_logged_user_company(partner):
 
 def partner_search_domain(partner, type_partner):
     # The child_of operator will look for records who are children or grand-children of a given record
-    return ["&", "|", ("id", "=", partner.id), ("parent_id", "child_of", partner.id), ("type", "=", type_partner)]
+    return [
+        "&",
+        "|",
+        ("id", "=", partner.id),
+        ("parent_id", "child_of", partner.id),
+        ("type", "=", type_partner),
+    ]
 
 
 def agence_search_domain(partner):
@@ -78,7 +84,5 @@ def convert_empty_to_none(post):
     :param post:
     :return:
     """
-    new_post = {
-        key: (value if value != "" else None) for (key, value) in post.items()
-    }
+    new_post = {key: (value if value != "" else None) for (key, value) in post.items()}
     return new_post

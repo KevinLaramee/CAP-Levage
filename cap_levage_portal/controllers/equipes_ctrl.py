@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from .abstract_equipes_agences_ctrl import (
-    AbstractEquipesagencesCtrl
-)
-from .utils import check_group, GroupWebsite
 from odoo import http
-
 from odoo.tools.translate import _
 
+from .abstract_equipes_agences_ctrl import AbstractEquipesagencesCtrl
+from .utils import GroupWebsite, check_group
+
 MANDATORY_EQUIPE_FIELDS = ["name"]
-OPTIONAL_EQUIPE_FIELDS = ["function", "phone", "mobile", "comment", "image_1920", "clear_avatar", "title", "email"]
+OPTIONAL_EQUIPE_FIELDS = [
+    "function",
+    "phone",
+    "mobile",
+    "comment",
+    "image_1920",
+    "clear_avatar",
+    "title",
+    "email",
+]
 
 
 class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
@@ -35,7 +42,9 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         :param kw:
         :return:
         """
-        return super(CapLevageEquipes, self).list_elements(page, sortby, search, search_in, **kw)
+        return super(CapLevageEquipes, self).list_elements(
+            page, sortby, search, search_in, **kw
+        )
 
     def get_labels(self):
         """
@@ -45,7 +54,14 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
         }
         :return:
         """
-        return {"singulier": "équipe", "pluriel": "équipes", "page_name": "equipes", "create_button_name": "Créer une équipe", "create_title": "Nouvelle équipe", "edit_title": "Modifier l'équipe"}
+        return {
+            "singulier": "équipe",
+            "pluriel": "équipes",
+            "page_name": "equipes",
+            "create_button_name": "Créer une équipe",
+            "create_title": "Nouvelle équipe",
+            "edit_title": "Modifier l'équipe",
+        }
 
     def get_url_value(self):
         return "equipes"
@@ -82,10 +98,9 @@ class CapLevageEquipes(AbstractEquipesagencesCtrl, http.Controller):
             {
                 "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
                 "partner": equipe,
-            })
-        return http.request.render(
-            "cap_levage_portal.equipe_detail", values
+            }
         )
+        return http.request.render("cap_levage_portal.equipe_detail", values)
 
     @check_group(GroupWebsite.lvl_2)
     @http.route(

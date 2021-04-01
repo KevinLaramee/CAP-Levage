@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from .abstract_equipes_agences_ctrl import (
-    AbstractEquipesagencesCtrl,
-)
-from .utils import check_group, GroupWebsite
 from odoo import http
-
 from odoo.tools.translate import _
 
+from .abstract_equipes_agences_ctrl import AbstractEquipesagencesCtrl
+from .utils import GroupWebsite, check_group
+
 MANDATORY_AGENCE_FIELDS = ["name"]
-OPTIONAL_AGENCE_FIELDS = ["email", "phone", "mobile", "comment", "street", "country_id", "city", "zip"]
+OPTIONAL_AGENCE_FIELDS = [
+    "email",
+    "phone",
+    "mobile",
+    "comment",
+    "street",
+    "country_id",
+    "city",
+    "zip",
+]
 
 
 class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
@@ -35,7 +42,9 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         :param kw:
         :return:
         """
-        return super(CapLevageAgences, self).list_elements(page, sortby, search, search_in, **kw)
+        return super(CapLevageAgences, self).list_elements(
+            page, sortby, search, search_in, **kw
+        )
 
     def get_labels(self):
         """
@@ -45,7 +54,14 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         }
         :return:
         """
-        return {"singulier": "agence", "pluriel": "agences", "page_name": "agences", "create_button_name": "Créer une agence", "create_title": "Nouvelle agence", "edit_title": "Modifier l'agence"}
+        return {
+            "singulier": "agence",
+            "pluriel": "agences",
+            "page_name": "agences",
+            "create_button_name": "Créer une agence",
+            "create_title": "Nouvelle agence",
+            "edit_title": "Modifier l'agence",
+        }
 
     def get_url_value(self):
         return "agences"
@@ -78,10 +94,12 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
         agence = http.request.env["res.partner"].browse(agence_id)
 
         values = self._compute_generic_values()
-        values.update({
-            "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
-            "partner": agence,
-        })
+        values.update(
+            {
+                "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
+                "partner": agence,
+            }
+        )
         return http.request.render(
             "cap_levage_portal.agence_detail",
             values,
@@ -138,5 +156,3 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
     )
     def agence_get_create(self, **post):
         return self.partner_create(post, "cap_levage_portal.agence_edit")
-
-
