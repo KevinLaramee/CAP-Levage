@@ -10,8 +10,8 @@ from odoo.tools.translate import _
 from . import utils
 from .grid_utils import TableComputeCapLevage
 
-PPG = 2
-PPR = 5
+PPG = 10  # nb de lignes
+PPR = 4  # nombre de colonnes
 
 
 class AbstractEquipesagencesCtrl:
@@ -125,11 +125,11 @@ class AbstractEquipesagencesCtrl:
             url_args={"sortby": sortby, "search": search},
             total=total_items,
             page=page,
-            step=PPG * PPR,
+            step=PPG,
             scope=20,
         )
         all_equipes = equipes.search(
-            search_domain, order=order, limit=PPG * PPR, offset=pager["offset"]
+            search_domain, order=order, limit=PPG, offset=pager["offset"]
         )
         [equipe._count_equipments() for equipe in all_equipes]
         values = self._compute_generic_values()
