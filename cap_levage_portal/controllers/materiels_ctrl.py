@@ -782,7 +782,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     def list_certificat_controle_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "controle", "controle", "contrôle"
@@ -794,7 +794,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     def list_certificat_creation_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "creation", "fabrication", "fabrication"
@@ -806,7 +806,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     def list_certificat_destruction_materiel(self, materiel_id, **kw):
         return self._generic_list_certificat_materiel(
             materiel_id, "reforme", "destruction", "destruction"
@@ -818,7 +818,7 @@ class CertifcatsList(CustomerPortal):
         auth="user",
         website=True,
     )
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     def list_certificat_creation_vgp(self, materiel_id, **kw):
         materiel = http.request.env["critt.equipment"].browse(materiel_id)
         vgps = materiel.rapport_controle
@@ -893,7 +893,7 @@ class DevisFacturesList(CustomerPortal):
         }
         return request.render(page_to_render, values)
 
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     @http.route(
         [
             "/cap_levage_portal/list/devis/<int:materiel_id>",
@@ -915,7 +915,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     @http.route(
         [
             "/cap_levage_portal/list/boncommandes/<int:materiel_id>",
@@ -937,7 +937,7 @@ class DevisFacturesList(CustomerPortal):
             **kw,
         )
 
-    @utils.check_group(utils.GroupWebsite.lvl_2)
+    @utils.check_group(utils.GroupWebsite.lvl_1)
     @http.route(
         [
             "/cap_levage_portal/list/factures/<int:materiel_id>",

@@ -237,10 +237,10 @@
                                                     <t t-call="cap_levage_portal.onglet_suivi"/>
                                                 </div>
                                                 <div role="vgp_tab" class="tab-pane" id="vgp_tab">
-                                                    <t t-call="cap_levage_portal.onglet_vgp" groups="certification.website_lvl_2"/>
+                                                    <t t-call="cap_levage_portal.onglet_vgp" groups="certification.website_lvl_1"/>
                                                 </div>
                                                 <div role="devis_tab" class="tab-pane" id="devis_tab">
-                                                    <t t-call="cap_levage_portal.onglet_devis" groups="certification.website_lvl_2"/>
+                                                    <t t-call="cap_levage_portal.onglet_devis" groups="certification.website_lvl_1"/>
                                                 </div>
                                             </div>
                                         </div>
