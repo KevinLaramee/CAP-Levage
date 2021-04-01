@@ -278,6 +278,8 @@ class MaintenanceEquipment(models.Model):
 
     def action_bloquer(self):
         self.statut = "bloque"
+        self.is_bloque = True
+        self.date_bloque = fields.date.today()
 
         Horodating = self.env["critt.horodating"]
 
