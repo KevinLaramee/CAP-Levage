@@ -46,7 +46,7 @@
                     </div>
                     <!--                    Affiche la liste des matériels-->
                     <div class="row o_wsale_products_main_row">
-                        <div id="products_grid">
+                        <div id="products_grid" class="col-12">
                             <div t-if="bins" class="o_wsale_products_grid_table_wrapper">
                                 <div class="as-product-list">
                                     <div class="row">
