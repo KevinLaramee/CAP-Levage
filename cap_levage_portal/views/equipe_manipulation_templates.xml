@@ -60,7 +60,7 @@
                         <div class="row align-items-center">
                             <t t-call="cap_levage_portal.equipe_toolbar"/>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-2">
                                 <span t-field="partner.image_128" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                             </div>
@@ -118,7 +118,7 @@
                                 <t t-call="cap_levage_portal.caplevage_title">
                                     <t t-set="title_value" t-value="page_title"/>
                                 </t>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col">
                                         <div id="cap_levage_portal_avatar">
                                             <input type="file" accept="image/*" name="image_1920"

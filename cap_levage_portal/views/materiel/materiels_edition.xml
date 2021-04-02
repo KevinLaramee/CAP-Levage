@@ -144,7 +144,7 @@
                                 <t t-call="cap_levage_portal.caplevage_title">
                                     <t t-set="title_value" t-value="'Edition matériel' if mode == 'edit' else 'Nouveau matériel'"/>
                                 </t>
-                                <div class="row align-items-center mt-5">
+                                <div class="row align-items-center mt-2">
                                     <div class="col-10" id="cap_levage_portal_avatar">
                                         <input type="file" accept="image/*" name="image" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"
                                                class="d-none cap_levage_portal_avatar_upload"/>
