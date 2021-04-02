@@ -75,20 +75,16 @@
                         <a t-field="materiel.date_fabrication" t-options='{"format": "dd/MM/yyyy"}'/>
                     </div>
                     <div class="row align-items-center">
-                        <a>Date dernier contrôle :</a>
-                        <a t-field="materiel.date_dernier_audit" t-options='{"format": "dd/MM/yyyy"}'/>
-                    </div>
-                    <div class="row align-items-center">
-                        <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
+                        <a>Date de mise en service :</a>
+                        <a t-field="materiel.an_mise_service" t-options='{"format": "dd/MM/yyyy"}'/>
                     </div>
                 </div>
                 <div class="col-4">
-                    <t t-call="cap_levage_portal.input_edition">
-                        <t t-set="labelValue">Date de mise en service :</t>
-                        <t t-set="idValue">an_mise_service</t>
-                        <t t-set="itemValue" t-value="materiel.an_mise_service if materiel else None"/>
+                    <t t-call="cap_levage_portal.date_input_edition">
+                        <t t-set="labelValue">Date dernier contrôle :</t>
+                        <t t-set="idValue">date_dernier_audit</t>
+                        <t t-set="itemValue" t-value="materiel.date_dernier_audit.date() if materiel else None"/>
                         <t t-set="inputType">date</t>
-                        <t t-set="isRequired" t-value="True"/>
                     </t>
                     <t t-call="cap_levage_portal.periode_field" groups="certification.website_lvl_3"/>
                 </div>
@@ -228,11 +224,6 @@
                                                         <li role="presentation">
                                                             <a href="#edit_vgp_tab" aria-controls="edit_vgp_tab" role="tab" data-toggle="tab"
                                                                groups="certification.website_lvl_2">Certificats/VGP
-                                                            </a>
-                                                        </li>
-                                                        <li role="presentation" t-if="mode == 'edit'">
-                                                            <a href="#edit_devis_tab" aria-controls="edit_devis_tab" role="tab" data-toggle="tab"
-                                                               groups="certification.website_lvl_2">Devis/factures
                                                             </a>
                                                         </li>
                                                     </ul>

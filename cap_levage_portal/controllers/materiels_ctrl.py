@@ -386,12 +386,12 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
         "periode",
+        "date_dernier_audit"
     ]
     MANDATORY_FIELDS = [
         "qr_code",
         "category_id",
         "fabricant_id",
-        "an_mise_service",
     ]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
