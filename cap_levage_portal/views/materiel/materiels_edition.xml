@@ -83,7 +83,7 @@
                     <t t-call="cap_levage_portal.date_input_edition">
                         <t t-set="labelValue">Date dernier contrôle :&#160;</t>
                         <t t-set="idValue">date_dernier_audit</t>
-                        <t t-set="itemValue" t-value="materiel.date_dernier_audit.date() if materiel else None"/>
+                        <t t-set="itemValue" t-value="materiel.date_dernier_audit.date() if materiel and materiel.date_dernier_audit else None"/>
                         <t t-set="inputType">date</t>
                     </t>
                     <t t-call="cap_levage_portal.periode_field" groups="certification.website_lvl_3"/>

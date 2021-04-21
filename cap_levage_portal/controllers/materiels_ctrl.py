@@ -8,7 +8,6 @@ from odoo import http
 from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.http import request
 from odoo.tools.translate import _
-
 from . import utils
 from .grid_utils import TableComputeCapLevage
 
@@ -200,6 +199,63 @@ class MaterielsCommonEditCreate(MaterielCommon):
 
         return error, error_message
 
+    def _validate_and_update_values_for_edition_and_creation(self, updated_post, values):
+        certificats = []
+        certificats.extend(
+            self._create_certificat(
+                updated_post, "creation", "upload_certificat_fabrication_files", 1
+            )
+        )
+        certificats.extend(
+            self._create_certificat(
+                updated_post, "controle", "upload_certificat_controle_files", 2
+            )
+        )
+        certificats.extend(
+            self._create_certificat(
+                updated_post, "reforme", "upload_certificat_destruction_files", 3
+            )
+        )
+        values.update(
+            {key: updated_post[key] for key in self.get_mandatory_fields()}
+        )
+        values.update(
+            {
+                key: updated_post[key]
+                for key in self.get_optional_fields()
+                if key in updated_post
+            }
+        )
+        for field in {
+                         "equipe_id",
+                         "category_id",
+                         "fabricant_id",
+                         "referent",
+                         "organisme_id",
+                     } & set(values.keys()):
+            try:
+                values[field] = int(values[field])
+            except:
+                values[field] = False
+        if "category_id" in values:
+            categorie_matos = request.env["critt.equipment.category"].browse(
+                values.get("category_id")
+            )
+            values.update(
+                {
+                    "display_nombre_brins": categorie_matos.display_nombre_brins,
+                    "display_longueur": categorie_matos.display_longueur,
+                    "display_cmu": categorie_matos.display_cmu,
+                    "display_tmu": categorie_matos.display_tmu,
+                    "display_model": categorie_matos.display_model,
+                    "display_diametre": categorie_matos.display_diametre,
+                    "display_grade": categorie_matos.display_grade,
+                    "display_num_lot": categorie_matos.display_num_lot,
+                    "display_num_commande": categorie_matos.display_num_commande,
+                }
+            )
+        return certificats
+
 
 class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
     """
@@ -272,46 +328,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
                     values.update({"image": image})
                 updated_post.pop("image")
 
-            certificats = []
-
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "creation", "upload_certificat_fabrication_files", 1
-                )
-            )
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "controle", "upload_certificat_controle_files", 2
-                )
-            )
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "reforme", "upload_certificat_destruction_files", 3
-                )
-            )
-
-            values.update(
-                {key: updated_post[key] for key in self.get_mandatory_fields()}
-            )
-            values.update(
-                {
-                    key: updated_post[key]
-                    for key in self.get_optional_fields()
-                    if key in updated_post
-                }
-            )
-            for field in {
-                "equipe_id",
-                "category_id",
-                "fabricant_id",
-                "referent",
-                "organisme_id",
-            } & set(values.keys()):
-                try:
-                    values[field] = int(values[field])
-                except:
-                    values[field] = False
-
+            certificats = self._validate_and_update_values_for_edition_and_creation(updated_post, values)
             values.update(
                 {
                     "certificats": certificats,
@@ -387,7 +404,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "upload_certificat_controle_files",
         "upload_certificat_fabrication_files",
         "periode",
-        "date_dernier_audit"
+        "date_dernier_audit",
     ]
     MANDATORY_FIELDS = [
         "qr_code",
@@ -421,41 +438,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
                 materiel.sudo().write({"image": False})
                 updated_post.pop("clear_avatar")
 
-            certificats = []
-
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "creation", "upload_certificat_fabrication_files", 1
-                )
-            )
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "controle", "upload_certificat_controle_files", 2
-                )
-            )
-            certificats.extend(
-                self._create_certificat(
-                    updated_post, "reforme", "upload_certificat_destruction_files", 3
-                )
-            )
-
-            values.update(
-                {key: updated_post[key] for key in self.get_mandatory_fields()}
-            )
-            values.update(
-                {
-                    key: updated_post[key]
-                    for key in self.get_optional_fields()
-                    if key in updated_post
-                }
-            )
-            for field in {"equipe_id", "category_id", "fabricant_id", "referent"} & set(
-                values.keys()
-            ):
-                try:
-                    values[field] = int(values[field])
-                except:
-                    values[field] = False
+            certificats = self._validate_and_update_values_for_edition_and_creation(updated_post, values)
 
             values.update({"certificats": certificats})
 
