@@ -164,10 +164,6 @@ class AbstractEquipesagencesCtrl:
         error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update(
-                {key: updated_post[key] for key in self.get_mandatory_fields()}
-            )
-
             if "image_1920" in updated_post:
                 image_1920 = updated_post.get("image_1920")
                 if image_1920:
@@ -179,18 +175,7 @@ class AbstractEquipesagencesCtrl:
                 partner.sudo().write({"image_1920": False})
                 updated_post.pop("clear_avatar")
 
-            values.update(
-                {
-                    key: updated_post[key]
-                    for key in self.get_optional_fields()
-                    if key in updated_post
-                }
-            )
-            for field in {"country_id", "state_id"} & set(values.keys()):
-                try:
-                    values[field] = int(values[field])
-                except:
-                    values[field] = False
+            self._update_values(updated_post, values)
             partner.sudo().write(values)
             return http.request.redirect(
                 f"/cap_levage_portal/{self.get_detail_url()}/detail/{partner_id}"
@@ -206,6 +191,23 @@ class AbstractEquipesagencesCtrl:
             )
             return http.request.render(error_page, values)
 
+    def _update_values(self, updated_post, values):
+        values.update(
+            {key: updated_post[key] for key in self.get_mandatory_fields()}
+        )
+        values.update(
+            {
+                key: updated_post[key]
+                for key in self.get_optional_fields()
+                if key in updated_post
+            }
+        )
+        for field in {"country_id", "state_id", "parent_id"} & set(values.keys()):
+            try:
+                values[field] = int(values[field])
+            except:
+                values[field] = False
+
     def archive_res_partner(self, partner_id):
         agence = http.request.env["res.partner"].browse(partner_id)
         values = {"active": False}
@@ -214,13 +216,14 @@ class AbstractEquipesagencesCtrl:
 
     def partner_get_create_data(self):
         titles = http.request.env["res.partner.title"].sudo().search([])
-        countries = request.env["res.country"].sudo().search([])
+        agences, countries = self._get_common_edition_creation_datas()
         values = self._compute_generic_values()
         values.update(
             {
                 "page_name": _(f"mes_{self.get_labels().get('page_name')}"),
                 "titles_list": titles,
                 "countries": countries,
+                "agences": agences,
                 "edit": True,
                 "error": {},
                 "mode": "create",
@@ -230,10 +233,19 @@ class AbstractEquipesagencesCtrl:
         )
         return values
 
+    def _get_common_edition_creation_datas(self):
+        countries = request.env["res.country"].sudo().search([])
+        logged_user = request.env["res.users"].browse(request.session.uid)
+        partner = logged_user.partner_id
+        agences = request.env["res.partner"].search(
+            utils.agence_search_domain(partner), order="name asc"
+        )
+        return agences, countries
+
     def partner_get_edit_data(self, partner_id):
         partner = http.request.env["res.partner"].browse(partner_id)
         titles = http.request.env["res.partner.title"].sudo().search([])
-        countries = request.env["res.country"].sudo().search([])
+        agences, countries = self._get_common_edition_creation_datas()
         values = self._compute_generic_values()
         values.update(
             {
@@ -241,6 +253,7 @@ class AbstractEquipesagencesCtrl:
                 "partner": partner,
                 "titles_list": titles,
                 "countries": countries,
+                "agences": agences,
                 "edit": True,
                 "mode": "edit",
                 "page_title": _(f"{self.get_labels().get('edit_title')}"),
@@ -255,22 +268,15 @@ class AbstractEquipesagencesCtrl:
         error, error_message = self.details_form_validate(updated_post)
         values = {}
         if not error:
-            values.update(
-                {key: updated_post[key] for key in self.get_mandatory_fields()}
-            )
-            values.update(
-                {
-                    key: updated_post[key]
-                    for key in self.get_optional_fields()
-                    if key in updated_post
-                }
-            )
+            self._update_values(updated_post, values)
             values.update(
                 {
                     "type": self.get_search_criteria(),
-                    "parent_id": logged_user.partner_id.id,
                 }
             )
+            # Si c'est une agence qui est créé, le parent_id est la cpy. Si c'est une equipe le parenti_id est précisé dans la requete
+            if self.is_agence():
+                values.update({"parent_id": utils.get_logged_user_company(logged_user.partner_id).id})
             new_partner = http.request.env["res.partner"].create(values)
 
             if "image_1920" in updated_post:

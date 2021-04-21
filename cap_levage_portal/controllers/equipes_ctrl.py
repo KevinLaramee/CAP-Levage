@@ -6,7 +6,7 @@ from odoo.tools.translate import _
 from .abstract_equipes_agences_ctrl import AbstractEquipesagencesCtrl
 from .utils import GroupWebsite, check_group
 
-MANDATORY_EQUIPE_FIELDS = ["name"]
+MANDATORY_EQUIPE_FIELDS = ["name", "parent_id"]
 OPTIONAL_EQUIPE_FIELDS = [
     "function",
     "phone",
@@ -15,7 +15,7 @@ OPTIONAL_EQUIPE_FIELDS = [
     "image_1920",
     "clear_avatar",
     "title",
-    "email",
+    "email"
 ]
 
 

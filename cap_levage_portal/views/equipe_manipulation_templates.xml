@@ -140,6 +140,18 @@
                                                 <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}"
                                                        t-att-value="partner.name if mode == 'edit' else ''" required="True"/>
                                             </div>
+                                            <div t-attf-class="form-group #{error.get('parent_id') and 'o_has_error' or ''} col-12">
+                                                <label class="col-form-label" for="agence_id">Agence de rattachement</label>
+                                                <select name="parent_id" t-attf-class="form-control #{error.get('parent_id') and 'is-invalid' or ''}" required="True">
+                                                    <option value="">Agence...</option>
+                                                    <t t-foreach="agences or []" t-as="agence">
+                                                        <option t-att-value="agence.id"
+                                                                t-att-selected="agence.id == partner.parent_id.id if mode == 'edit' else 0">
+                                                            <t t-esc="agence.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
                                             <div t-attf-class="form-group #{error.get('title') and 'o_has_error' or ''} col-12">
                                                 <label class="col-form-label" for="title_id">Titre</label>
                                                 <select name="title" t-attf-class="form-control #{error.get('title') and 'is-invalid' or ''}">

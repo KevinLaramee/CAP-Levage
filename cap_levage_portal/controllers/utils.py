@@ -57,10 +57,12 @@ def partner_search_domain(partner, type_partner):
     # The child_of operator will look for records who are children or grand-children of a given record
     return [
         "&",
+        "&",
         "|",
         ("id", "=", partner.id),
         ("parent_id", "child_of", partner.id),
         ("type", "=", type_partner),
+        ("parent_id", "!=", None),
     ]
 
 
