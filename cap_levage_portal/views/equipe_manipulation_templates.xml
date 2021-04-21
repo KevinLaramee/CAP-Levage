@@ -60,14 +60,14 @@
                         <div class="row align-items-center">
                             <t t-call="cap_levage_portal.equipe_toolbar"/>
                         </div>
+                        <t t-call="cap_levage_portal.caplevage_title">
+                            <t t-set="title_value" t-value="partner.name"/>
+                        </t>
                         <div class="row mt-2">
                             <div class="col-2">
                                 <span t-field="partner.image_128" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                             </div>
                             <div class="col-10">
-                                <t t-call="cap_levage_portal.caplevage_title">
-                                    <t t-set="title_value" t-value="partner.name"/>
-                                </t>
                                 <div class="row">
                                     <div class="col-5">
                                         <t t-call="cap_levage_portal.equipe_champs_col_1"/>
@@ -190,7 +190,7 @@
                                         <span>&#160;Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/equipes'"
-                                       class="btn btn-danger"
+                                       class="btn btn-primary"
                                        aria-label="Annuler" title="Annuler">
                                         <i class="fa fa-ban"/>
                                         <span>&#160;Annuler</span>

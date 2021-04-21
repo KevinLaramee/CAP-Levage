@@ -354,7 +354,7 @@
                                         <span>&#160;Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/materiel/detail/' + str(materiel.id) if mode == 'edit' else '/cap_levage_portal/materiels'"
-                                       class="btn btn-danger"
+                                       class="btn btn-primary"
                                        aria-label="Annuler" title="Annuler">
                                         <i class="fa fa-ban"/>
                                         <span>&#160;Annuler</span>

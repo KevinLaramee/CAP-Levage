@@ -57,14 +57,14 @@
                         <div class="row align-items-center">
                             <t t-call="cap_levage_portal.agence_toolbar"/>
                         </div>
+                            <t t-call="cap_levage_portal.caplevage_title">
+                                <t t-set="title_value" t-value="partner.name"/>
+                            </t>
                         <div class="row mt-2">
                             <div class="col-2">
                                 <span t-field="partner.parent_id.image_1920" t-options="{'widget': 'image', 'class': 'o_image_128_max'}"/>
                             </div>
                             <div class="col-10">
-                                <t t-call="cap_levage_portal.caplevage_title">
-                                    <t t-set="title_value" t-value="partner.name"/>
-                                </t>
                                 <div class="row">
                                     <div class="col-5">
                                         <t t-call="cap_levage_portal.agence_champs_col_1"/>
@@ -145,12 +145,6 @@
                                                 </t>
                                             </select>
                                         </div>
-                                        <div t-attf-class="form-group #{error.get('comment') and 'o_has_error' or ''} col-12">
-                                            <label class="col-form-label" for="comment">Notes</label>
-                                            <input type="text" name="comment"
-                                                   t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
-                                                   t-att-value="partner.comment if mode == 'edit' else ''"/>
-                                        </div>
                                         <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-12">
                                             <label class="col-form-label" for="email">Email</label>
                                             <input type="email" name="email" t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}"
@@ -166,6 +160,12 @@
                                             <input type="tel" name="mobile" t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''}"
                                                    t-att-value="partner.mobile if mode == 'edit' else ''"/>
                                         </div>
+                                        <div t-attf-class="form-group #{error.get('comment') and 'o_has_error' or ''} col-12">
+                                            <label class="col-form-label" for="comment">Notes</label>
+                                            <input type="text" name="comment"
+                                                   t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
+                                                   t-att-value="partner.comment if mode == 'edit' else ''"/>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="clearfix">
@@ -174,7 +174,7 @@
                                         <span>&#160;Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/agence/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/agences'"
-                                       class="btn btn-danger"
+                                       class="btn btn-primary"
                                        aria-label="Annuler" title="Annuler">
                                         <i class="fa fa-ban"/>
                                         <span>&#160;Annuler</span>

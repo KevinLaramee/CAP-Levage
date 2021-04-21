@@ -60,7 +60,7 @@ class CapLevageAgences(AbstractEquipesagencesCtrl, http.Controller):
             "page_name": "agences",
             "create_button_name": "Créer une agence",
             "create_title": "Nouvelle agence",
-            "edit_title": "Modifier l'agence",
+            "edit_title": "Modifier l' agence",
         }
 
     def get_url_value(self):
