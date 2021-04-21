@@ -29,47 +29,47 @@
         <template id="cap_levage_portal.onglet_caracteristiques">
             <div class="col-12">
                 <div class="row align-items-center">
-                    <a>Type :</a>
+                    <a>Type :&#160;</a>
                     <t t-call="cap_levage_portal.materiel_type"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Fabricant :</a>
+                    <a>Fabricant :&#160;</a>
                     <a t-field="materiel.fabricant_id"/>
                 </div>
                 <div t-if="materiel.display_nombre_brins" class="row align-items-center">
-                    <a>Nombre de brins :</a>
+                    <a>Nombre de brins :&#160;</a>
                     <a t-field="materiel.nombre_brins"/>
                 </div>
                 <div t-if="materiel.display_longueur" class="row align-items-center">
-                    <a>Longueur (ml) :</a>
+                    <a>Longueur (ml) :&#160;</a>
                     <a t-field="materiel.longueur"/>
                 </div>
                 <div t-if="materiel.display_cmu" class="row align-items-center">
-                    <a>CMU (tonnes) :</a>
+                    <a>CMU (tonnes) :&#160;</a>
                     <a t-field="materiel.cmu"/>
                 </div>
                 <div t-if="materiel.display_tmu" class="row align-items-center">
-                    <a>TMU (daN) :</a>
+                    <a>TMU (daN) :&#160;</a>
                     <a t-field="materiel.tmu"/>
                 </div>
                 <div t-if="materiel.display_model" class="row align-items-center">
-                    <a>Modèle matériel :</a>
+                    <a>Modèle matériel :&#160;</a>
                     <a t-field="materiel.model"/>
                 </div>
                 <div t-if="materiel.display_diametre" class="row align-items-center">
-                    <a>Diamètre (mm) :</a>
+                    <a>Diamètre (mm) :&#160;</a>
                     <a t-field="materiel.diametre"/>
                 </div>
                 <div t-if="materiel.display_grade" class="row align-items-center">
-                    <a>Grade :</a>
+                    <a>Grade :&#160;</a>
                     <a t-field="materiel.grade"/>
                 </div>
                 <div t-if="materiel.display_num_lot" class="row align-items-center">
-                    <a>Numéro de lot :</a>
+                    <a>Numéro de lot :&#160;</a>
                     <a t-field="materiel.num_lot"/>
                 </div>
                 <div t-if="materiel.display_num_commande" class="row align-items-center">
-                    <a>Numéro de commande :</a>
+                    <a>Numéro de commande :&#160;</a>
                     <a t-field="materiel.num_commande"/>
                 </div>
             </div>
@@ -77,26 +77,26 @@
         <template id="cap_levage_portal.onglet_suivi">
             <div class="col-12">
                 <div class="row align-items-center">
-                    <a>Organisme de certification :</a>
+                    <a>Organisme de certification :&#160;</a>
                     <a t-field="materiel.organisme_id"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Date de fabrication :</a>
+                    <a>Date de fabrication :&#160;</a>
                     <a t-field="materiel.date_fabrication" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Date de mise en service :</a>
+                    <a>Date de mise en service :&#160;</a>
                     <a t-field="materiel.an_mise_service" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Date dernier contrôle :</a>
+                    <a>Date dernier contrôle :&#160;</a>
                     <a t-field="materiel.date_dernier_audit" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
                     <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Périodicité :</a>
+                    <a>Périodicité :&#160;</a>
                     <a t-field="materiel.periode"/>
                 </div>
             </div>
@@ -156,23 +156,23 @@
         <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
             <div>
-                <a>Numéro :</a>
+                <a>Numéro :&#160;</a>
                 <a t-field="materiel.num_materiel" class="font-weight-bold"/>
             </div>
             <div>
-                <a>Référent :</a>
+                <a>Référent :&#160;</a>
                 <a t-field="materiel.owner_user_id"/>
             </div>
             <div>
-                <a>Agence/secteur :</a>
+                <a>Agence/secteur :&#160;</a>
                 <a t-field="materiel.agence_id.name"/>
             </div>
             <div>
-                <a>Equipe :</a>
+                <a>Equipe :&#160;</a>
                 <a t-field="materiel.equipe_id.name"/>
             </div>
             <div>
-                <a>Identifiant QRCode :</a>
+                <a>Identifiant QRCode :&#160;</a>
                 <a t-field="materiel.qr_code"/>
             </div>
         </template>
@@ -199,7 +199,7 @@
                                 </t>
                                 <t t-call="cap_levage_portal.affichage_details_principaux"/>
                                 <div style="border-bottom:solid;border-top:solid;">
-                                    <a>Dernière observation générale :</a>
+                                    <a>Dernière observation générale :&#160;</a>
                                     <a t-field="materiel.last_general_observation"/>
                                 </div>
                                 <t t-call="cap_levage_portal.date_controle"/>

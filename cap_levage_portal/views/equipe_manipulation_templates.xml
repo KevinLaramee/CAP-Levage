@@ -22,15 +22,15 @@
         <template id="cap_levage_portal.equipe_champs_col_1">
             <div class="col-12">
                 <div class="row align-items-center">
-                    <a>Titre :</a>
+                    <a>Titre :&#160;</a>
                     <a t-field="partner.title"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Poste occupé :</a>
+                    <a>Poste occupé :&#160;</a>
                     <a t-field="partner.function"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Notes :</a>
+                    <a>Notes :&#160;</a>
                     <a t-field="partner.comment"/>
                 </div>
             </div>
@@ -38,15 +38,15 @@
         <template id="cap_levage_portal.equipe_champs_col_2">
             <div class="col-12">
                 <div class="row align-items-center">
-                    <a>Email :</a>
+                    <a>Email :&#160;</a>
                     <a t-field="partner.email"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Téléphone :</a>
+                    <a>Téléphone :&#160;</a>
                     <a t-field="partner.phone"/>
                 </div>
                 <div class="row align-items-center">
-                    <a>Mobile :</a>
+                    <a>Mobile :&#160;</a>
                     <a t-field="partner.mobile"/>
                 </div>
             </div>

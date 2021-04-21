@@ -103,11 +103,11 @@
                             <a itemprop="name" t-att-content="item.name" t-field="item.name"/>
                         </h6>
                         <div class="text-left small">
-                            <a>Email :</a>
+                            <a>Email :&#160;</a>
                             <a t-field="item.email"/>
                         </div>
                         <div class="text-left small">
-                            <a>Matériels possédés :</a>
+                            <a>Matériels possédés :&#160;</a>
                             <a style="color: red;" t-esc="item.nb_equipment"/>
                         </div>
                     </div>

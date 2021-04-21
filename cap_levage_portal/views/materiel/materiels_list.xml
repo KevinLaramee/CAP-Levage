@@ -113,22 +113,22 @@
                             </t>
                         </div>
                         <div class="w-100 small text-left">
-                            <a>Numéro :</a>
+                            <a>Numéro :&#160;</a>
                             <a t-field="materiel.num_materiel" class="font-weight-bold"/>
                         </div>
                         <div class="w-100 small text-left">
-                            <a>QRCode :</a>
+                            <a>QRCode :&#160;</a>
                             <a t-field="materiel.qr_code" class="font-weight-bold"/>
                         </div>
                         <div class="w-100 small text-left">
                             <t t-call="cap_levage_portal.date_controle"/>
                         </div>
                         <div class="w-100 small text-left">
-                            <a>Equipe :</a>
+                            <a>Equipe :&#160;</a>
                             <a t-field="materiel.equipe_id.name"/>
                         </div>
                         <div class="w-100 small text-left">
-                            <a>Agence/secteur :</a>
+                            <a>Agence/secteur :&#160;</a>
                             <a t-field="materiel.agence_id.name"/>
                         </div>
                     </div>
