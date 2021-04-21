@@ -210,7 +210,6 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         "image",
         "clear_avatar",
         "agence_id",
-        "equipe_id",
         "last_general_observation",
         "nombre_brins",
         "longueur",
@@ -236,6 +235,7 @@ class MaterielCreate(http.Controller, MaterielsCommonEditCreate):
         "fabricant_id",
         "an_mise_service",
         "organisme_id",
+        "equipe_id",
     ]
 
     @utils.check_group(utils.GroupWebsite.lvl_3)
@@ -372,7 +372,6 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "image",
         "clear_avatar",
         "agence_id",
-        "equipe_id",
         "last_general_observation",
         "nombre_brins",
         "longueur",
@@ -394,6 +393,7 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "qr_code",
         "category_id",
         "fabricant_id",
+        "equipe_id",
     ]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
