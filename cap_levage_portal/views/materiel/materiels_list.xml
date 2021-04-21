@@ -36,7 +36,7 @@
                             <!--                    bouton de création -->
                             <a href="/cap_levage_portal/materiel/create/" class="btn btn-secondary" aria-label="Créer" title="Créer">
                                 <i class="fa fa-plus"/>
-                                <span>Création d'un matériel</span>
+                                <span>&#160;Création d'un matériel</span>
                             </a>
                         </div>
                         <!--                    qrcode scan -->
@@ -45,7 +45,7 @@
                             <a id="buttonqrcodescan" title="Scanner QRCode" aria-label="Scanner QRCode"
                                class="btn btn-secondary" href="#">
                                 <i class="fa fa-qrcode"/>
-                                <span>Scanner QR code</span>
+                                <span>&#160;Scanner QR code</span>
                             </a>
                         </div>
                     </div>

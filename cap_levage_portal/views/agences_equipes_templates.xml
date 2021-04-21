@@ -40,7 +40,7 @@
                         <div class="col-3" groups="certification.website_lvl_3">
                             <a t-att-href="create_url" class="btn btn-secondary" aria-label="Créer" title="Créer">
                                 <i class="fa fa-plus"/>
-                                <span t-esc="create_button_name"/>
+                                <span t-esc="'&#160;'+create_button_name"/>
                             </a>
                         </div>
                     </div>

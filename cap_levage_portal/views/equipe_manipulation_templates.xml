@@ -5,7 +5,7 @@
                 <a t-att-href="'/cap_levage_portal/equipe/edit/' + str(partner.id)" class="btn btn-secondary"
                    aria-label="Editer" title="Editer">
                     <i class="fa fa-pencil"/>
-                    <span>Modifier</span>
+                    <span>&#160;Modifier</span>
                 </a>
             </div>
             <div class="ml-2" groups="certification.website_lvl_3">
@@ -14,7 +14,7 @@
                     <input type="hidden" value="false" name="active"/>
                     <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
                         <i class="fa fa-trash"/>
-                        <span>Supprimer</span>
+                        <span>&#160;Supprimer</span>
                     </button>
                 </form>
             </div>
@@ -85,7 +85,7 @@
                                class="btn btn-primary"
                                aria-label="Mes matériels" title="Mes matériels">
                                 <i class="fa fa-wrench"/>
-                                Matériels associés
+                                <span>&#160;Matériels associés</span>
                             </a>
                         </div>
                     </div>
@@ -187,13 +187,13 @@
                                 <div class="clearfix">
                                     <button type="submit" t-att-id="partner.id if mode == 'edit' else ''" class="btn btn-primary">
                                         <i class="fa fa-save"/>
-                                        <span>Enregistrer</span>
+                                        <span>&#160;Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/equipe/detail/' + str(partner.id) if mode == 'edit' else '/cap_levage_portal/equipes'"
                                        class="btn btn-danger"
                                        aria-label="Annuler" title="Annuler">
-                                        <span class="fa fa-ban"/>
-                                        <span>Annuler</span>
+                                        <i class="fa fa-ban"/>
+                                        <span>&#160;Annuler</span>
                                     </a>
                                 </div>
                             </div>

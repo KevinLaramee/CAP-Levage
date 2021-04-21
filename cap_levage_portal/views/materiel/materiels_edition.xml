@@ -47,7 +47,7 @@
                     <input type="file" class="d-none" t-att-name="idValue" accept="image/*,application/pdf"/>
                     <a t-att-id="idValue" class="btn border-primary" aria-label="Edit">
                         <i class="fa fa-upload"/>
-                        <span>Ajouter un document</span>
+                        <span>&#160;Ajouter un document</span>
                     </a>
                     <span name="uploadFileName"/>
                 </div>
@@ -351,13 +351,13 @@
                                 <div class="clearfix">
                                     <button type="submit" t-att-id="materiel.id if mode == 'edit' else ''" class="btn btn-primary">
                                         <i class="fa fa-save"/>
-                                        <span>Enregistrer</span>
+                                        <span>&#160;Enregistrer</span>
                                     </button>
                                     <a t-att-href="'/cap_levage_portal/materiel/detail/' + str(materiel.id) if mode == 'edit' else '/cap_levage_portal/materiels'"
                                        class="btn btn-danger"
                                        aria-label="Annuler" title="Annuler">
-                                        <span class="fa fa-ban"/>
-                                        <span>Annuler</span>
+                                        <i class="fa fa-ban"/>
+                                        <span>&#160;Annuler</span>
                                     </a>
                                 </div>
                             </div>
