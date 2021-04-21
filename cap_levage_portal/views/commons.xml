@@ -1,5 +1,12 @@
 <odoo>
     <data>
+
+
+        <template id="assets_backend_portal" name="cap_levage_portal_specific_assets" inherit_id="website.assets_frontend">
+            <xpath expr="." position="inside">
+            	<link rel='stylesheet' type="text/css" href='/cap_levage_portal/static/src/css/cap_levage_specific.css'/>
+            </xpath>
+        </template>
         <!--        Affiche la page mes matériels dans le fil d'ariane-->
         <template id="cap_levage_portal.caplevage_title" name="caplevage_title">
             <div class="row">

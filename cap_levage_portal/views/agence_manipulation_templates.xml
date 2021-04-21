@@ -25,10 +25,6 @@
                     <a>Adresse :&#160;</a>
                     <address t-esc="partner" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
                 </div>
-                <div class="row align-items-center">
-                    <a>Notes :&#160;</a>
-                    <a t-field="partner.comment"/>
-                </div>
             </div>
         </template>
         <template id="cap_levage_portal.agence_champs_col_2">
@@ -44,6 +40,10 @@
                 <div class="row align-items-center">
                     <a>Mobile :&#160;</a>
                     <a t-field="partner.mobile"/>
+                </div>
+                <div class="row align-items-center">
+                    <a>Notes :&#160;</a>
+                    <a t-field="partner.comment"/>
                 </div>
             </div>
         </template>

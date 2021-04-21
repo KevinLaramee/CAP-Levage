@@ -9,15 +9,15 @@
                     <span>&#160;Modifier</span>
                 </a>
             </div>
-            <div class="col-8"/>
-            <div class="col-2" groups="certification.website_lvl_3" t-if="materiel.statut_index != 0">
+            <div class="col-7"/>
+            <div class="col-3" groups="certification.website_lvl_3" t-if="materiel.statut_index != 0">
                 <a t-att-href="'/cap_levage_portal/materiel/activer/' + str(materiel.id)" class="btn btn-secondary"
                    aria-label="Activer le matériel" title="Activer">
                     <i class="fa fa-power-off"/>
                     <span>&#160;Activer le matériel</span>
                 </a>
             </div>
-            <div class="col-2" groups="certification.website_lvl_3" t-if="materiel.statut_index != 2">
+            <div class="col-3" groups="certification.website_lvl_3" t-if="materiel.statut_index != 2">
                 <a t-att-href="'/cap_levage_portal/materiel/bloquer/' + str(materiel.id)" class="btn btn-primary"
                    aria-label="Bloquer le matériel" title="Bloquer">
                     <i class="fa fa-ban"/>
@@ -28,47 +28,47 @@
         <!--        détail des différents onglets-->
         <template id="cap_levage_portal.onglet_caracteristiques">
             <div class="col-12">
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Type :&#160;</a>
                     <t t-call="cap_levage_portal.materiel_type"/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Fabricant :&#160;</a>
                     <a t-field="materiel.fabricant_id"/>
                 </div>
-                <div t-if="materiel.display_nombre_brins" class="row align-items-center">
+                <div t-if="materiel.display_nombre_brins" class="row align-items-center cap_levage_interligne">
                     <a>Nombre de brins :&#160;</a>
                     <a t-field="materiel.nombre_brins"/>
                 </div>
-                <div t-if="materiel.display_longueur" class="row align-items-center">
+                <div t-if="materiel.display_longueur" class="row align-items-center cap_levage_interligne">
                     <a>Longueur (ml) :&#160;</a>
                     <a t-field="materiel.longueur"/>
                 </div>
-                <div t-if="materiel.display_cmu" class="row align-items-center">
+                <div t-if="materiel.display_cmu" class="row align-items-center cap_levage_interligne">
                     <a>CMU (tonnes) :&#160;</a>
                     <a t-field="materiel.cmu"/>
                 </div>
-                <div t-if="materiel.display_tmu" class="row align-items-center">
+                <div t-if="materiel.display_tmu" class="row align-items-center cap_levage_interligne">
                     <a>TMU (daN) :&#160;</a>
                     <a t-field="materiel.tmu"/>
                 </div>
-                <div t-if="materiel.display_model" class="row align-items-center">
+                <div t-if="materiel.display_model" class="row align-items-center cap_levage_interligne">
                     <a>Modèle matériel :&#160;</a>
                     <a t-field="materiel.model"/>
                 </div>
-                <div t-if="materiel.display_diametre" class="row align-items-center">
+                <div t-if="materiel.display_diametre" class="row align-items-center cap_levage_interligne">
                     <a>Diamètre (mm) :&#160;</a>
                     <a t-field="materiel.diametre"/>
                 </div>
-                <div t-if="materiel.display_grade" class="row align-items-center">
+                <div t-if="materiel.display_grade" class="row align-items-center cap_levage_interligne">
                     <a>Grade :&#160;</a>
                     <a t-field="materiel.grade"/>
                 </div>
-                <div t-if="materiel.display_num_lot" class="row align-items-center">
+                <div t-if="materiel.display_num_lot" class="row align-items-center cap_levage_interligne">
                     <a>Numéro de lot :&#160;</a>
                     <a t-field="materiel.num_lot"/>
                 </div>
-                <div t-if="materiel.display_num_commande" class="row align-items-center">
+                <div t-if="materiel.display_num_commande" class="row align-items-center cap_levage_interligne">
                     <a>Numéro de commande :&#160;</a>
                     <a t-field="materiel.num_commande"/>
                 </div>
@@ -76,26 +76,26 @@
         </template>
         <template id="cap_levage_portal.onglet_suivi">
             <div class="col-12">
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Organisme de certification :&#160;</a>
                     <a t-field="materiel.organisme_id"/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Date de fabrication :&#160;</a>
                     <a t-field="materiel.date_fabrication" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Date de mise en service :&#160;</a>
                     <a t-field="materiel.an_mise_service" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Date dernier contrôle :&#160;</a>
                     <a t-field="materiel.date_dernier_audit" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <t t-call="cap_levage_portal.date_controle" t-options='{"format": "dd/MM/yyyy"}'/>
                 </div>
-                <div class="row align-items-center">
+                <div class="row align-items-center cap_levage_interligne">
                     <a>Périodicité :&#160;</a>
                     <a t-field="materiel.periode"/>
                 </div>
@@ -155,23 +155,23 @@
 
         <!--        Détail des caractéristiques principales-->
         <template id="cap_levage_portal.affichage_details_principaux">
-            <div>
+            <div class="cap_levage_interligne">
                 <a>Numéro :&#160;</a>
                 <a t-field="materiel.num_materiel" class="font-weight-bold"/>
             </div>
-            <div>
+            <div class="cap_levage_interligne">
                 <a>Référent :&#160;</a>
                 <a t-field="materiel.owner_user_id"/>
             </div>
-            <div>
+            <div class="cap_levage_interligne">
                 <a>Agence/secteur :&#160;</a>
                 <a t-field="materiel.agence_id.name"/>
             </div>
-            <div>
+            <div class="cap_levage_interligne">
                 <a>Equipe :&#160;</a>
                 <a t-field="materiel.equipe_id.name"/>
             </div>
-            <div>
+            <div class="cap_levage_interligne">
                 <a>Identifiant QRCode :&#160;</a>
                 <a t-field="materiel.qr_code"/>
             </div>
@@ -194,15 +194,19 @@
                                 <t t-call="cap_levage_portal.caplevage_title">
                                     <t t-set="title_value" t-value="materiel.category_id.name"/>
                                 </t>
-                                <t t-call="cap_levage_portal.etat_materiel">
-                                    <t t-set="classes" t-value="'w-100 mt-2 text-center'"/>
-                                </t>
+                                <div class="cap_levage_interligne">
+                                    <t t-call="cap_levage_portal.etat_materiel">
+                                        <t t-set="classes" t-value="'w-100 mt-2 text-center'"/>
+                                    </t>
+                                </div>
                                 <t t-call="cap_levage_portal.affichage_details_principaux"/>
-                                <div style="border-bottom:solid;border-top:solid;">
+                                <div style="border-bottom:solid;border-top:solid;" class="cap_levage_interligne">
                                     <a>Dernière observation générale :&#160;</a>
                                     <a t-field="materiel.last_general_observation"/>
                                 </div>
-                                <t t-call="cap_levage_portal.date_controle"/>
+                                <div class="cap_levage_interligne">
+                                    <t t-call="cap_levage_portal.date_controle"/>
+                                </div>
                             </div>
                         </div>
                         <div class="row align-items-center">
@@ -287,11 +291,11 @@
                                     </td>
                                     <td class="text-right">
                                         <div class="btn-group flex-grow-1 mr-1 mb-1">
-                                            <a t-if="doc.pdf" class="btn btn-secondary btn-block o_download_btn"
+                                            <a t-if="doc.pdf" class="btn btn-primary btn-block o_download_btn"
                                                t-att-href="doc.pdf" title="Download">
                                                 <i class="fa fa-download"/>
                                             </a>
-                                            <a t-if="doc.dl_pdf" class="btn btn-secondary btn-block o_download_btn"
+                                            <a t-if="doc.dl_pdf" class="btn btn-primary btn-block o_download_btn"
                                                t-att-href="doc.dl_pdf" title="Download">
                                                 <i class="fa fa-download"/>
                                             </a>
@@ -329,7 +333,7 @@
                                     </td>
                                     <td class="text-right">
                                         <div class="btn-group flex-grow-1 mr-1 mb-1">
-                                            <a class="btn btn-secondary btn-block o_download_btn"
+                                            <a class="btn btn-primary btn-block o_download_btn"
                                                t-att-href="doc.url" title="Download">
                                                 <i class="fa fa-download"/>
                                             </a>

@@ -29,10 +29,6 @@
                     <a>Poste occupé :&#160;</a>
                     <a t-field="partner.function"/>
                 </div>
-                <div class="row align-items-center">
-                    <a>Notes :&#160;</a>
-                    <a t-field="partner.comment"/>
-                </div>
             </div>
         </template>
         <template id="cap_levage_portal.equipe_champs_col_2">
@@ -48,6 +44,10 @@
                 <div class="row align-items-center">
                     <a>Mobile :&#160;</a>
                     <a t-field="partner.mobile"/>
+                </div>
+                <div class="row align-items-center">
+                    <a>Notes :&#160;</a>
+                    <a t-field="partner.comment"/>
                 </div>
             </div>
         </template>
@@ -78,15 +78,15 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-12 text-right">
-                            <a t-att-href="'/cap_levage_portal/materiels?sortby=date&amp;search_in=equipe&amp;search=' + partner.name"
-                               class="btn btn-primary"
-                               aria-label="Mes matériels" title="Mes matériels">
-                                <i class="fa fa-wrench"/>
-                                <span>&#160;Matériels associés</span>
-                            </a>
+                        <div class="row align-items-center">
+                            <div class="col-12 text-right">
+                                <a t-att-href="'/cap_levage_portal/materiels?sortby=date&amp;search_in=equipe&amp;search=' + partner.name"
+                                   class="btn btn-primary"
+                                   aria-label="Mes matériels" title="Mes matériels">
+                                    <i class="fa fa-wrench"/>
+                                    <span>&#160;Matériels associés</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -157,12 +157,6 @@
                                                 <input name="function" t-attf-class="form-control #{error.get('function') and 'is-invalid' or ''}"
                                                        t-att-value="partner.function if mode == 'edit' else ''"/>
                                             </div>
-                                            <div t-attf-class="form-group #{error.get('comment') and 'o_has_error' or ''} col-12">
-                                                <label class="col-form-label" for="comment">Notes</label>
-                                                <input type="text" name="comment"
-                                                       t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
-                                                       t-att-value="partner.comment if mode == 'edit' else ''"/>
-                                            </div>
                                             <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-12">
                                                 <label class="col-form-label" for="email">Email</label>
                                                 <input type="email" name="email"
@@ -180,6 +174,12 @@
                                                 <input type="tel" name="mobile"
                                                        t-attf-class="form-control #{error.get('mobile') and 'is-invalid' or ''}"
                                                        t-att-value="partner.mobile if mode == 'edit' else ''"/>
+                                            </div>
+                                            <div t-attf-class="form-group #{error.get('comment') and 'o_has_error' or ''} col-12">
+                                                <label class="col-form-label" for="comment">Notes</label>
+                                                <input type="text" name="comment"
+                                                       t-attf-class="form-control #{error.get('comment') and 'is-invalid' or ''}"
+                                                       t-att-value="partner.comment if mode == 'edit' else ''"/>
                                             </div>
                                         </div>
                                     </div>

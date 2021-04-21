@@ -139,6 +139,8 @@ class MaterielsCommonEditCreate(MaterielCommon):
             .search([("res_partner_id", "=", logged_user_company.id)])
         )
         categories_materiel = [categ.category_id for categ in categ_rights]
+
+        categories_materiel.sort(key=lambda categ: categ.name)
         fabricants = (
             http.request.env["critt.equipment.fabricant"]
             .sudo()
