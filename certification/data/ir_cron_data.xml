@@ -4,7 +4,7 @@
         <field name="name">Bloquer matéreil dont la date de contrôle est depassée</field>
         <field name="model_id" ref="model_critt_equipment"/>
         <field name="state">code</field>
-        <field name="code">model._cron_bloquer_materiel()</field>
+        <field name="code">model._cron_gerer_etat_materiel()</field>
         <field name="user_id" ref="base.user_root"/>
         <field name="interval_number">12</field>
         <field name="interval_type">hours</field>

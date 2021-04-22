@@ -225,10 +225,10 @@ class MaintenanceEquipment(models.Model):
         help="This field holds the image used as image for the product, limited to 1024x1024px.",
     )
     image_medium = fields.Image(
-        "Image 256", related="image", max_width=128, max_height=128, store=True
+        "Image 128", related="image", max_width=128, max_height=128, store=True
     )
     image_small = fields.Image(
-        "Image 128", related="image", max_width=64, max_height=64, store=True
+        "Image 64", related="image", max_width=64, max_height=64, store=True
     )
 
     # is_ok = fields.Boolean("", compute="_get_is_ok", copy=False)
