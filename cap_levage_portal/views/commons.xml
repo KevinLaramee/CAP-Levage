@@ -10,7 +10,7 @@
         <!--        Affiche la page mes matériels dans le fil d'ariane-->
         <template id="cap_levage_portal.caplevage_title" name="caplevage_title">
             <div class="row">
-                <div class="col-12 s_wsale_products_recently_viewed">
+                <div class="col-12 cap_levage_title">
                     <h3 class="text-center" style="text-transform: uppercase;" t-esc="title_value"/>
                 </div>
             </div>

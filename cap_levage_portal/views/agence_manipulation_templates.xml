@@ -12,7 +12,7 @@
                 <form id="agence_edit_archive" method="POST" t-att-action="'/cap_levage_portal/agence/archive/' + str(partner.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" value="false" name="active"/>
-                    <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
+                    <button type="submit" t-att-id="partner.id" class="btn btn-primary" aria-label="Archiver" title="Archiver">
                         <i class="fa fa-trash"/>
                         <span>&#160;Supprimer</span>
                     </button>

@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-group col-3" name="uploadDiv">
                     <input type="file" class="d-none" t-att-name="idValue" accept="image/*,application/pdf"/>
-                    <a t-att-id="idValue" class="btn border-primary" aria-label="Edit">
+                    <a t-att-id="idValue" class="btn btn-primary" aria-label="Edit">
                         <i class="fa fa-upload"/>
                         <span>&#160;Ajouter un document</span>
                     </a>
@@ -156,7 +156,7 @@
                                             <a href="#" class="btn btn-primary cap_levage_portal_avatar_edit" aria-label="Edit">
                                                 <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
                                             </a>
-                                            <a href="#" title="Clear" aria-label="Clear" class="btn border-primary cap_levage_portal_avatar_clear">
+                                            <a href="#" title="Clear" aria-label="Clear" class="btn btn-primary cap_levage_portal_avatar_clear">
                                                 <i class="fa fa-trash-o float-sm-none float-md-right"/>
                                             </a>
                                         </div>

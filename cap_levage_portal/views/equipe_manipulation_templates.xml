@@ -12,7 +12,7 @@
                 <form id="equipe_edit_archive" method="POST" t-att-action="'/cap_levage_portal/equipe/archive/' + str(partner.id)">
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" value="false" name="active"/>
-                    <button type="submit" t-att-id="partner.id" class="btn btn-secondary" aria-label="Archiver" title="Archiver">
+                    <button type="submit" t-att-id="partner.id" class="btn btn-primary" aria-label="Archiver" title="Archiver">
                         <i class="fa fa-trash"/>
                         <span>&#160;Supprimer</span>
                     </button>
@@ -131,7 +131,7 @@
                                                     <i class="fa fa-pencil fa-1g float-sm-none float-md-left" title="Edit"/>
                                                 </a>
                                                 <a href="#" title="Clear" aria-label="Clear"
-                                                   class="btn border-primary cap_levage_portal_avatar_clear">
+                                                   class="btn btn-primary cap_levage_portal_avatar_clear">
                                                     <i class="fa fa-trash-o float-sm-none float-md-right"/>
                                                 </a>
                                             </div>

@@ -1,3 +1,26 @@
-.cap_levage_interligne{
+.cap_levage_interligne {
     line-height: 1.5;
+}
+
+.cap_levage_title h3 {
+    font-size: 32px;
+    position: relative;
+    padding: 0 0 10px;
+    margin: 0;
+    font-weight: 600;
+    z-index: 1;
+    color: #414141;
+}
+
+.cap_levage_title h3:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    margin: auto;
+    z-index: -1;
+    width: 50px;
+    background: #ff0000;
 }
