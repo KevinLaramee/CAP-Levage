@@ -16,27 +16,33 @@
             </xpath>
         </template>
 
-<!--        Affiche l'etat d'un matériel avec les couleurs-->
+        <!--        Affiche l'etat d'un matériel avec les couleurs-->
         <template id="cap_levage_portal.etat_materiel">
             <div t-field="materiel.statut"
-               t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}" t-attf-class="#{classes}"/>
+                 t-attf-style="color:white;background-color:#{'#15CA16' if (materiel.statut_index == 0) else '#FF8e60' if (materiel.statut_index == 1) else '#e6332a' if (materiel.statut_index == 2) else '#000000' if (materiel.statut_index == 3) else 'None'}"
+                 t-attf-class="#{classes}"/>
         </template>
-<!--        Affiche le type d'un matériel avec les couleurs-->
+        <!--        Affiche le type d'un matériel avec les couleurs-->
         <template id="cap_levage_portal.materiel_type">
             <a t-field="materiel.category_id" class="font-weight-bold"/>
         </template>
-<!--        Affiche la date de contrôle d'un matériel-->
+        <!--        Affiche la date de contrôle d'un matériel-->
         <template id="cap_levage_portal.date_controle">
             <a>Prochaine date de contrôle :&#160;</a>
             <a t-field="materiel.audit_suivant" t-attf-style="color:#{materiel.audit_suivant_color}" t-options='{"format": "dd/MM/yyyy"}'/>
         </template>
 
-<!--        Affiche un input de type text par défaut, prend les param : idValue/itemValue/labelValue, optionnel inputType/isRequired -->
+        <!--        Affiche un input de type text par défaut, prend les param : idValue/itemValue/labelValue, optionnel inputType/isRequired -->
         <template id="cap_levage_portal.input_edition">
-            <label class="col-form-label"><t t-esc="labelValue"/></label>
-            <input t-att-type="text if inputType is None else inputType" t-att-name="idValue" t-att-id="idValue" t-att-required="True if isRequired else False"
+            <label class="col-form-label">
+                <t t-esc="labelValue"/>
+            </label>
+            <input t-att-type="text if inputType is None else inputType" t-att-name="idValue" t-att-id="idValue"
+                   t-att-required="True if isRequired else False"
                    t-attf-class="form-control #{error.get(idValue) and 'is-invalid' or ''}"
-                   t-att-value="itemValue"/>
+                   t-att-value="itemValue"
+                   t-att-min="minValue"
+                   t-att-max="maxValue"/>
         </template>
         <template id="cap_levage_portal.date_input_edition">
             <label class="col-form-label">

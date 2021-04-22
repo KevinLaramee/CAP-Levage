@@ -61,6 +61,8 @@
                 <t t-set="idValue">periode</t>
                 <t t-set="itemValue" t-value="materiel.periode if materiel else 0"/>
                 <t t-set="inputType">number</t>
+                <t t-set="minValue">0</t>
+                <t t-set="maxValue">12</t>
             </t>
         </template>
         <template id="cap_levage_portal.onglet_suivi_edition">
