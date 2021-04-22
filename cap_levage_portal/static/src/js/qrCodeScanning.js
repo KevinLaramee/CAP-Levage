@@ -54,8 +54,7 @@ odoo.define('cap_levage_portal.materiels_list', function (require) {
                     };
                     const config = {fps: 10, qrbox: 150, doNegatif: false, disableFlip: true};
                     const html5QrCode = new Html5Qrcode("reader");
-                    // FIXEMe juste pour un test !
-                    html5QrCode.start(devices[0].id, config, qrCodeSuccessCallback, qrCodeFailureCallback)
+                    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, qrCodeFailureCallback)
                         .catch(err => {
                             console.error("start_qrcode_scan_error", err);
                             this._stopScanning(html5QrCode);
