@@ -1,11 +1,11 @@
 <odoo>
     <data>
-        <!--import le fichier js gérant l'affichage/masquage des options en fonction des types de catégories-->
-        <template id="cap_levageassets_frontend_list" inherit_id="website.assets_frontend" name="Portal Assets" priority="99">
+
+        <template id="cap_levage_assets_frontend" inherit_id="website.assets_frontend" name="Portal Assets" priority="90">
             <xpath expr="//script[last()]" position="after">
-                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/html5-qrcode-min.js"/>
-                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/qrcode-min.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/html5-qrcode.min.js"/>
                 <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrCodeScanning.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/qrcode-min.js"/>
             </xpath>
         </template>
         <template id="cap_levage_portal.qrcode_scanning_popup">
