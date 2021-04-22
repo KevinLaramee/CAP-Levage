@@ -5,7 +5,7 @@
             <xpath expr="//script[last()]" position="after">
                 <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/html5-qrcode.min.js"/>
                 <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrCodeScanning.js"/>
-                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/qrcode-min.js"/>
+                <script type="text/javascript" src="/cap_levage_portal/static/src/js/qrcode/qrcode.min.js"/>
             </xpath>
         </template>
         <template id="cap_levage_portal.qrcode_scanning_popup">
