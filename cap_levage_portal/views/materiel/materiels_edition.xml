@@ -350,7 +350,7 @@
                                     </div>
                                 </div>
                                 <div class="clearfix">
-                                    <button type="submit" t-att-id="materiel.id if mode == 'edit' else ''" class="btn btn-primary">
+                                    <button type="submit" id="materiel_submit_button" class="btn btn-primary">
                                         <i class="fa fa-save"/>
                                         <span>&#160;Enregistrer</span>
                                     </button>

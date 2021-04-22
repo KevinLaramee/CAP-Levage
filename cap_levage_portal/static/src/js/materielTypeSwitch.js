@@ -8,6 +8,7 @@ odoo.define('cap_levage_portal.materiel_edit_portal', function (require) {
         selector: '#materiel_edit_form',
         events: {
             "change #materiel_edit_category_select": "_onCategoryChange",
+            "click #materiel_submit_button": "_onSubmitClick",
         },
         read_events: {
             "click #upload_certificat_fabrication_files": "_onUploadDocClick",
@@ -44,7 +45,7 @@ odoo.define('cap_levage_portal.materiel_edit_portal', function (require) {
         /**
          * @private
          */
-        _showCorrectParams: function (firstSet=false) {
+        _showCorrectParams: function (firstSet = false) {
             let selectedVal = this.$categorySelector.val();
             let elementList = ["nombre_brins", "longueur", "cmu", "tmu", "model", "diametre", "grade", "num_lot", "num_commande"];
             if (selectedVal !== "") {
@@ -76,7 +77,7 @@ odoo.define('cap_levage_portal.materiel_edit_portal', function (require) {
             }
         },
 
-        _showOrHideDiv: function (selectedCategory, nameValue,firstSet) {
+        _showOrHideDiv: function (selectedCategory, nameValue, firstSet) {
             const displayAttr = "data-display_".concat(nameValue);
             let showDiv = selectedCategory.attr(displayAttr) !== "true";
             let periodeValue = selectedCategory.attr("data-periode");
@@ -104,6 +105,30 @@ odoo.define('cap_levage_portal.materiel_edit_portal', function (require) {
             let $div = $(ev.currentTarget).closest('div[name="uploadDiv"]');
             $div.find('span[name="uploadFileName"]').text(ev.currentTarget.files[0].name);
         },
+        _onSubmitClick: function (ev) {
+            $('input:invalid').each(function () {
+                // Find the tab-pane that this element is inside, and get the id
+                var $closest = $(this).closest('.tab-pane');
+                var id = $closest.attr('id');
+
+                // Find the link that corresponds to the pane and have it show
+                $('.nav a[href="#' + id + '"]').tab('show');
+
+                // Only want to do it once
+                return false;
+            });
+            $('select:invalid').each(function () {
+                // Find the tab-pane that this element is inside, and get the id
+                var $closest = $(this).closest('.tab-pane');
+                var id = $closest.attr('id');
+
+                // Find the link that corresponds to the pane and have it show
+                $('.nav a[href="#' + id + '"]').tab('show');
+
+                // Only want to do it once
+                return false;
+            });
+        }
     });
     return publicWidget.registry.CapLevageEditMaterielWidget;
 });
