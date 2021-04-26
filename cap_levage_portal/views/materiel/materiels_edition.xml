@@ -32,7 +32,8 @@
                 </label>
                 <input t-att-id="'materiel_input_' + concernedAttr" t-att-type="text if inputType is None else inputType" t-att-name="concernedAttr"
                        t-attf-class="form-control #{error.get(concernedAttr) and 'is-invalid' or ''}"
-                       t-att-value="attrValue if mode == 'edit' else ''"/>
+                       t-att-value="attrValue if mode == 'edit' else ''"
+                t-att-step="None if attrStep is None else attrStep"/>
             </div>
         </template>
         <!-- affichage pour upload un document (niveau 3 uniquement)-->
@@ -287,6 +288,7 @@
                                                                         <t t-set="labelValue">Longueur (ml)</t>
                                                                         <t t-set="attrValue" t-value="materiel.longueur if materiel else ''"/>
                                                                         <t t-set="inputType">number</t>
+                                                                        <t t-set="attrStep">any</t>
                                                                     </t>
                                                                     <t t-call="cap_levage_portal.dynamic_categories">
                                                                         <t t-set="concernedAttr">cmu</t>
@@ -308,6 +310,7 @@
                                                                         <t t-set="labelValue">Diamètre (mm)</t>
                                                                         <t t-set="attrValue" t-value="materiel.diametre if materiel else ''"/>
                                                                         <t t-set="inputType">number</t>
+                                                                        <t t-set="attrStep">any</t>
                                                                     </t>
                                                                     <t t-call="cap_levage_portal.dynamic_categories">
                                                                         <t t-set="concernedAttr">grade</t>
