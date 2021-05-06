@@ -114,8 +114,7 @@ class MaterielsCommonEditCreate(MaterielCommon):
                     },
                 )
             )
-
-        post.pop(input_name)
+            post.pop(input_name)
         return new_files
 
     def _generate_edit_create_data(self):
@@ -412,6 +411,10 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         "fabricant_id",
         "equipe_id",
     ]
+    MANDATORY_FIELDS_LVL_2 = [
+        "qr_code",
+        "equipe_id",
+    ]
 
     @utils.check_group(utils.GroupWebsite.lvl_2)
     @http.route(
@@ -489,7 +492,11 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
         return self.OPTIONNAL_FIELDS
 
     def get_mandatory_fields(self):
-        return self.MANDATORY_FIELDS
+        logged_user = http.request.env.user
+        if logged_user.has_group(utils.GroupWebsite.lvl_2.value):
+            return self.MANDATORY_FIELDS_LVL_2
+        else:
+            return self.MANDATORY_FIELDS
 
 
 class Materiels(http.Controller, MaterielCommon):
