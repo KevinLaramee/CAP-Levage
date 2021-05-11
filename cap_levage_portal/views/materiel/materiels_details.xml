@@ -161,7 +161,7 @@
             </div>
             <div class="cap_levage_interligne">
                 <a>Référent :&#160;</a>
-                <a t-field="materiel.owner_user_id"/>
+                <a t-field="materiel.referent.name"/>
             </div>
             <div class="cap_levage_interligne">
                 <a>Agence/secteur :&#160;</a>
