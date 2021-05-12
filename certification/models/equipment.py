@@ -690,31 +690,23 @@ class MaintenanceEquipment(models.Model):
             self.display_num_commande = False
             self.num_commande = None
 
-    @api.onchange("periode")
-    def _onchange_periode(self):
-        for record in self:
-            if record.date_dernier_audit:
-                date = record.date_dernier_audit + relativedelta(months=+int(record.periode))
-                record.audit_suivant = date
-            else:
-                date = self.an_mise_service + relativedelta(months=+int(record.periode))
-                record.audit_suivant = date
-
-    @api.onchange("date_dernier_audit")
+    @api.onchange("date_dernier_audit", "periode")
     def _onchange_date_dernier_audit(self):
         for record in self:
-            if record.date_dernier_audit:
-                date = self.date_dernier_audit + relativedelta(months=+int(record.periode))
-                record.audit_suivant = date
-            else:
-                date = self.an_mise_service + relativedelta(months=+int(record.periode))
-                record.audit_suivant = date
+            if record.periode:
+                if record.date_dernier_audit:
+                    date = record.date_dernier_audit + relativedelta(months=+int(record.periode))
+                    record.audit_suivant = date
+                elif record.an_mise_service:
+                    date = record.an_mise_service + relativedelta(months=+int(record.periode))
+                    record.audit_suivant = date
 
     @api.onchange("audit_suivant")
     def _onchange_audit_suivant(self):
         for record in self:
-            if record.audit_suivant < fields.Date.today() and record.statut == "ok":
-                self.action_bloquer()
+            if record.audit_suivant:
+                if record.audit_suivant < fields.Date.today() and record.statut == "ok":
+                    record.action_bloquer()
 
     @api.model
     def _cron_gerer_etat_materiel(self):
