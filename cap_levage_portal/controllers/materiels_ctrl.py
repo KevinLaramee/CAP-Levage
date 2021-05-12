@@ -97,7 +97,7 @@ class MaterielsCommonEditCreate(MaterielCommon):
         :return:
         """
         new_files = []
-        if post.get(input_name, False):
+        if input_name in post:
             file = post.get(input_name)
             certifcat = file.read()
 
