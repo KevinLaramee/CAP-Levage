@@ -99,21 +99,22 @@ class MaterielsCommonEditCreate(MaterielCommon):
         new_files = []
         if input_name in post:
             file = post.get(input_name)
-            certifcat = file.read()
-
-            new_files.append(
-                (
-                    0,
-                    0,
-                    {
-                        "desc": file.filename,
-                        "date": datetime.now(),
-                        "type": type_of_certificat,
-                        "fic_pdf": base64.b64encode(certifcat),
-                        "sequence": sequence,
-                    },
-                )
-            )
+            if file is not None:
+                certificat = file.read()
+                if len(certificat) > 0:
+                    new_files.append(
+                        (
+                            0,
+                            0,
+                            {
+                                "desc": file.filename,
+                                "date": datetime.now(),
+                                "type": type_of_certificat,
+                                "fic_pdf": base64.b64encode(certificat),
+                                "sequence": sequence,
+                            },
+                        )
+                    )
             post.pop(input_name)
         return new_files
 

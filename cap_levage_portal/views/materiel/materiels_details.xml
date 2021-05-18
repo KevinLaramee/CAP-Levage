@@ -115,15 +115,15 @@
                         <t t-set="url" t-value="'/cap_levage_portal/list/vgp/' + str(materiel.id)"/>
                         <t t-set="count" t-value="onglet_vgp.get('nb_vgp')"/>
                     </t>
-                    <t t-if="onglet_vgp.get('nb_certificats_destruction')" t-call="portal.portal_docs_entry">
-                        <t t-set="title">Certificats de destruction</t>
-                        <t t-set="url" t-value="'/cap_levage_portal/list/certificats/destruction/' + str(materiel.id)"/>
-                        <t t-set="count" t-value="onglet_vgp.get('nb_certificats_destruction')"/>
-                    </t>
                     <t t-if="onglet_vgp.get('nb_certificats_controle')" t-call="portal.portal_docs_entry">
                         <t t-set="title">Rapport de contrôle</t>
                         <t t-set="url" t-value="'/cap_levage_portal/list/certificats/controle/' + str(materiel.id)"/>
                         <t t-set="count" t-value="onglet_vgp.get('nb_certificats_controle')"/>
+                    </t>
+                    <t t-if="onglet_vgp.get('nb_certificats_destruction')" t-call="portal.portal_docs_entry">
+                        <t t-set="title">Certificats de destruction</t>
+                        <t t-set="url" t-value="'/cap_levage_portal/list/certificats/destruction/' + str(materiel.id)"/>
+                        <t t-set="count" t-value="onglet_vgp.get('nb_certificats_destruction')"/>
                     </t>
                 </div>
             </div>
