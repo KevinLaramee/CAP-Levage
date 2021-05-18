@@ -493,10 +493,10 @@ class MaterielEdit(http.Controller, MaterielsCommonEditCreate):
 
     def get_mandatory_fields(self):
         logged_user = http.request.env.user
-        if logged_user.has_group(utils.GroupWebsite.lvl_2.value):
-            return self.MANDATORY_FIELDS_LVL_2
-        else:
+        if logged_user.has_group(utils.GroupWebsite.lvl_3.value):
             return self.MANDATORY_FIELDS
+        else:
+            return self.MANDATORY_FIELDS_LVL_2
 
 
 class Materiels(http.Controller, MaterielCommon):
