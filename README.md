@@ -1,6 +1,6 @@
 # CAP-Levage
 
-## QR code
+## infos QR code
 
 librairie de base utilisé : https://github.com/mebjas/html5-qrcode/releases en V1.2.3
 
