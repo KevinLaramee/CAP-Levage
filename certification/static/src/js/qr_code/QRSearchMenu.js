@@ -74,12 +74,12 @@ if(window.location.toString().indexOf('http://localhost:8069') != -1) {//pour le
             document.getElementById("qrCodeModal").appendChild(video);
         });
     }else{
-		setTimeout(function(){ 
+		setTimeout(function(){
 			console.log('error camera');
-		
+
 			$('#qr_error').html('Aucune caméra détectée !');
 		}, 500);
-        
+
     }
 }*/
 
@@ -156,8 +156,8 @@ function tick() {
 
                 var origin = $('#qrCodeOriginMenu').val();
                 if(origin == 'bo'){
-                    var url = '/my/qr_code_search?';
-                    url+= 'search_qr_code=' + code.data;
+                    var url = '/cap_levage_portal/materiels?search_in=allid&';
+                    url+= 'search=' + code.data;
                     $scanProgress = true;
                     window.location = url;
                 }else{

@@ -131,7 +131,7 @@ class MaintenanceEquipment(models.Model):
     equipe_id = fields.Many2one(
         "res.partner",
         string="Équipe",
-        domain="[('type', '=', 'contact')]",
+        domain="[('parent_id', '!=', None), ('type', '=', 'contact')]",
         track_visibility=True,
     )
 
