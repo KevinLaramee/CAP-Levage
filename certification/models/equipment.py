@@ -40,7 +40,7 @@ class MaintenanceEquipment(models.Model):
     referent = fields.Many2one(
         "res.partner",
         string="Référent",
-        domain="[('parent_id', '=', res_partner_id)]",
+        domain="[('parent_id', '=', res_partner_id), ('type', '=', 'contact')]",
         track_visibility=True,
     )
 
