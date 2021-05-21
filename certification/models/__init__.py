@@ -9,7 +9,6 @@ from . import account_move
 from . import res_partner
 from . import planification
 from . import horodating
-from . import crm
 from . import product
 from . import res_company
 from . import account

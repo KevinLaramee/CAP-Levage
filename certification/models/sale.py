@@ -57,21 +57,6 @@ class SaleOrderInherit(models.Model):
         string="N° de commande obligatoire", compute="_num_commande_client_required"
     )
 
-    # ajouter de tag_ids et opportunity_id from sale_crm sinon erreur pour afficher le module ventes liste devis depuis l'ajout de la gestion des droits
-    tag_ids = fields.Many2many(
-        "crm.lead.tag", "sale_order_tag_rel", "order_id", "tag_id", string="Tags"
-    )
-    opportunity_id = fields.Many2one(
-        "crm.lead",
-        string="Opportunity",
-        check_company=True,
-        domain="[('type', '=', 'opportunity'), '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
-    )
-
-    # def _get_partner_name(self):
-    #     for order in self:
-    #         order.partner_name = order.partner_id.company_name
-
     def _get_invoice(self):
         for order in self:
             order.invoice = self.env["account.move"].search(

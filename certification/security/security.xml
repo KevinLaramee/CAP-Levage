@@ -11,22 +11,10 @@
         <field name="sequence">81</field>
     </record>
 
-    <record model="ir.module.category" id="module_category_crm">
-        <field name="name">CRM</field>
-        <field name="description">CRM</field>
-        <field name="sequence">82</field>
-    </record>
-
     <record model="ir.module.category" id="module_category_certification">
         <field name="name">Certification</field>
         <field name="description">Certification</field>
         <field name="sequence">83</field>
-    </record>
-
-    <record id="crm_manager" model="res.groups">
-        <field name="name">CRM</field>
-        <field name="category_id" ref="module_category_crm"/>
-        <field name="menu_access" eval="[(4, ref('crm.crm_menu_root'))]"/>
     </record>
 
     <record id="certification_manager" model="res.groups">
@@ -63,10 +51,9 @@
         <field name="name">Niveau 2</field>
         <field name="category_id" ref="module_category_cap_levage_back"/>
         <field name="implied_ids" eval="[(4, ref('quality.group_quality_manager')),
-                                         (4, ref('account.group_account_invoice')), (4, ref('certification.crm_manager')),
+                                         (4, ref('account.group_account_invoice')),
                                          (4, ref('certification.certification_lvl_3'))]"/>
-        <field name="menu_access" eval="[(4, ref('crm.crm_menu_root')),
-                                         (4, ref('account.menu_finance')), (4, ref('quality_control.menu_quality_root'))]"/>
+        <field name="menu_access" eval="[(4, ref('account.menu_finance'))]"/>
     </record>
 
     <record id="certification_lvl_1" model="res.groups">
@@ -74,7 +61,7 @@
         <field name="category_id" ref="module_category_cap_levage_back"/>
         <field name="implied_ids" eval="[(4, ref('certification.certification_lvl_2')),
                                          (4, ref('hr.group_hr_manager')), (4, ref('certification.certification_manager')),
-                                         (4, ref('certification.crm_manager')), (4, ref('base.group_system')),
+                                         (4, ref('base.group_system')),
                                          (4, ref('base.group_erp_manager')), (4, ref('base.group_no_one'))]"/>
         <field name="menu_access" eval="[(4, ref('website.menu_website_configuration')), (4, ref('hr.menu_hr_root'))]"/>
     </record>
@@ -133,7 +120,6 @@
 
     <record id="sales_team.group_sale_salesman" model="res.groups">
         <field name="implied_ids" eval="[(3, ref('base.group_user'))]"/>
-        <field name="menu_access" eval="[(3, ref('crm.crm_menu_root'))]"/>
     </record>
 
     <record id="mrp.group_mrp_user" model="res.groups">
@@ -145,7 +131,7 @@
     </record>
     <record id="sales_team.group_sale_manager" model="res.groups">
         <field name="implied_ids" eval="[(3, ref('account.group_account_invoice')), (3, ref('website.group_website_publisher'))]"/>
-        <field name="menu_access" eval="[(5, ref('crm.crm_menu_root')), (4, ref('website_sale.menu_reporting')),
+        <field name="menu_access" eval="[(4, ref('website_sale.menu_reporting')),
                                          (4, ref('website.menu_website_global_configuration')), (4, ref('contacts.res_partner_menu_config'))]"/>
     </record>
 

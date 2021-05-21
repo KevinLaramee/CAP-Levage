@@ -25,12 +25,3 @@ sale_order_manager,Sale Order,model_sale_order,certification.certification_manag
 ir_attachment_manager,Ir Attachment,model_ir_attachment,certification.certification_manager,1,1,1,1
 res_company_manager,Res Company,model_res_company,certification.certification_manager,1,1,1,1
 product_product_manager,Product,model_product_product,certification.certification_manager,1,1,1,1
-
-crm_lead_manager,CRM Lead,model_crm_lead,certification.crm_manager,1,1,1,1
-crm_team_manager,CRM Team,model_crm_team,certification.crm_manager,1,1,1,1
-crm_activity_report_manager,CRM Activity Report,model_crm_activity_report,certification.crm_manager,1,1,1,1
-crm_lead_tag_manager,CRM Lead Tag,model_crm_lead_tag,certification.crm_manager,1,1,1,1
-crm_lead_scoring_frequency_field_manager,CRM Lead Scoring Frequency Field,model_crm_lead_scoring_frequency_field,certification.crm_manager,1,1,1,1
-crm_lead_scoring_frequency_manager,CRM Lead Scoring Frequency,model_crm_lead_scoring_frequency,certification.crm_manager,1,1,1,1
-crm_lost_reason_manager,CRM Lost Reason,model_crm_lost_reason,certification.crm_manager,1,1,1,1
-crm_stage_manager,CRM Stage,model_crm_stage,certification.crm_manager,1,1,1,1
