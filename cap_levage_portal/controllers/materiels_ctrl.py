@@ -31,14 +31,10 @@ class MaterielCommon:
         nb_certif_destruction = len(
             [certif for certif in certificats if certif.type == "reforme"]
         )
-        nb_certif_controle = len(
-            [certif for certif in certificats if certif.type == "controle"]
-        )
         onglet_vgp_data = {
             "nb_certificats_fabrication": nb_certif_creation,
             "nb_vgp": nb_vgp,
             "nb_certificats_destruction": nb_certif_destruction,
-            "nb_certificats_controle": nb_certif_controle,
         }
 
         sale_order_line_equipment_ids = request.env[
@@ -767,18 +763,6 @@ class CertifcatsList(CustomerPortal):
             "default_url": f"/cap_levage_portal/list/{url_name}/{materiel_id}",
         }
         return request.render("cap_levage_portal.certifs_list", values)
-
-    @http.route(
-        "/cap_levage_portal/list/certificats/controle/<int:materiel_id>",
-        type="http",
-        auth="user",
-        website=True,
-    )
-    @utils.check_group(utils.GroupWebsite.lvl_1)
-    def list_certificat_controle_materiel(self, materiel_id, **kw):
-        return self._generic_list_certificat_materiel(
-            materiel_id, "controle", "controle", "contrôle"
-        )
 
     @http.route(
         "/cap_levage_portal/list/certificats/fabrication/<int:materiel_id>",
