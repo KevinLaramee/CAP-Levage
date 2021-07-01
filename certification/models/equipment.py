@@ -714,10 +714,6 @@ class MaintenanceEquipment(models.Model):
         for materiel in concerned_equipment:
             self.logger.warning(f"CRON - Blocage du matériel {materiel} - {materiel.audit_suivant}")
             materiel.action_bloquer()
-        concerned_equipment = self.search([('audit_suivant', '>', fields.Date.today()), ('statut', '=', 'bloque')])
-        for materiel in concerned_equipment:
-            self.logger.warning(f"CRON - Déblocage du matériel {materiel} - {materiel.audit_suivant}")
-            materiel.action_valider()
 
     def materiel_entre(self):
         self.in_or_out = "in"
